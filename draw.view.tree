@@ -1,0 +1,17 @@
+$hyoo_draw $mol_view
+	title @ \Fast vector sketch
+	plugins /
+		<= Theme $mol_theme_auto
+	sub /
+		<= Sidebar $mol_scroll
+			sub /
+				<= Tools $mol_list
+					rows /
+						<= Lights $mol_lights_toggle
+						<= Colors $hyoo_draw_colors
+							color => color
+						<= Source_link $mol_link_source
+							uri \https://github.com/hyoo-ru/draw.hyoo.ru
+		<= Pane $hyoo_draw_pane
+			color <= color
+			geometry?val <=> geometry?val /

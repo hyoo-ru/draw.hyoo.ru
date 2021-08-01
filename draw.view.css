@@ -1,0 +1,25 @@
+[hyoo_draw] {
+	position: relative;
+	--hyoo_draw_palette_red: #F44336;
+	--hyoo_draw_palette_pink: #E91E63;
+	--hyoo_draw_palette_purple: #9C27B0;
+	--hyoo_draw_palette_indigo: #3F51B5;
+	--hyoo_draw_palette_blue: #2196F3;
+	--hyoo_draw_palette_cyan: #00BCD4;
+	--hyoo_draw_palette_teal: #009688;
+	--hyoo_draw_palette_green: #4CAF50;
+	--hyoo_draw_palette_lime: #CDDC39;
+	--hyoo_draw_palette_yellow: #FFEB3B;
+	--hyoo_draw_palette_amber: #FFC107;
+	--hyoo_draw_palette_orange: #FF9800;
+	--hyoo_draw_palette_deep_orange: #FF5722;
+	--hyoo_draw_palette_brown: #795548;
+	--hyoo_draw_palette_blue_grey: #607D8B;
+	--hyoo_draw_palette_grey: #9E9E9E;
+}
+
+[hyoo_draw_sidebar] {
+	position: absolute;
+	box-shadow: 0.5rem 0 0.5rem -0.5rem hsla(0,0%,0%,.25);
+}
+

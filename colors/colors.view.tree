@@ -1,0 +1,21 @@
+$hyoo_draw_colors $mol_list
+	color?val \blue
+	Option!id $mol_button
+		title <= option_title!id \
+		style * backgroundColor <= color_raw!id \
+		click?event <=> option_select!id?event null
+	options /
+		\red
+		\pink
+		\purple
+		\indigo
+		\blue
+		\cyan
+		\teal
+		\green
+		\lime
+		\orange
+		\deep_orange
+		\brown
+		\blue_grey
+		\grey
