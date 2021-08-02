@@ -12,7 +12,6 @@
 	--hyoo_draw_palette_yellow: #FFEB3B;
 	--hyoo_draw_palette_amber: #FFC107;
 	--hyoo_draw_palette_orange: #FF9800;
-	--hyoo_draw_palette_deep_orange: #FF5722;
 	--hyoo_draw_palette_brown: #795548;
 	--hyoo_draw_palette_blue_grey: #607D8B;
 	--hyoo_draw_palette_grey: #9E9E9E;
@@ -20,6 +19,7 @@
 
 [hyoo_draw_sidebar] {
 	position: absolute;
-	box-shadow: 0.5rem 0 0.5rem -0.5rem hsla(0,0%,0%,.25);
+	box-shadow: 0 0 0.5rem hsla(0,0%,0%,.25);
+	background: var(--mol_theme_back);
 }
 

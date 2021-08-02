@@ -16,7 +16,7 @@ namespace $.$$ {
 		}
 
 		option_title( id: string ) {
-			return id === this.color() ? '🞄' : ''
+			return id === this.color() ? '✔' : ''
 		}
 
 	}

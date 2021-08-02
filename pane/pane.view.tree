@@ -1,6 +1,6 @@
 $hyoo_draw_pane $mol_plot_pane
 	color \blue
-	geometry?next /
+	store $mol_store_shared / *
 	-
 	pan?val $mol_vector_2d /
 		0

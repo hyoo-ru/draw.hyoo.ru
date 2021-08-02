@@ -3,31 +3,50 @@ namespace $.$$ {
 	export class $hyoo_draw_pane extends $.$hyoo_draw_pane {
 		
 		@ $mol_mem
+		figures( next?: string[] ) {
+			return this.store().value( 'figures', next ) as string[] ?? []
+		}
+		
+		@ $mol_mem
 		graphs() {
 			return [
-				... this.geometry().map( (_,i)=> this.Line( i ) ),
+				... this.figures().map( id => this.Line( id ) ),
 				this.Ruler_hor(),
 				this.Ruler_vert(),
 			]
 		}
-
+		
 		@ $mol_mem_key
-		line_x( index: number ) {
-			return this.geometry()[ index ].x
+		figure( id: string ) {
+			return this.store().sub( `figure=${ id }`, new $mol_store({
+				color: 'blue',
+				type: 'line',
+				x: '',
+				y: '',
+			}) )
 		}
 
 		@ $mol_mem_key
-		line_y( index: number ) {
-			return this.geometry()[ index ].y
+		line_x( id: string ) {
+			const str = this.figure( id ).value( 'x' )
+			if( !str ) return []
+			return [ ... new Float32Array( $mol_base64_decode( str ) ) ]
 		}
 
 		@ $mol_mem_key
-		line_color( index: number ) {
-			return `var(--hyoo_draw_palette_${ this.geometry()[ index ].color })`
+		line_y( id: string ) {
+			const str = this.figure( id ).value( 'y' )
+			if( !str ) return []
+			return [ ... new Float32Array( $mol_base64_decode( str ) ) ]
+		}
+
+		@ $mol_mem_key
+		line_color( id: string ) {
+			return `var(--hyoo_draw_palette_${ this.figure( id ).value( 'color' ) })`
 		}
 
 		@ $mol_mem
-		geometry_current( next? : number | null ) {
+		figure_current( next? : string | null ) {
 			return next ?? null
 		}
 		
@@ -36,37 +55,39 @@ namespace $.$$ {
 			
 			if( !next ) return new $mol_vector_2d( [], [] )
 					
-			const geometry = this.geometry()
-			let index = this.geometry_current()
+			const store = this.store()
+			let id = this.figure_current()
+			let figures = this.figures()
+			let index = id === null ? -1 : figures.indexOf( id )
 			
 			if( next.x.length === 0 ) {
+				
 				if( index === null ) return next
+				if( id === null ) return next
 				
-				this.geometry_current( null )
+				this.figure_current( null )
 				
-				if( geometry[ index ].x.length > 1 ) return next
+				if( this.figure( id ).value( 'x' ).length > 1 ) return next
 				
-				this.geometry([
-					... geometry.slice( 0, index ),
-					... geometry.slice( index + 1 ),
-				])
+				if( index >= 0 ) {
+					this.figures( figures.filter( i => i !== id ) )
+				}
 				
 				return next
 			}
 			
-			if( index === null ) {
-				this.geometry_current( index = geometry.length )
+			if( id === null ) {
+				id = $mol_guid()
+				this.figure_current( id )
+				figures = [ ... figures, id ]
+				this.figures( figures )
 			}
 			
-			this.geometry([
-				... geometry.slice( 0, index ),
-				{
-					... geometry[ index ] ?? { color: this.color(), type: 'line' },
-					x: next.x,
-					y: next.y,
-				},
-				... geometry.slice( index + 1 ),
-			])
+			const figure = this.figure( id )
+			figure.value( 'color', this.color() )
+			figure.value( 'type', 'line' )
+			figure.value( 'x', $mol_base64_encode( new Uint8Array( Float32Array.from( next.x ).buffer ) ) )
+			figure.value( 'y', $mol_base64_encode( new Uint8Array( Float32Array.from( next.y ).buffer ) ) )
 			
 			return next
 		}
