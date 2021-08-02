@@ -112,7 +112,6 @@ $hyoo_draw_colors $mol_list
 		\green
 		\lime
 		\orange
-		\deep_orange
 		\brown
 		\blue_grey
 		\grey
@@ -472,7 +471,7 @@ $mol_plot_ruler_hor $mol_plot_ruler
 
 $hyoo_draw_pane $mol_plot_pane
 	color \blue
-	geometry?next /
+	store $mol_store_shared / *
 	-
 	pan?val $mol_vector_2d /
 		0
@@ -522,4 +521,8 @@ $hyoo_draw $mol_view
 							uri \https://github.com/hyoo-ru/draw.hyoo.ru
 		<= Pane $hyoo_draw_pane
 			color <= color
-			geometry?val <=> geometry?val /
+			pan?val <=> center?val $mol_vector_2d /
+				0
+				0
+			zoom?val <=> zoom?val 1
+
