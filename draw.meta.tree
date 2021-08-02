@@ -1,3 +1,4 @@
 deploy \/hyoo/draw/logo/logo.svg
+deploy \/hyoo/draw/manifest.json
 
 include \/mol/offline/install
