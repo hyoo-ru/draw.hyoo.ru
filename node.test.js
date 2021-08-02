@@ -8464,13 +8464,13 @@ var $;
                 const str = this.figure(id).value('x');
                 if (!str)
                     return [];
-                return [...new Float32Array($.$mol_base64_decode(str))];
+                return [...new Float32Array($.$mol_base64_decode(str).buffer)];
             }
             line_y(id) {
                 const str = this.figure(id).value('y');
                 if (!str)
                     return [];
-                return [...new Float32Array($.$mol_base64_decode(str))];
+                return [...new Float32Array($.$mol_base64_decode(str).buffer)];
             }
             line_color(id) {
                 return `var(--hyoo_draw_palette_${this.figure(id).value('color')})`;
@@ -8507,8 +8507,8 @@ var $;
                 const figure = this.figure(id);
                 figure.value('color', this.color());
                 figure.value('type', 'line');
-                figure.value('x', $.$mol_base64_encode(new Uint8Array(Float32Array.from(next.x).buffer)));
-                figure.value('y', $.$mol_base64_encode(new Uint8Array(Float32Array.from(next.y).buffer)));
+                figure.value('x', $.$mol_base64_encode(new Uint8Array(new Float32Array(next.x).buffer)));
+                figure.value('y', $.$mol_base64_encode(new Uint8Array(new Float32Array(next.y).buffer)));
                 return next;
             }
             pan(next) {
