@@ -4998,6 +4998,23 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_svg_title extends $.$mol_svg {
+        dom_name() {
+            return "title";
+        }
+        sub() {
+            return [
+                this.title()
+            ];
+        }
+    }
+    $.$mol_svg_title = $mol_svg_title;
+})($ || ($ = {}));
+//title.view.tree.js.map
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_plot_graph extends $.$mol_svg_group {
         series_x() {
             return [];
@@ -5065,6 +5082,11 @@ var $;
         back() {
             return [];
         }
+        Hint() {
+            const obj = new this.$.$mol_svg_title();
+            obj.title = () => this.hint();
+            return obj;
+        }
         hue() {
             return NaN;
         }
@@ -5109,6 +5131,12 @@ var $;
             const obj = new this.$.$mol_vector_range(0, 0);
             return obj;
         }
+        title() {
+            return "";
+        }
+        hint() {
+            return this.title();
+        }
     }
     __decorate([
         $.$mol_mem
@@ -5128,6 +5156,9 @@ var $;
     __decorate([
         $.$mol_mem
     ], $mol_plot_graph.prototype, "gap", null);
+    __decorate([
+        $.$mol_mem
+    ], $mol_plot_graph.prototype, "Hint", null);
     __decorate([
         $.$mol_mem
     ], $mol_plot_graph.prototype, "viewport_x", null);
@@ -5241,146 +5272,6 @@ var $;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
 //graph.view.js.map
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_meter extends $.$mol_plugin {
-        zoom() {
-            return 1;
-        }
-        width(val) {
-            if (val !== undefined)
-                return val;
-            return 0;
-        }
-        height(val) {
-            if (val !== undefined)
-                return val;
-            return 0;
-        }
-        left(val) {
-            if (val !== undefined)
-                return val;
-            return 0;
-        }
-        right(val) {
-            if (val !== undefined)
-                return val;
-            return 0;
-        }
-        bottom(val) {
-            if (val !== undefined)
-                return val;
-            return 0;
-        }
-        top(val) {
-            if (val !== undefined)
-                return val;
-            return 0;
-        }
-    }
-    __decorate([
-        $.$mol_mem
-    ], $mol_meter.prototype, "width", null);
-    __decorate([
-        $.$mol_mem
-    ], $mol_meter.prototype, "height", null);
-    __decorate([
-        $.$mol_mem
-    ], $mol_meter.prototype, "left", null);
-    __decorate([
-        $.$mol_mem
-    ], $mol_meter.prototype, "right", null);
-    __decorate([
-        $.$mol_mem
-    ], $mol_meter.prototype, "bottom", null);
-    __decorate([
-        $.$mol_mem
-    ], $mol_meter.prototype, "top", null);
-    $.$mol_meter = $mol_meter;
-})($ || ($ = {}));
-//meter.view.tree.js.map
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $mol_meter extends $.$mol_meter {
-            rect() {
-                const node = this.dom_node();
-                const win = this.$.$mol_dom_context;
-                if (node !== $.$mol_dom_context.document.body) {
-                    new $.$mol_after_frame($.$mol_atom2.current.fresh);
-                    try {
-                        const { left, top, right, bottom, width, height } = node.getBoundingClientRect();
-                        return { left, top, right, bottom, width, height, zoom: win.devicePixelRatio || 1 };
-                    }
-                    catch (error) {
-                    }
-                }
-                const size = $.$mol_window.size();
-                return {
-                    zoom: win.devicePixelRatio || 1,
-                    left: 0,
-                    top: 0,
-                    right: size.width,
-                    bottom: size.height,
-                    width: size.width,
-                    height: size.height,
-                };
-            }
-            top() {
-                return this.rect().top;
-            }
-            bottom() {
-                return this.rect().bottom;
-            }
-            left() {
-                return this.rect().left;
-            }
-            right() {
-                return this.rect().right;
-            }
-            width() {
-                return this.rect().width;
-            }
-            height() {
-                return this.rect().height;
-            }
-            zoom() {
-                return this.rect().zoom;
-            }
-        }
-        __decorate([
-            $.$mol_mem
-        ], $mol_meter.prototype, "rect", null);
-        __decorate([
-            $.$mol_mem
-        ], $mol_meter.prototype, "top", null);
-        __decorate([
-            $.$mol_mem
-        ], $mol_meter.prototype, "bottom", null);
-        __decorate([
-            $.$mol_mem
-        ], $mol_meter.prototype, "left", null);
-        __decorate([
-            $.$mol_mem
-        ], $mol_meter.prototype, "right", null);
-        __decorate([
-            $.$mol_mem
-        ], $mol_meter.prototype, "width", null);
-        __decorate([
-            $.$mol_mem
-        ], $mol_meter.prototype, "height", null);
-        __decorate([
-            $.$mol_mem
-        ], $mol_meter.prototype, "zoom", null);
-        $$.$mol_meter = $mol_meter;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-//meter.view.js.map
 ;
 "use strict";
 var $;
@@ -5708,17 +5599,17 @@ var $;
                 cursor_pos = this.event_coords(event).center();
                 pos = cursor_pos;
                 const action_type = this.action_type(event);
-                if (!action_type)
-                    return;
-                if (action_type === 'draw') {
-                    this.draw_continue(event);
-                    return;
-                }
                 if (cursor_pos) {
                     this.pos([
                         Math.max(0, cursor_pos[0]),
                         Math.max(0, cursor_pos[1]),
                     ]);
+                }
+                if (!action_type)
+                    return;
+                if (action_type === 'draw') {
+                    this.draw_continue(event);
+                    return;
                 }
                 const start_pos = this.start_pos();
                 if (pos) {
@@ -5947,18 +5838,18 @@ var $;
         scale(val) {
             if (val !== undefined)
                 return val;
-            const obj = new this.$.$mol_vector_2d(1, 1);
+            const obj = new this.$.$mol_vector_2d(1, -1);
             return obj;
         }
         scale_x(val) {
             if (val !== undefined)
                 return val;
-            return 0;
+            return 1;
         }
         scale_y(val) {
             if (val !== undefined)
                 return val;
-            return 0;
+            return -1;
         }
         size() {
             const obj = new this.$.$mol_vector_2d(0, 0);
@@ -5987,7 +5878,6 @@ var $;
         plugins() {
             return [
                 ...super.plugins(),
-                this.Meter(),
                 this.Touch()
             ];
         }
@@ -6018,7 +5908,7 @@ var $;
             return obj;
         }
         scale_limit_y() {
-            const obj = new this.$.$mol_vector_range(0, Infinity);
+            const obj = new this.$.$mol_vector_range(0, -Infinity);
             return obj;
         }
         dimensions_x() {
@@ -6038,21 +5928,23 @@ var $;
         graphs_positioned() {
             return this.graphs();
         }
-        width() {
-            return this.Meter().width();
+        zoom(val) {
+            if (val !== undefined)
+                return val;
+            return 1;
         }
-        height() {
-            return this.Meter().height();
-        }
-        Meter() {
-            const obj = new this.$.$mol_meter();
+        drawn(val) {
+            if (val !== undefined)
+                return val;
+            const obj = new this.$.$mol_vector_2d([], []);
             return obj;
         }
         Touch() {
             const obj = new this.$.$mol_touch();
-            obj.zoom = (val) => this.scale_x(val);
+            obj.zoom = (val) => this.zoom(val);
             obj.pan = (val) => this.shift(val);
             obj.pos = (val) => this.cursor_position(val);
+            obj.drawn = (val) => this.drawn(val);
             return obj;
         }
         reset(event) {
@@ -6132,7 +6024,10 @@ var $;
     ], $mol_plot_pane.prototype, "dimensions_y", null);
     __decorate([
         $.$mol_mem
-    ], $mol_plot_pane.prototype, "Meter", null);
+    ], $mol_plot_pane.prototype, "zoom", null);
+    __decorate([
+        $.$mol_mem
+    ], $mol_plot_pane.prototype, "drawn", null);
     __decorate([
         $.$mol_mem
     ], $mol_plot_pane.prototype, "Touch", null);
@@ -6179,7 +6074,10 @@ var $;
                 return graphs;
             }
             size_real() {
-                return new this.$.$mol_vector_2d(this.width(), this.height());
+                const rect = this.view_rect();
+                if (!rect)
+                    return new this.$.$mol_vector_2d(1, 1);
+                return new this.$.$mol_vector_2d(rect.width, rect.height);
             }
             view_box() {
                 const size = this.size_real();
@@ -6192,11 +6090,11 @@ var $;
                 const real = this.size_real();
                 const left = +(real.x - gap.x.min - gap.x.max) / size.x;
                 const bottom = -(real.y - gap.y.max - gap.y.min) / size.y;
-                return new this.$.$mol_vector_2d(new this.$.$mol_vector_range(left, right), new this.$.$mol_vector_range(bottom, top));
+                return new this.$.$mol_vector_2d(new this.$.$mol_vector_range(left, right), new this.$.$mol_vector_range(top, bottom));
             }
             scale_default() {
                 const limits = this.scale_limit();
-                return new $.$mol_vector_2d(limits.x.min, limits.y.min);
+                return new $.$mol_vector_2d(limits.x.min, limits.y.max);
             }
             scale(next) {
                 if (next === undefined) {
@@ -7525,6 +7423,7 @@ var $;
         }
         sub() {
             return [
+                this.Hint(),
                 this.Curve()
             ];
         }

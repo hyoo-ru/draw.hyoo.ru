@@ -1521,6 +1521,13 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $mol_svg_title extends $mol_svg {
+        dom_name(): string;
+        sub(): readonly any[];
+    }
+}
+
+declare namespace $ {
     class $mol_plot_graph extends $mol_svg_group {
         series_x(): readonly number[];
         series_y(): readonly number[];
@@ -1542,6 +1549,7 @@ declare namespace $ {
         points(): readonly (readonly number[])[];
         front(): readonly $mol_svg[];
         back(): readonly $mol_svg[];
+        Hint(): $mol_svg_title;
         hue(): number;
         Sample(): any;
         type(): string;
@@ -1554,6 +1562,8 @@ declare namespace $ {
         dimensions_y(): $mol_vector_range<number>;
         gap_x(): $mol_vector_range<number>;
         gap_y(): $mol_vector_range<number>;
+        title(): string;
+        hint(): string;
     }
     class $mol_plot_graph_sample extends $mol_view {
         attr(): {
@@ -1579,39 +1589,6 @@ declare namespace $.$$ {
         dimensions(): $mol_vector_2d<$mol_vector_range<number>>;
         color(): string;
         front(): readonly $.$mol_svg[];
-    }
-}
-
-declare namespace $ {
-    class $mol_meter extends $mol_plugin {
-        zoom(): number;
-        width(val?: any): number;
-        height(val?: any): number;
-        left(val?: any): number;
-        right(val?: any): number;
-        bottom(val?: any): number;
-        top(val?: any): number;
-    }
-}
-
-declare namespace $.$$ {
-    class $mol_meter extends $.$mol_meter {
-        rect(): {
-            left: number;
-            top: number;
-            right: number;
-            bottom: number;
-            width: number;
-            height: number;
-            zoom: number;
-        };
-        top(): number;
-        bottom(): number;
-        left(): number;
-        right(): number;
-        width(): number;
-        height(): number;
-        zoom(): number;
     }
 }
 
@@ -1726,9 +1703,8 @@ declare namespace $ {
         graphs_sorted(): readonly $mol_svg[];
         graphs(): readonly $mol_plot_graph[];
         graphs_positioned(): readonly $mol_plot_graph[];
-        width(): number;
-        height(): number;
-        Meter(): $$.$mol_meter;
+        zoom(val?: any): number;
+        drawn(val?: any): $mol_vector_2d<readonly number[]>;
         Touch(): $$.$mol_touch;
         reset(event?: any): any;
     }
