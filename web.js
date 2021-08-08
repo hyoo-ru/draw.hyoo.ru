@@ -8026,23 +8026,17 @@ var $;
             const obj = new this.$.$mol_store_shared({});
             return obj;
         }
-        pan(val) {
+        shift(val) {
             if (val !== undefined)
                 return val;
             const obj = new this.$.$mol_vector_2d(0, 0);
             return obj;
         }
-        zoom(val) {
+        scale(val) {
             if (val !== undefined)
                 return val;
-            return 1;
-        }
-        scale() {
             const obj = new this.$.$mol_vector_2d(this.zoom(), this.zoom());
             return obj;
-        }
-        shift() {
-            return this.pan();
         }
         Line(id) {
             const obj = new this.$.$mol_plot_line();
@@ -8063,12 +8057,6 @@ var $;
             obj.title = () => "";
             return obj;
         }
-        plugins() {
-            return [
-                ...super.plugins(),
-                this.Touch()
-            ];
-        }
         snapshot() {
             return "";
         }
@@ -8084,29 +8072,13 @@ var $;
         line_y(id) {
             return [];
         }
-        drawn_last(val) {
-            if (val !== undefined)
-                return val;
-            const obj = new this.$.$mol_vector_2d([], []);
-            return obj;
-        }
-        Touch() {
-            const obj = new this.$.$mol_touch();
-            obj.zoom = (val) => this.zoom(val);
-            obj.pan = (val) => this.pan(val);
-            obj.drawn = (val) => this.drawn_last(val);
-            return obj;
-        }
     }
     __decorate([
         $.$mol_mem
     ], $hyoo_draw_pane.prototype, "store", null);
     __decorate([
         $.$mol_mem
-    ], $hyoo_draw_pane.prototype, "pan", null);
-    __decorate([
-        $.$mol_mem
-    ], $hyoo_draw_pane.prototype, "zoom", null);
+    ], $hyoo_draw_pane.prototype, "shift", null);
     __decorate([
         $.$mol_mem
     ], $hyoo_draw_pane.prototype, "scale", null);
@@ -8119,12 +8091,6 @@ var $;
     __decorate([
         $.$mol_mem
     ], $hyoo_draw_pane.prototype, "Ruler_hor", null);
-    __decorate([
-        $.$mol_mem
-    ], $hyoo_draw_pane.prototype, "drawn_last", null);
-    __decorate([
-        $.$mol_mem
-    ], $hyoo_draw_pane.prototype, "Touch", null);
     $.$hyoo_draw_pane = $hyoo_draw_pane;
 })($ || ($ = {}));
 //pane.view.tree.js.map
@@ -8239,7 +8205,7 @@ var $;
             figure_current(next) {
                 return next ?? null;
             }
-            drawn_last(next) {
+            drawn(next) {
                 if (!next)
                     return new $.$mol_vector_2d([], []);
                 const store = this.store();
@@ -8299,7 +8265,7 @@ var $;
         ], $hyoo_draw_pane.prototype, "figure_current", null);
         __decorate([
             $.$mol_mem
-        ], $hyoo_draw_pane.prototype, "drawn_last", null);
+        ], $hyoo_draw_pane.prototype, "drawn", null);
         __decorate([
             $.$mol_mem
         ], $hyoo_draw_pane.prototype, "pan", null);
@@ -8376,7 +8342,7 @@ var $;
         Pane() {
             const obj = new this.$.$hyoo_draw_pane();
             obj.color = () => this.color();
-            obj.pan = (val) => this.center(val);
+            obj.shift = (val) => this.center(val);
             obj.zoom = (val) => this.zoom(val);
             return obj;
         }
@@ -8426,12 +8392,14 @@ var $;
     (function ($$) {
         class $hyoo_draw extends $.$hyoo_draw {
             center(next) {
-                const arg = next ? next.join('x') : undefined;
+                const rect = this.view_rect() ?? { width: 0, height: 0 };
+                const offset = new $.$mol_vector_2d(rect.width / 2, rect.height / 2);
+                const arg = next ? (next[0] - offset.x) + 'x' + (next[1] - offset.y) : undefined;
                 const str = this.$.$mol_state_arg.value('center', arg);
                 if (!str)
                     return super.center();
                 const coords = str.split('x').map(Number);
-                return new $.$mol_vector_2d(coords[0], coords[1]);
+                return new $.$mol_vector_2d(coords[0] + offset.x, coords[1] + offset.y);
             }
             zoom(next) {
                 const arg = next ? String(next) : undefined;

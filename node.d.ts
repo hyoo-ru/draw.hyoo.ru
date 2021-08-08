@@ -2871,21 +2871,16 @@ declare namespace $ {
     class $hyoo_draw_pane extends $mol_plot_pane {
         color(): string;
         store(): $mol_store_shared;
-        pan(val?: any): $mol_vector_2d<number>;
-        zoom(val?: any): number;
-        scale(): $mol_vector_2d<number>;
-        shift(): $mol_vector_2d<number>;
+        shift(val?: any): $mol_vector_2d<number>;
+        scale(val?: any): $mol_vector_2d<number>;
         Line(id: any): $$.$mol_plot_line;
         Ruler_vert(): $$.$mol_plot_ruler_vert;
         Ruler_hor(): $$.$mol_plot_ruler_hor;
-        plugins(): readonly any[];
         snapshot(): string;
         snapshot_current(): string;
         line_color(id: any): string;
         line_x(id: any): readonly number[];
         line_y(id: any): readonly number[];
-        drawn_last(val?: any): $mol_vector_2d<readonly number[]>;
-        Touch(): $$.$mol_touch;
     }
 }
 
@@ -2923,7 +2918,7 @@ declare namespace $.$$ {
         line_y(id: string): number[];
         line_color(id: string): string;
         figure_current(next?: string | null): string | null;
-        drawn_last(next: $mol_vector_2d<readonly number[]>): $mol_vector_2d<readonly number[]>;
+        drawn(next: $mol_vector_2d<readonly number[]>): $mol_vector_2d<readonly number[]>;
         pan(next?: $mol_vector_2d<number>): $mol_vector<number, 2>;
     }
 }
