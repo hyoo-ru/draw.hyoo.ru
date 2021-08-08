@@ -1,16 +1,12 @@
 $hyoo_draw_pane $mol_plot_pane
 	color \blue
 	store $mol_store_shared / *
-	-
-	pan?val $mol_vector_2d /
+	shift?val $mol_vector_2d /
 		0
 		0
-	zoom?val 1
-	scale $mol_vector_2d /
+	scale?val $mol_vector_2d /
 		<= zoom
 		<= zoom
-	shift <= pan
-	-
 	Line!id $mol_plot_line
 		color <= line_color!id \
 		series_x <= line_x!id /number
@@ -21,15 +17,6 @@ $hyoo_draw_pane $mol_plot_pane
 	Ruler_hor $mol_plot_ruler_hor
 		front /
 		title \
-	-
-	plugins /
-		^
-		<= Touch $mol_touch
-			zoom?val <=> zoom?val
-			pan?val <=> pan?val
-			drawn?val <=> drawn_last?val $mol_vector_2d /
-				/number
-				/number
 	-
 	snapshot \
 	snapshot_current \

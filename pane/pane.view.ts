@@ -51,7 +51,7 @@ namespace $.$$ {
 		}
 		
 		@ $mol_mem
-		drawn_last( next: $mol_vector_2d< readonly number[] > ) {
+		drawn( next: $mol_vector_2d< readonly number[] > ) {
 			
 			if( !next ) return new $mol_vector_2d( [], [] )
 					

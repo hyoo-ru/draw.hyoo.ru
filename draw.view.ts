@@ -4,11 +4,21 @@ namespace $.$$ {
 		
 		@ $mol_mem
 		center( next?: $mol_vector_2d< number > ) {
-			const arg = next ? next.join( 'x' ) : undefined
+			
+			const rect = this.view_rect() ?? { width: 0, height: 0 }
+			const offset = new $mol_vector_2d(
+				rect.width / 2,
+				rect.height / 2,
+			)
+			
+			const arg = next ? ( next[0] - offset.x ) + 'x' + ( next[1] - offset.y ) : undefined
+			
 			const str = this.$.$mol_state_arg.value( 'center', arg )
 			if( !str ) return super.center()
+			
 			const coords = str.split( 'x' ).map( Number )
-			return new $mol_vector_2d( coords[0], coords[1] )
+			return new $mol_vector_2d( coords[0] + offset.x, coords[1] + offset.y )
+			
 		}
 		
 		@ $mol_mem

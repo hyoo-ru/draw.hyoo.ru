@@ -14,7 +14,7 @@ $hyoo_draw $mol_view
 							uri \https://github.com/hyoo-ru/draw.hyoo.ru
 		<= Pane $hyoo_draw_pane
 			color <= color
-			pan?val <=> center?val $mol_vector_2d /
+			shift?val <=> center?val $mol_vector_2d /
 				0
 				0
 			zoom?val <=> zoom?val 1
