@@ -8,6 +8,8 @@ $hyoo_draw $mol_view
 				<= Tools $mol_list
 					rows /
 						<= Lights $mol_lights_toggle
+						<= Chat $mol_chat
+							pages => chat_pages
 						<= Colors $hyoo_draw_colors
 							color => color
 						<= Source_link $mol_link_source
@@ -18,4 +20,3 @@ $hyoo_draw $mol_view
 				0
 				0
 			zoom?val <=> zoom?val 1
-

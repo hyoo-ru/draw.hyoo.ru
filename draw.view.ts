@@ -3,6 +3,15 @@ namespace $.$$ {
 	export class $hyoo_draw extends $.$hyoo_draw {
 		
 		@ $mol_mem
+		sub() {
+			return [
+				this.Sidebar(),
+				this.Pane(),
+				... this.chat_pages(),
+			]
+		}
+		
+		@ $mol_mem
 		center( next?: $mol_vector_2d< number > ) {
 			
 			const rect = this.view_rect() ?? { width: 0, height: 0 }
