@@ -3263,36 +3263,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $.$mol_test_mocks.push(context => {
-        context.$mol_store_local = new $.$mol_store({});
-    });
-})($ || ($ = {}));
-//local.mock.test.js.map
-;
-"use strict";
-var $;
-(function ($_1) {
-    $_1.$mol_test({
-        'get/set/delete'() {
-            var key = '$mol_store_local_test';
-            $_1.$mol_assert_equal($_1.$mol_store_local.value(key), null);
-            $_1.$mol_store_local.value(key, 123);
-            $_1.$mol_assert_equal($_1.$mol_store_local.value(key), 123);
-            $_1.$mol_store_local.value(key, null);
-            $_1.$mol_assert_equal($_1.$mol_store_local.value(key), null);
-        },
-        'mocked'($) {
-            var key = '$mol_store_local_test';
-            $.$mol_store_local.value(key, 321);
-            $_1.$mol_assert_unique($_1.$mol_store_local.value(key), 321);
-        },
-    });
-})($ || ($ = {}));
-//local.test.js.map
-;
-"use strict";
-var $;
-(function ($) {
     const png = new Uint8Array([0x1a, 0x0a, 0x00, 0x49, 0x48, 0x78, 0xda]);
     $.$mol_test({
         'base64 decode string'() {

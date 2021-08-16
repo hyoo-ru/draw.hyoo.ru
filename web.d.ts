@@ -2749,23 +2749,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_store_local_class extends $mol_store<Record<string, any>> {
-        native(): Storage | {
-            map: Map<string, string>;
-            getItem: (key: string) => string | undefined;
-            setItem: (key: string, value: string) => Map<string, string>;
-            removeItem: (key: string) => boolean;
-        };
-        data(): never;
-        value<Value>(key: string, next?: Value, force?: $mol_mem_force_cache): any;
-    }
-    let $mol_store_local: $mol_store<Record<string, any>>;
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
     type $mol_store_shared_data = Record<string, $hyoo_crowd_delta_value | string[]>;
     class $mol_store_shared extends $mol_store<$mol_store_shared_data> {
         store(prefix: string): $hyoo_crowd_graph;
