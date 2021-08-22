@@ -3219,21 +3219,25 @@ var $;
 var $;
 (function ($) {
     function parse(theme) {
-        if (theme === 'on')
+        if (theme === 'true')
             return true;
-        if (theme === 'off')
+        if (theme === 'false')
             return false;
         return null;
     }
     function $mol_lights(next) {
-        const base = null
-            ?? parse(this.$mol_state_arg.value('mol_lights'))
-            ?? this.$mol_media.match('(prefers-color-scheme: light)');
+        const arg = parse(this.$mol_state_arg.value('mol_lights'));
+        const base = arg ?? this.$mol_media.match('(prefers-color-scheme: light)');
         if (next === undefined) {
             return this.$mol_state_local.value('$mol_lights') ?? base;
         }
         else {
-            this.$mol_state_local.value('$mol_lights', next === base ? null : next);
+            if (arg === null) {
+                this.$mol_state_local.value('$mol_lights', next === base ? null : next);
+            }
+            else {
+                this.$mol_state_arg.value('mol_lights', String(next));
+            }
             return next;
         }
     }
@@ -5054,7 +5058,7 @@ var $;
             }
             embed() {
                 const seed = this.seed();
-                const lights = this.$.$mol_lights() ? 'on' : 'off';
+                const lights = String(this.$.$mol_lights());
                 const embed = this.$.$mol_state_arg.href();
                 return `https://talks.hyoo.ru/#!chat=${encodeURIComponent(seed)}/embed=${encodeURIComponent(embed)}/mol_lights=${lights}`;
             }
