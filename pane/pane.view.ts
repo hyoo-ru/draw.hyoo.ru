@@ -3,8 +3,8 @@ namespace $.$$ {
 	export class $hyoo_draw_pane extends $.$hyoo_draw_pane {
 		
 		@ $mol_mem
-		figures( next?: string[] ) {
-			return this.store().value( 'figures', next ) as string[] ?? []
+		figures( next?: readonly string[] ) {
+			return this.state().doc( 'figures' ).list( next ) as readonly string[]
 		}
 		
 		@ $mol_mem
@@ -18,31 +18,22 @@ namespace $.$$ {
 		
 		@ $mol_mem_key
 		figure( id: string ) {
-			return this.store().sub( `figure=${ id }`, new $mol_store({
-				color: 'blue',
-				type: 'line',
-				x: '',
-				y: '',
-			}) )
+			return this.state().doc( 'figure' ).doc( id )
 		}
 
 		@ $mol_mem_key
-		line_x( id: string ) {
-			const str = this.figure( id ).value( 'x' )
-			if( !str ) return []
-			return [ ... new Float32Array( $mol_base64_decode( str ).buffer ) ]
+		line_x( id: string, next?: readonly number[] ) {
+			return this.figure( id ).sub( 'x' ).list( next ) as readonly number[]
 		}
 
 		@ $mol_mem_key
-		line_y( id: string ) {
-			const str = this.figure( id ).value( 'y' )
-			if( !str ) return []
-			return [ ... new Float32Array( $mol_base64_decode( str ).buffer ) ]
+		line_y( id: string, next?: readonly number[] ) {
+			return this.figure( id ).sub( 'y' ).list( next ) as readonly number[]
 		}
 
 		@ $mol_mem_key
 		line_color( id: string ) {
-			return `var(--hyoo_draw_palette_${ this.figure( id ).value( 'color' ) })`
+			return `var(--hyoo_draw_palette_${ this.figure( id ).sub( 'color' ).value() })`
 		}
 
 		@ $mol_mem
@@ -55,7 +46,6 @@ namespace $.$$ {
 			
 			if( !next ) return new $mol_vector_2d( [], [] )
 					
-			const store = this.store()
 			let id = this.figure_current()
 			let figures = this.figures()
 			let index = id === null ? -1 : figures.indexOf( id )
@@ -67,7 +57,7 @@ namespace $.$$ {
 				
 				this.figure_current( null )
 				
-				if( this.figure( id ).value( 'x' ).length > 1 ) return next
+				if( this.line_x( id ).length > 1 ) return next
 				
 				if( index >= 0 ) {
 					this.figures( figures.filter( i => i !== id ) )
@@ -84,10 +74,10 @@ namespace $.$$ {
 			}
 			
 			const figure = this.figure( id )
-			figure.value( 'color', this.color() )
-			figure.value( 'type', 'line' )
-			figure.value( 'x', $mol_base64_encode( new Uint8Array( new Float32Array( next.x ).buffer ) ) )
-			figure.value( 'y', $mol_base64_encode( new Uint8Array( new Float32Array( next.y ).buffer ) ) )
+			figure.sub( 'color' ).value( this.color() )
+			figure.sub( 'type' ).value( 'line' )
+			figure.sub( 'x' ).list( next.x )
+			figure.sub( 'y' ).list( next.y )
 			
 			return next
 		}
