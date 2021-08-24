@@ -528,7 +528,7 @@ $mol_plot_ruler_hor $mol_plot_ruler
 
 $hyoo_draw_pane $mol_plot_pane
 	color \blue
-	store $mol_store_shared / *
+	state $mol_state_shared
 	shift?val $mol_vector_2d /
 		0
 		0
