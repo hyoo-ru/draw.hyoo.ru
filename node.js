@@ -7799,6 +7799,7 @@ var $;
         }
         socket() {
             this.heartbeat();
+            const atom = $.$mol_atom2.current;
             const socket = new $.$mol_dom_context.WebSocket(this.server());
             socket.onmessage = $.$mol_fiber.func(event => {
                 if (!event.data)
@@ -7827,12 +7828,18 @@ var $;
                 doc.version_last(-1);
                 this.scheduled_enforcer(null);
             });
-            socket.onclose = () => this.scheduled_enforcer(null);
+            socket.onclose = () => {
+                setTimeout(() => atom.obsolete(), 5000);
+                this.scheduled_enforcer(null);
+            };
             return socket;
         }
         heartbeat() {
             const timer = setInterval(() => {
-                this.socket().send('');
+                const socket = this.socket();
+                if (socket.readyState !== socket.OPEN)
+                    return;
+                socket.send('');
             }, 30000);
             return {
                 destructor: () => clearInterval(timer)
@@ -7846,6 +7853,8 @@ var $;
             if (socket.readyState === socket.CONNECTING) {
                 $.$mol_fiber_sync(() => new Promise(done => socket.addEventListener('open', done)))();
             }
+            if (socket.readyState !== socket.OPEN)
+                return;
             const message = next === undefined ? [key] : [key, next];
             socket.send(JSON.stringify(message));
         }
