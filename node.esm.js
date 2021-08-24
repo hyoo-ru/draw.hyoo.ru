@@ -8675,6 +8675,11 @@ var $;
             const obj = new this.$.$mol_state_shared();
             return obj;
         }
+        reset(event) {
+            if (event !== undefined)
+                return event;
+            return null;
+        }
         shift(val) {
             if (val !== undefined)
                 return val;
@@ -8725,6 +8730,9 @@ var $;
     __decorate([
         $.$mol_mem
     ], $hyoo_draw_pane.prototype, "state", null);
+    __decorate([
+        $.$mol_mem
+    ], $hyoo_draw_pane.prototype, "reset", null);
     __decorate([
         $.$mol_mem
     ], $hyoo_draw_pane.prototype, "shift", null);
@@ -8802,13 +8810,10 @@ var $;
                     if (id === null)
                         return next;
                     this.figure_current(null);
-                    if (this.line_x(id).length > 1)
-                        return next;
-                    if (index >= 0) {
-                        this.figures(figures.filter(i => i !== id));
-                    }
                     return next;
                 }
+                if (next.x.length < 2)
+                    return next;
                 if (id === null) {
                     id = $.$mol_guid();
                     this.figure_current(id);

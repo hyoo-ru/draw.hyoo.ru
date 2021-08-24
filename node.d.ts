@@ -2358,6 +2358,7 @@ declare namespace $ {
     class $hyoo_draw_pane extends $mol_plot_pane {
         color(): string;
         state(): $mol_state_shared;
+        reset(event?: any): any;
         shift(val?: any): $mol_vector_2d<number>;
         scale(val?: any): $mol_vector_2d<number>;
         Line(id: any): $$.$mol_plot_line;
