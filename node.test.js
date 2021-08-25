@@ -4168,9 +4168,6 @@ var $;
         '@': {
             mol_link_current: {
                 'true': {
-                    background: {
-                        color: $.$mol_theme.hover,
-                    },
                     color: $.$mol_theme.text,
                     textShadow: '0 0',
                 }
@@ -6679,8 +6676,27 @@ var $;
                 this.scale(this.scale_default());
                 this.shift(this.shift_default());
             }
+            graphs_visible() {
+                const viewport = this.dimensions_viewport();
+                return this.graphs().filter(graph => {
+                    const dims = graph.dimensions();
+                    if (dims.x.min > dims.x.max)
+                        return true;
+                    if (dims.y.min > dims.y.max)
+                        return true;
+                    if (dims.x.min > viewport.x.max)
+                        return false;
+                    if (dims.x.max < viewport.x.min)
+                        return false;
+                    if (dims.y.min > viewport.y.max)
+                        return false;
+                    if (dims.y.max < viewport.y.min)
+                        return false;
+                    return true;
+                });
+            }
             graphs_positioned() {
-                const graphs = this.graphs();
+                const graphs = this.graphs_visible();
                 for (let graph of graphs) {
                     graph.shift = () => this.shift();
                     graph.scale = () => this.scale();
@@ -6735,6 +6751,9 @@ var $;
         __decorate([
             $.$mol_mem
         ], $mol_plot_pane.prototype, "shift", null);
+        __decorate([
+            $.$mol_mem
+        ], $mol_plot_pane.prototype, "graphs_visible", null);
         __decorate([
             $.$mol_mem
         ], $mol_plot_pane.prototype, "graphs_positioned", null);
