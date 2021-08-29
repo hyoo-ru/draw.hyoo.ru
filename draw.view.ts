@@ -23,10 +23,21 @@ namespace $.$$ {
 			const arg = next ? ( next[0] - offset.x ) + 'x' + ( next[1] - offset.y ) : undefined
 			
 			const str = this.$.$mol_state_arg.value( 'center', arg )
-			if( !str ) return super.center()
+			const val = this.$.$mol_state_local.value( 'center', next ) as null | readonly[ number, number ]
 			
-			const coords = str.split( 'x' ).map( Number )
-			return new $mol_vector_2d( coords[0] + offset.x, coords[1] + offset.y )
+			if( str ) {
+				const coords = str.split( 'x' ).map( Number )
+				return new $mol_vector_2d( coords[0] + offset.x, coords[1] + offset.y )
+			}
+			
+			if( val ) {
+				return new $mol_vector_2d( ... val )
+			}
+			
+			return new $mol_vector_2d(
+				( Math.random() - .5 ) * 2**32,
+				( Math.random() - .5 ) * 2**32,
+			)
 			
 		}
 		
@@ -34,7 +45,8 @@ namespace $.$$ {
 		zoom( next?: number ) {
 			const arg = next ? String( next ) : undefined
 			const str = this.$.$mol_state_arg.value( 'zoom', arg )
-			return Number( str ) || 1
+			const val = this.$.$mol_state_local.value( 'zoom', next ) as null | number
+			return Number( str ) || val || 1
 		}
 		
 	}
