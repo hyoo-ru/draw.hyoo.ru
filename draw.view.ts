@@ -35,8 +35,8 @@ namespace $.$$ {
 			}
 			
 			return new $mol_vector_2d(
-				( Math.random() - .5 ) * 2**32,
-				( Math.random() - .5 ) * 2**32,
+				Math.trunc( ( Math.random() - .5 ) * 2**32 ),
+				Math.trunc( ( Math.random() - .5 ) * 2**32 ),
 			)
 			
 		}

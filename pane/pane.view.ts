@@ -22,13 +22,13 @@ namespace $.$$ {
 		}
 
 		@ $mol_mem_key
-		line_x( id: string, next?: readonly number[] ) {
-			return this.figure( id ).sub( 'x' ).list( next ) as readonly number[]
+		line_x( id: string ) {
+			return ( this.figure( id ).sub( 'points' ).list() as { x: number }[] ).map( point => point.x )
 		}
-
+		
 		@ $mol_mem_key
-		line_y( id: string, next?: readonly number[] ) {
-			return this.figure( id ).sub( 'y' ).list( next ) as readonly number[]
+		line_y( id: string ) {
+			return ( this.figure( id ).sub( 'points' ).list() as { y: number }[] ).map( point => point.y )
 		}
 
 		@ $mol_mem_key
@@ -37,45 +37,65 @@ namespace $.$$ {
 		}
 
 		@ $mol_mem
-		figure_current( next? : string | null ) {
-			return next ?? null
+		figure_current( next = null as string | null ) {
+			return next
 		}
 		
-		@ $mol_mem
-		drawn( next: $mol_vector_2d< readonly number[] > ) {
+		_point_last = null as null | $mol_vector_2d< number >
+		
+		draw( event: Event ) {
 			
-			if( !next ) return new $mol_vector_2d( [], [] )
+			event.preventDefault()
+			
+			const action = this.action_type()
+			const point = this.action_point()
+			
+			switch( action ) {
+				
+				case 'draw': {
 					
-			let id = this.figure_current()
-			let figures = this.figures()
-			let index = id === null ? -1 : figures.indexOf( id )
-			
-			if( next.x.length === 0 ) {
+					let id = this.figure_current()
+					if( !id ) {
+						this.figure_current( $mol_guid() )
+						this._point_last = point
+						return
+					}
+					
+					const figure = this.figure( id )
+					let points = figure.sub( 'points' ).list()
+					
+					if( points.length === 0 ) {
+						
+						points = [ { x: this._point_last!.x, y: this._point_last!.y } ]
+						
+						let figures = [ ... this.figures() ]
+						if( figures.indexOf( id ) === -1 ) {
+							
+							figures.push( id )
+							this.figures( figures )
+							
+							figure.sub( 'color' ).value( this.color() )
+							figure.sub( 'type' ).value( 'line' )
+							
+						}
+						
+					}
+					
+					figure.sub( 'points' ).list([
+						... points,
+						{ x: point!.x, y: point!.y },
+					])
+					
+					return
+				}
 				
-				if( index === null ) return next
-				if( id === null ) return next
+				default: {
+					this.figure_current( null )
+					return
+				}
 				
-				this.figure_current( null )
-				
-				return next
 			}
 			
-			if( next.x.length < 2 ) return next
-			
-			if( id === null ) {
-				id = $mol_guid()
-				this.figure_current( id )
-				figures = [ ... figures, id ]
-				this.figures( figures )
-			}
-			
-			const figure = this.figure( id )
-			figure.sub( 'color' ).value( this.color() )
-			figure.sub( 'type' ).value( 'line' )
-			figure.sub( 'x' ).list( next.x )
-			figure.sub( 'y' ).list( next.y )
-			
-			return next
 		}
 		
 		@ $mol_mem
