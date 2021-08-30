@@ -1,5 +1,5 @@
 $hyoo_draw_colors $mol_list
-	color?val \blue
+	color?val \
 	Option!id $mol_button
 		title <= option_title!id \
 		style * backgroundColor <= color_raw!id \

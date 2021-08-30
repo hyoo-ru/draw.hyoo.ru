@@ -5,8 +5,7 @@ namespace $.$$ {
 		@ $mol_mem
 		sub() {
 			return [
-				this.Sidebar(),
-				this.Pane(),
+				this.Main(),
 				... this.chat_pages(),
 			]
 		}

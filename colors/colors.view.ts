@@ -7,6 +7,11 @@ namespace $.$$ {
 			return this.options().map( id => this.Option( id ) )
 		}
 		
+		@ $mol_mem
+		color( next?: string ) {
+			return next ?? this.options()[ Math.floor( Math.random() * this.options().length ) ]
+		}
+		
 		color_raw( id: string ) {
 			return `var(--hyoo_draw_palette_${id})`
 		}

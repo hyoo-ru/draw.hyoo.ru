@@ -17,8 +17,23 @@
 	--hyoo_draw_palette_grey: #9E9E9E;
 }
 
-[hyoo_draw_sidebar] {
+[hyoo_draw_main] {
+	position: relative;
+	flex: 10000 0 30rem;
+}
+
+[hyoo_draw_side_left] {
 	position: absolute;
+	top: 0;
+	left: 0;
+	box-shadow: 0 0 0.5rem hsla(0,0%,0%,.25);
+	background: var(--mol_theme_back);
+}
+
+[hyoo_draw_side_right] {
+	position: absolute;
+	top: 0;
+	right: 0;
 	box-shadow: 0 0 0.5rem hsla(0,0%,0%,.25);
 	background: var(--mol_theme_back);
 }

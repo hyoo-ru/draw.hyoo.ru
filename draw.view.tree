@@ -1,22 +1,28 @@
-$hyoo_draw $mol_view
+$hyoo_draw $mol_book2
 	title @ \Fast vector sketch
 	plugins /
 		<= Theme $mol_theme_auto
 	sub /
-		<= Sidebar $mol_scroll
+		<= Main $mol_view
 			sub /
-				<= Tools $mol_list
-					rows /
-						<= Lights $mol_lights_toggle
-						<= Chat $mol_chat
-							pages => chat_pages
-						<= Colors $hyoo_draw_colors
-							color => color
-						<= Source_link $mol_link_source
-							uri \https://github.com/hyoo-ru/draw.hyoo.ru
-		<= Pane $hyoo_draw_pane
-			color <= color
-			shift?val <=> center?val $mol_vector_2d /
-				0
-				0
-			zoom?val <=> zoom?val 1
+				<= Side_left $mol_scroll
+					sub /
+						<= Tools_left $mol_list
+							rows /
+								<= Colors $hyoo_draw_colors
+									color => color
+				<= Pane $hyoo_draw_pane
+					color <= color
+					shift?val <=> center?val $mol_vector_2d /
+						0
+						0
+					zoom?val <=> zoom?val 1
+				<= Side_right $mol_scroll
+					sub /
+						<= Tools_right $mol_list
+							rows /
+								<= Chat $mol_chat
+									pages => chat_pages
+								<= Source_link $mol_link_source
+									uri \https://github.com/hyoo-ru/draw.hyoo.ru
+								<= Lights $mol_lights_toggle
