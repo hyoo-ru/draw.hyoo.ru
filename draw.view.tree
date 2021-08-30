@@ -10,7 +10,7 @@ $hyoo_draw $mol_book2
 						<= Tools_left $mol_list
 							rows /
 								<= Colors $hyoo_draw_colors
-									color => color
+									value => color
 				<= Pane $hyoo_draw_pane
 					color <= color
 					tool <= tool

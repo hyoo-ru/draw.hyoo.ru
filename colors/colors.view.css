@@ -1,7 +1,8 @@
-[hyoo_draw_colors_option] {
-	font-size: 2rem;
-	align-items: center;
-	justify-content: center;
-	border-radius: 0;
-	color: black;
+[hyoo_draw_colors] {
+	flex-direction: column;
+}
+
+
+[hyoo_draw_colors_option][mol_check_checked="true"] {
+	box-shadow: inset 0 0 0px 2px var(--mol_theme_back);
 }

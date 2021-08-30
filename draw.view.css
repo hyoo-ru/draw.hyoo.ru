@@ -13,8 +13,10 @@
 	--hyoo_draw_palette_amber: #FFC107;
 	--hyoo_draw_palette_orange: #FF9800;
 	--hyoo_draw_palette_brown: #795548;
+	--hyoo_draw_palette_coral: #456;
 	--hyoo_draw_palette_blue_grey: #607D8B;
 	--hyoo_draw_palette_grey: #9E9E9E;
+	--hyoo_draw_palette_negative: var(--mol_theme_text);
 }
 
 [hyoo_draw_main] {

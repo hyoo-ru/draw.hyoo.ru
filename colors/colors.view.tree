@@ -1,10 +1,14 @@
-$hyoo_draw_colors $mol_list
-	color?val \
-	Option!id $mol_button
+$hyoo_draw_colors $mol_switch
+	- Option!id $mol_button
 		title <= option_title!id \
 		style * backgroundColor <= color_raw!id \
 		click?event <=> option_select!id?event null
-	options /
+	Option!id $hyoo_draw_colors_option
+		color <= color_raw!id \
+		checked?val <=> option_checked!id?val
+		enabled <= option_enabled!id
+		minimal_height 40
+	keys /
 		\red
 		\pink
 		\purple
@@ -16,5 +20,12 @@ $hyoo_draw_colors $mol_list
 		\yellow
 		\orange
 		\brown
+		\coral
 		\blue_grey
 		\grey
+		\negative
+
+$hyoo_draw_colors_option $mol_check
+	style *
+		^
+		backgroundColor <= color \
