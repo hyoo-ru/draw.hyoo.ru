@@ -13,6 +13,7 @@ $hyoo_draw $mol_book2
 									color => color
 				<= Pane $hyoo_draw_pane
 					color <= color
+					tool <= tool
 					shift?val <=> center?val $mol_vector_2d /
 						0
 						0
@@ -26,3 +27,5 @@ $hyoo_draw $mol_book2
 								<= Source_link $mol_link_source
 									uri \https://github.com/hyoo-ru/draw.hyoo.ru
 								<= Lights $mol_lights_toggle
+								<= Tools $hyoo_draw_tools
+									value => tool

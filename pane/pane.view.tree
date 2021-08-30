@@ -1,5 +1,6 @@
 $hyoo_draw_pane $mol_plot_pane
 	color \blue
+	tool \pencil
 	state $mol_state_shared
 	reset?event null
 	shift?val $mol_vector_2d /

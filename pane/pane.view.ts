@@ -44,6 +44,13 @@ namespace $.$$ {
 		_point_last = null as null | $mol_vector_2d< number >
 		
 		draw( event: Event ) {
+			switch( this.tool() ) {
+				case 'pencil': return this.draw_pencil( event )
+				case 'eraser': return this.draw_eraser( event )
+			}
+		}
+		
+		draw_pencil( event: Event ) {
 			
 			event.preventDefault()
 			
@@ -95,6 +102,40 @@ namespace $.$$ {
 				}
 				
 			}
+			
+		}
+		
+		draw_eraser( event: Event ) {
+			
+			event.preventDefault()
+			
+			const action = this.action_type()
+			if( action !== 'draw' ) return
+			
+			const point = this.action_point()
+			const radius = 16 / this.zoom()
+
+			let figures = this.figures()
+			for( const id of figures ) {
+				
+				const figure = this.figure( id )
+				const points = figure.sub( 'points' )
+				
+				const list = ( points.list() as { x: number, y: number }[] ).filter( p => {
+					if( Math.abs( p.x - point.x ) > radius ) return true
+					if( Math.abs( p.y - point.y ) > radius ) return true
+					return false
+				} )
+				
+				points.list( list )
+				
+				if( !list.length ) {
+					figures = figures.filter( f => f !== id )
+				}
+				
+			}
+			
+			this.figures( figures )
 			
 		}
 		
