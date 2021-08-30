@@ -5312,7 +5312,7 @@ var $;
                 "cyan",
                 "teal",
                 "green",
-                "lime",
+                "yellow",
                 "orange",
                 "brown",
                 "blue_grey",
