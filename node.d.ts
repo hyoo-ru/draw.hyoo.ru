@@ -1026,41 +1026,6 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
-    class $mol_list extends $mol_view {
-        render_visible_only(): boolean;
-        render_over(): number;
-        sub(): readonly $mol_view[];
-        Empty(): $mol_view;
-        Gap_before(): $mol_view;
-        Gap_after(): $mol_view;
-        view_window(): readonly any[];
-        rows(): readonly $mol_view[];
-        gap_before(): number;
-        gap_after(): number;
-    }
-}
-
-declare namespace $ {
-    function $mol_support_css_overflow_anchor(this: $): boolean;
-}
-
-declare namespace $ {
-}
-
-declare namespace $.$$ {
-    class $mol_list extends $.$mol_list {
-        sub(): readonly $mol_view[];
-        render_visible_only(): boolean;
-        view_window(): [number, number];
-        gap_before(): number;
-        gap_after(): number;
-        sub_visible(): $mol_view[];
-        minimal_height(): number;
-        force_render(path: Set<$mol_view>): void;
-    }
-}
-
-declare namespace $ {
     class $mol_speck extends $mol_view {
         attr(): {
             mol_theme: string;
@@ -1225,13 +1190,98 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
-    class $hyoo_draw_colors extends $mol_list {
-        color(val?: any): string;
-        Option(id: any): $$.$mol_button;
-        options(): readonly any[];
+    class $mol_button_typed extends $mol_button {
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_button_minor extends $mol_button_typed {
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_check extends $mol_button_minor {
+        attr(): {
+            mol_check_checked: boolean;
+            "aria-checked": boolean;
+            role: string;
+            disabled: boolean;
+            tabindex: number;
+            title: string;
+        };
+        sub(): readonly $mol_view_content[];
+        checked(val?: any): boolean;
+        Icon(): any;
+        title(): string;
+        Title(): $mol_view;
+        label(): readonly any[];
+    }
+}
+
+declare namespace $ {
+    function $mol_maybe<Value>(value: Value | null | undefined): Value[];
+}
+
+declare namespace $ {
+}
+
+declare namespace $.$$ {
+    class $mol_check extends $.$mol_check {
+        click(next?: Event): void;
+        sub(): readonly $mol_view_content[];
+        label(): readonly any[];
+    }
+}
+
+declare namespace $ {
+    class $mol_switch extends $mol_view {
+        Option(id: any): $$.$mol_check;
+        value(val?: any): any;
+        options(): {};
+        keys(): readonly string[];
+        sub(): readonly $mol_check[];
+        option_checked(id: any, val?: any): boolean;
         option_title(id: any): string;
+        option_label(id: any): readonly any[];
+        enabled(): boolean;
+        option_enabled(id: any): boolean;
+        items(): readonly $mol_check[];
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $.$$ {
+    class $mol_switch extends $.$mol_switch {
+        value(next?: any): any;
+        options(): {
+            [key: string]: string;
+        };
+        keys(): string[];
+        items(): $mol_check[];
+        option_title(key: string): string;
+        option_checked(key: string, next?: boolean): boolean;
+    }
+}
+
+declare namespace $ {
+    class $hyoo_draw_colors extends $mol_switch {
+        Option(id: any): $hyoo_draw_colors_option;
+        keys(): readonly any[];
         color_raw(id: any): string;
-        option_select(id: any, event?: any): any;
+    }
+    class $hyoo_draw_colors_option extends $mol_check {
+        style(): {
+            backgroundColor: string;
+        };
+        color(): string;
     }
 }
 
@@ -1240,11 +1290,43 @@ declare namespace $ {
 
 declare namespace $.$$ {
     class $hyoo_draw_colors extends $.$hyoo_draw_colors {
-        rows(): $mol_button[];
-        color(next?: string): any;
+        value(next?: string): any;
         color_raw(id: string): string;
-        option_select(id: string): void;
-        option_title(id: string): "" | "✔";
+    }
+}
+
+declare namespace $ {
+    class $mol_list extends $mol_view {
+        render_visible_only(): boolean;
+        render_over(): number;
+        sub(): readonly $mol_view[];
+        Empty(): $mol_view;
+        Gap_before(): $mol_view;
+        Gap_after(): $mol_view;
+        view_window(): readonly any[];
+        rows(): readonly $mol_view[];
+        gap_before(): number;
+        gap_after(): number;
+    }
+}
+
+declare namespace $ {
+    function $mol_support_css_overflow_anchor(this: $): boolean;
+}
+
+declare namespace $ {
+}
+
+declare namespace $.$$ {
+    class $mol_list extends $.$mol_list {
+        sub(): readonly $mol_view[];
+        render_visible_only(): boolean;
+        view_window(): [number, number];
+        gap_before(): number;
+        gap_after(): number;
+        sub_visible(): $mol_view[];
+        minimal_height(): number;
+        force_render(path: Set<$mol_view>): void;
     }
 }
 
@@ -2335,56 +2417,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_button_typed extends $mol_button {
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    class $mol_button_minor extends $mol_button_typed {
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    class $mol_check extends $mol_button_minor {
-        attr(): {
-            mol_check_checked: boolean;
-            "aria-checked": boolean;
-            role: string;
-            disabled: boolean;
-            tabindex: number;
-            title: string;
-        };
-        sub(): readonly $mol_view_content[];
-        checked(val?: any): boolean;
-        Icon(): any;
-        title(): string;
-        Title(): $mol_view;
-        label(): readonly any[];
-    }
-}
-
-declare namespace $ {
-    function $mol_maybe<Value>(value: Value | null | undefined): Value[];
-}
-
-declare namespace $ {
-}
-
-declare namespace $.$$ {
-    class $mol_check extends $.$mol_check {
-        click(next?: Event): void;
-        sub(): readonly $mol_view_content[];
-        label(): readonly any[];
-    }
-}
-
-declare namespace $ {
     class $mol_check_icon extends $mol_check {
     }
 }
@@ -2411,38 +2443,6 @@ declare namespace $ {
 declare namespace $.$$ {
     class $mol_lights_toggle extends $.$mol_lights_toggle {
         lights(next?: boolean): boolean;
-    }
-}
-
-declare namespace $ {
-    class $mol_switch extends $mol_view {
-        Option(id: any): $$.$mol_check;
-        value(val?: any): any;
-        options(): {};
-        keys(): readonly string[];
-        sub(): readonly $mol_check[];
-        option_checked(id: any, val?: any): boolean;
-        option_title(id: any): string;
-        option_label(id: any): readonly any[];
-        enabled(): boolean;
-        option_enabled(id: any): boolean;
-        items(): readonly $mol_check[];
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $.$$ {
-    class $mol_switch extends $.$mol_switch {
-        value(next?: any): any;
-        options(): {
-            [key: string]: string;
-        };
-        keys(): string[];
-        items(): $mol_check[];
-        option_title(key: string): string;
-        option_checked(key: string, next?: boolean): boolean;
     }
 }
 

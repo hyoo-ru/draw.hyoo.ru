@@ -18,17 +18,6 @@ $mol_book2 $mol_scroll
 $mol_theme_auto $mol_plugin
 	attr * mol_theme <= theme \
 
-$mol_list $mol_view
-	render_visible_only true
-	render_over 0
-	sub <= rows /$mol_view
-	Empty $mol_view
-	Gap_before $mol_view style * paddingTop <= gap_before 0
-	Gap_after $mol_view style * paddingTop <= gap_after 0
-	view_window /
-		0
-		0
-
 $mol_speck $mol_view
 	attr *
 		^
@@ -58,13 +47,45 @@ $mol_button $mol_view
 		<= title
 	Speck $mol_speck
 
-$hyoo_draw_colors $mol_list
-	color?val \
-	Option!id $mol_button
+$mol_button_typed $mol_button
+
+$mol_button_minor $mol_button_typed
+
+$mol_check $mol_button_minor
+	attr *
+		^
+		mol_check_checked <= checked?val false
+		aria-checked <= checked?val false
+		role \checkbox
+	sub /$mol_view_content
+		<= Icon null
+		<= label /
+			<= Title $mol_view
+				sub /
+					<= title \
+
+$mol_switch $mol_view
+	Option!id $mol_check
+		checked?val <=> option_checked!id?val false
+		label <= option_label!id / <= option_title!id \
+		enabled <= option_enabled!id <= enabled true
+		minimal_height 24
+	value?val null
+	options *
+	keys /string
+	sub <= items /$mol_check
+
+$hyoo_draw_colors $mol_switch
+	- Option!id $mol_button
 		title <= option_title!id \
 		style * backgroundColor <= color_raw!id \
 		click?event <=> option_select!id?event null
-	options /
+	Option!id $hyoo_draw_colors_option
+		color <= color_raw!id \
+		checked?val <=> option_checked!id?val
+		enabled <= option_enabled!id
+		minimal_height 40
+	keys /
 		\red
 		\pink
 		\purple
@@ -76,8 +97,26 @@ $hyoo_draw_colors $mol_list
 		\yellow
 		\orange
 		\brown
+		\coral
 		\blue_grey
 		\grey
+		\negative
+
+$hyoo_draw_colors_option $mol_check
+	style *
+		^
+		backgroundColor <= color \
+
+$mol_list $mol_view
+	render_visible_only true
+	render_over 0
+	sub <= rows /$mol_view
+	Empty $mol_view
+	Gap_before $mol_view style * paddingTop <= gap_before 0
+	Gap_after $mol_view style * paddingTop <= gap_after 0
+	view_window /
+		0
+		0
 
 $mol_svg $mol_view
 	dom_name \svg
@@ -526,23 +565,6 @@ $mol_link_source $mol_link
 	sub /
 		<= Icon $mol_icon_github_circle
 
-$mol_button_typed $mol_button
-
-$mol_button_minor $mol_button_typed
-
-$mol_check $mol_button_minor
-	attr *
-		^
-		mol_check_checked <= checked?val false
-		aria-checked <= checked?val false
-		role \checkbox
-	sub /$mol_view_content
-		<= Icon null
-		<= label /
-			<= Title $mol_view
-				sub /
-					<= title \
-
 $mol_check_icon $mol_check
 
 $mol_icon_brightness_6 $mol_icon path \M12,18V6C15.31,6 18,8.69 18,12C18,15.31 15.31,18 12,18M20,15.31L23.31,12L20,8.69V4H15.31L12,0.69L8.69,4H4V8.69L0.69,12L4,15.31V20H8.69L12,23.31L15.31,20H20V15.31Z
@@ -551,17 +573,6 @@ $mol_lights_toggle $mol_check_icon
 	Icon <= Lights_icon $mol_icon_brightness_6
 	hint @ \Toggle lights
 	checked?val <=> lights?val false
-
-$mol_switch $mol_view
-	Option!id $mol_check
-		checked?val <=> option_checked!id?val false
-		label <= option_label!id / <= option_title!id \
-		enabled <= option_enabled!id <= enabled true
-		minimal_height 24
-	value?val null
-	options *
-	keys /string
-	sub <= items /$mol_check
 
 $mol_icon_cursor_move $mol_icon path \M13,6V11H18V7.75L22.25,12L18,16.25V13H13V18H16.25L12,22.25L7.75,18H11V13H6V16.25L1.75,12L6,7.75V11H11V6H7.75L12,1.75L16.25,6H13Z
 
@@ -593,7 +604,7 @@ $hyoo_draw $mol_book2
 						<= Tools_left $mol_list
 							rows /
 								<= Colors $hyoo_draw_colors
-									color => color
+									value => color
 				<= Pane $hyoo_draw_pane
 					color <= color
 					tool <= tool
