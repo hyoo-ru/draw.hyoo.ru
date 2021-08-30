@@ -2107,6 +2107,7 @@ declare namespace $.$$ {
 declare namespace $ {
     class $hyoo_draw_pane extends $mol_plot_pane {
         color(): string;
+        tool(): string;
         state(): $mol_state_shared;
         reset(event?: any): any;
         shift(val?: any): $mol_vector_2d<number>;
@@ -2137,6 +2138,8 @@ declare namespace $.$$ {
         figure_current(next?: string | null): string | null;
         _point_last: $mol_vector_2d<number> | null;
         draw(event: Event): void;
+        draw_pencil(event: Event): void;
+        draw_eraser(event: Event): void;
         pan(next?: $mol_vector_2d<number>): $mol_vector<number, 2>;
     }
 }
@@ -2412,6 +2415,81 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
+    class $mol_switch extends $mol_view {
+        Option(id: any): $$.$mol_check;
+        value(val?: any): any;
+        options(): {};
+        keys(): readonly string[];
+        sub(): readonly $mol_check[];
+        option_checked(id: any, val?: any): boolean;
+        option_title(id: any): string;
+        option_label(id: any): readonly any[];
+        enabled(): boolean;
+        option_enabled(id: any): boolean;
+        items(): readonly $mol_check[];
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $.$$ {
+    class $mol_switch extends $.$mol_switch {
+        value(next?: any): any;
+        options(): {
+            [key: string]: string;
+        };
+        keys(): string[];
+        items(): $mol_check[];
+        option_title(key: string): string;
+        option_checked(key: string, next?: boolean): boolean;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_cursor_move extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_lead_pencil extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_eraser extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_eraser_variant extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $hyoo_draw_tools extends $mol_switch {
+        value(val?: any): string;
+        keys(): readonly any[];
+        Icon_move(): $mol_icon_cursor_move;
+        Icon_pencil(): $mol_icon_lead_pencil;
+        Icon_eraser(): $mol_icon_eraser_variant;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $.$$ {
+    class $hyoo_draw_tools extends $.$hyoo_draw_tools {
+        option_label(id: string): $mol_icon_cursor_move[];
+    }
+}
+
+declare namespace $ {
     class $hyoo_draw extends $mol_book2 {
         title(): string;
         plugins(): readonly any[];
@@ -2428,6 +2506,8 @@ declare namespace $ {
         Chat(): $$.$mol_chat;
         Source_link(): $mol_link_source;
         Lights(): $$.$mol_lights_toggle;
+        tool(): string;
+        Tools(): $$.$hyoo_draw_tools;
         Tools_right(): $$.$mol_list;
         Side_right(): $$.$mol_scroll;
         Main(): $mol_view;
