@@ -22,6 +22,7 @@
 [hyoo_draw_main] {
 	position: relative;
 	flex: 10000 0 30rem;
+	min-width: 0;
 }
 
 [hyoo_draw_side_left] {
