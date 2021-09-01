@@ -114,9 +114,14 @@ namespace $.$$ {
 			
 			const point = this.action_point()
 			const radius = 16 / this.zoom()
+			
+			const visible = new Set( this.graphs_visible() )
 
 			let figures = this.figures()
 			for( const id of figures ) {
+				
+				const graph = this.Line( id )
+				if( !visible.has( graph ) ) continue
 				
 				const figure = this.figure( id )
 				const points = figure.sub( 'points' )
