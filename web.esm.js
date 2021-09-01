@@ -5531,8 +5531,11 @@ var $;
         graphs() {
             return [];
         }
-        graphs_positioned() {
+        graphs_visible() {
             return this.graphs();
+        }
+        graphs_positioned() {
+            return this.graphs_visible();
         }
         zoom(val) {
             if (val !== undefined)
@@ -7966,8 +7969,12 @@ var $;
                     return;
                 const point = this.action_point();
                 const radius = 16 / this.zoom();
+                const visible = new Set(this.graphs_visible());
                 let figures = this.figures();
                 for (const id of figures) {
+                    const graph = this.Line(id);
+                    if (!visible.has(graph))
+                        continue;
                     const figure = this.figure(id);
                     const points = figure.sub('points');
                     const list = points.list().filter(p => {
