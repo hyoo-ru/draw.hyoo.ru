@@ -6,4 +6,4 @@ $hyoo_draw_tools $mol_switch
 		\eraser
 	Icon_move $mol_icon_cursor_move
 	Icon_pencil $mol_icon_lead_pencil
-	Icon_eraser $mol_icon_eraser_variant
+	Icon_eraser $mol_icon_eraser

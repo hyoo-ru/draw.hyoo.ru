@@ -168,6 +168,7 @@ namespace $.$$ {
 			const action = this.action_type()
 			if( action !== 'draw' ) return
 			
+			const color = this.color()
 			const point = this.action_point()
 			const radius = 16 / this.zoom()
 			
@@ -180,6 +181,8 @@ namespace $.$$ {
 				if( !visible.has( graph ) ) continue
 				
 				const figure = this.figure( id )
+				if( color && color !== figure.sub( 'color' ).value() ) continue
+				
 				const points = figure.sub( 'points' )
 				
 				const list = ( points.list() as { x: number, y: number }[] ).filter( p => {

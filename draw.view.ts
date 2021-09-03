@@ -38,6 +38,7 @@ namespace $.$$ {
 		zoom( next?: number ) {
 			const arg = next ? String( next ) : undefined
 			const str = this.$.$mol_state_arg.value( 'zoom', arg )
+			if( next ) this.Tools().value( '' )
 			return Number( str ) || 1
 		}
 		
