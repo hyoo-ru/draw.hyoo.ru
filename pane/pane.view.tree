@@ -3,6 +3,8 @@ $hyoo_draw_pane $mol_plot_pane
 	tool \pencil
 	state $mol_state_shared
 	reset?event null
+	auto /
+		<= peer_update null
 	shift?val $mol_vector_2d /
 		0
 		0
@@ -13,6 +15,10 @@ $hyoo_draw_pane $mol_plot_pane
 		color <= line_color!id \
 		series_x <= line_x!id /number
 		series_y <= line_y!id /number
+	Peer!id $mol_plot_line
+		color <= peer_color!id \
+		series_x <= peer_x!id /number
+		series_y <= peer_y!id /number
 	Ruler_vert $mol_plot_ruler_vert
 		front /
 		title \

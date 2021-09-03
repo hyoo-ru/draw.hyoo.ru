@@ -8,9 +8,17 @@ namespace $.$$ {
 		}
 		
 		@ $mol_mem
+		peers() {
+			this.figures()
+			const self = this.state().peer()
+			return [ ... this.state().doc( 'figures' ).store().clock.keys() ].filter( id => id != self )
+		}
+		
+		@ $mol_mem
 		graphs() {
 			return [
 				... this.figures().map( id => this.Line( id ) ),
+				... this.peers().map( id => this.Peer( id ) ),
 				this.Ruler_hor(),
 				this.Ruler_vert(),
 			]
@@ -34,6 +42,35 @@ namespace $.$$ {
 		@ $mol_mem_key
 		line_color( id: string ) {
 			return `var(--hyoo_draw_palette_${ this.figure( id ).sub( 'color' ).value() })`
+		}
+
+		@ $mol_mem_key
+		peer( id: number ) {
+			return this.state().doc( 'peers' ).sub( id.toString(36) )
+		}
+		
+		@ $mol_mem_key
+		peer_x( id: number ) {
+			const data = this.peer( id ).value() as {
+				left: number
+				right: number
+			}
+			return data ? [ data.left, data.left, data.right, data.right, data.left ] : []
+		}
+		
+		@ $mol_mem_key
+		peer_y( id: number ) {
+			const data = this.peer( id ).value() as {
+				top: number
+				bottom: number
+			}
+			return data ? [ data.top, data.bottom, data.bottom, data.top, data.top ] : []
+		}
+		
+		@ $mol_mem_key
+		peer_color( id: number ) {
+			const color = ( this.peer( id ).value() as { color: string } )?.color ?? 'negative'
+			return `var(--hyoo_draw_palette_${ color })`
 		}
 
 		@ $mol_mem
@@ -163,11 +200,28 @@ namespace $.$$ {
 			
 		}
 		
+		_peer_update_task: $mol_fiber | undefined
+		
 		@ $mol_mem
-		pan( next?: $mol_vector_2d< number > ) {
-			return next || this.size_real().map( v => v / 2 )
-		}
+		peer_update() {
+			
+			const dims = this.dimensions_viewport()
+			const color = this.color()
+			
+			if( this._peer_update_task ) this._peer_update_task.destructor()
+			this._peer_update_task = $mol_fiber_defer( ()=> {
+				this.peer( this.state().peer() ).value({
+					left: dims.x.min,
+					right: dims.x.max,
+					top: dims.y.min,
+					bottom: dims.y.max,
+					color,
+				})
+			} )
 
+			return null
+		}
+		
 	}
 
 }
