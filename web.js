@@ -8071,6 +8071,7 @@ var $;
                 const action = this.action_type();
                 if (action !== 'draw')
                     return;
+                const color = this.color();
                 const point = this.action_point();
                 const radius = 16 / this.zoom();
                 const visible = new Set(this.graphs_visible());
@@ -8080,6 +8081,8 @@ var $;
                     if (!visible.has(graph))
                         continue;
                     const figure = this.figure(id);
+                    if (color && color !== figure.sub('color').value())
+                        continue;
                     const points = figure.sub('points');
                     const list = points.list().filter(p => {
                         if (Math.abs(p.x - point.x) > radius)
@@ -9062,18 +9065,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $mol_icon_eraser_variant extends $.$mol_icon {
-        path() {
-            return "M15.14,3C14.63,3 14.12,3.2 13.73,3.59L2.59,14.73C1.81,15.5 1.81,16.77 2.59,17.56L5.03,20H12.69L21.41,11.27C22.2,10.5 22.2,9.23 21.41,8.44L16.56,3.59C16.17,3.2 15.65,3 15.14,3M17,18L15,20H22V18";
-        }
-    }
-    $.$mol_icon_eraser_variant = $mol_icon_eraser_variant;
-})($ || ($ = {}));
-//variant.view.tree.js.map
-;
-"use strict";
-var $;
-(function ($) {
     class $hyoo_draw_tools extends $.$mol_switch {
         value(val) {
             if (val !== undefined)
@@ -9095,7 +9086,7 @@ var $;
             return obj;
         }
         Icon_eraser() {
-            const obj = new this.$.$mol_icon_eraser_variant();
+            const obj = new this.$.$mol_icon_eraser();
             return obj;
         }
     }
@@ -9118,7 +9109,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $.$mol_style_attach("hyoo/draw/tools/tools.view.css", "[hyoo_draw_tools] {\n\tflex-direction: column;\n}\n");
+    $.$mol_style_attach("hyoo/draw/tools/tools.view.css", "[hyoo_draw_tools] {\n\tflex-direction: column;\n\tflex: none;\n}\n");
 })($ || ($ = {}));
 //tools.view.css.js.map
 ;
@@ -9338,6 +9329,8 @@ var $;
             zoom(next) {
                 const arg = next ? String(next) : undefined;
                 const str = this.$.$mol_state_arg.value('zoom', arg);
+                if (next)
+                    this.Tools().value('');
                 return Number(str) || 1;
             }
         }

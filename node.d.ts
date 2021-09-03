@@ -2485,18 +2485,12 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_icon_eraser_variant extends $mol_icon {
-        path(): string;
-    }
-}
-
-declare namespace $ {
     class $hyoo_draw_tools extends $mol_switch {
         value(val?: any): string;
         keys(): readonly any[];
         Icon_move(): $mol_icon_cursor_move;
         Icon_pencil(): $mol_icon_lead_pencil;
-        Icon_eraser(): $mol_icon_eraser_variant;
+        Icon_eraser(): $mol_icon_eraser;
     }
 }
 
