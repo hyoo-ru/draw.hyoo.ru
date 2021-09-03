@@ -1623,6 +1623,7 @@ declare namespace $ {
         size(): $mol_vector_2d<number>;
         size_real(): $mol_vector_2d<number>;
         dimensions(): $mol_vector_2d<$mol_vector_range<number>>;
+        dimensions_viewport(): $mol_vector_2d<$mol_vector_range<number>>;
         sub(): readonly $mol_svg[];
         graphs_colored(): readonly $mol_plot_graph[];
         plugins(): readonly any[];
@@ -1637,6 +1638,8 @@ declare namespace $ {
         scale_limit_y(): $mol_vector_range<number>;
         dimensions_x(): $mol_vector_range<number>;
         dimensions_y(): $mol_vector_range<number>;
+        dimensions_viewport_x(): $mol_vector_range<number>;
+        dimensions_viewport_y(): $mol_vector_range<number>;
         graphs_sorted(): readonly $mol_svg[];
         graphs(): readonly $mol_plot_graph[];
         graphs_visible(): readonly $mol_plot_graph[];
@@ -2207,16 +2210,22 @@ declare namespace $ {
         tool(): string;
         state(): $mol_state_shared;
         reset(event?: any): any;
+        auto(): readonly any[];
         shift(val?: any): $mol_vector_2d<number>;
         scale(val?: any): $mol_vector_2d<number>;
         Line(id: any): $$.$mol_plot_line;
+        Peer(id: any): $$.$mol_plot_line;
         Ruler_vert(): $$.$mol_plot_ruler_vert;
         Ruler_hor(): $$.$mol_plot_ruler_hor;
         snapshot(): string;
         snapshot_current(): string;
+        peer_update(): any;
         line_color(id: any): string;
         line_x(id: any): readonly number[];
         line_y(id: any): readonly number[];
+        peer_color(id: any): string;
+        peer_x(id: any): readonly number[];
+        peer_y(id: any): readonly number[];
     }
 }
 
@@ -2224,20 +2233,29 @@ declare namespace $ {
     function $mol_guid(length?: number, exists?: (id: string) => boolean): string;
 }
 
+declare namespace $ {
+}
+
 declare namespace $.$$ {
     class $hyoo_draw_pane extends $.$hyoo_draw_pane {
         figures(next?: readonly string[]): readonly string[];
+        peers(): number[];
         graphs(): ($mol_plot_line | $mol_plot_ruler_vert | $mol_plot_ruler_hor)[];
         figure(id: string): $mol_state_shared;
         line_x(id: string): number[];
         line_y(id: string): number[];
         line_color(id: string): string;
+        peer(id: number): $mol_state_shared;
+        peer_x(id: number): number[];
+        peer_y(id: number): number[];
+        peer_color(id: number): string;
         figure_current(next?: string | null): string | null;
         _point_last: $mol_vector_2d<number> | null;
         draw(event: Event): void;
         draw_pencil(event: Event): void;
         draw_eraser(event: Event): void;
-        pan(next?: $mol_vector_2d<number>): $mol_vector<number, 2>;
+        _peer_update_task: $mol_fiber | undefined;
+        peer_update(): null;
     }
 }
 

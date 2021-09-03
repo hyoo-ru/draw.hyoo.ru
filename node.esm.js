@@ -5649,6 +5649,10 @@ var $;
             const obj = new this.$.$mol_vector_2d(this.dimensions_x(), this.dimensions_y());
             return obj;
         }
+        dimensions_viewport() {
+            const obj = new this.$.$mol_vector_2d(this.dimensions_viewport_x(), this.dimensions_viewport_y());
+            return obj;
+        }
         sub() {
             return this.graphs_sorted();
         }
@@ -5696,6 +5700,14 @@ var $;
             return obj;
         }
         dimensions_y() {
+            const obj = new this.$.$mol_vector_range(Infinity, -Infinity);
+            return obj;
+        }
+        dimensions_viewport_x() {
+            const obj = new this.$.$mol_vector_range(Infinity, -Infinity);
+            return obj;
+        }
+        dimensions_viewport_y() {
             const obj = new this.$.$mol_vector_range(Infinity, -Infinity);
             return obj;
         }
@@ -5787,6 +5799,9 @@ var $;
     ], $mol_plot_pane.prototype, "dimensions", null);
     __decorate([
         $.$mol_mem
+    ], $mol_plot_pane.prototype, "dimensions_viewport", null);
+    __decorate([
+        $.$mol_mem
     ], $mol_plot_pane.prototype, "gap_x", null);
     __decorate([
         $.$mol_mem
@@ -5809,6 +5824,12 @@ var $;
     __decorate([
         $.$mol_mem
     ], $mol_plot_pane.prototype, "dimensions_y", null);
+    __decorate([
+        $.$mol_mem
+    ], $mol_plot_pane.prototype, "dimensions_viewport_x", null);
+    __decorate([
+        $.$mol_mem
+    ], $mol_plot_pane.prototype, "dimensions_viewport_y", null);
     __decorate([
         $.$mol_mem
     ], $mol_plot_pane.prototype, "zoom", null);
@@ -8005,6 +8026,11 @@ var $;
                 return event;
             return null;
         }
+        auto() {
+            return [
+                this.peer_update()
+            ];
+        }
         shift(val) {
             if (val !== undefined)
                 return val;
@@ -8022,6 +8048,13 @@ var $;
             obj.color = () => this.line_color(id);
             obj.series_x = () => this.line_x(id);
             obj.series_y = () => this.line_y(id);
+            return obj;
+        }
+        Peer(id) {
+            const obj = new this.$.$mol_plot_line();
+            obj.color = () => this.peer_color(id);
+            obj.series_x = () => this.peer_x(id);
+            obj.series_y = () => this.peer_y(id);
             return obj;
         }
         Ruler_vert() {
@@ -8042,6 +8075,9 @@ var $;
         snapshot_current() {
             return "";
         }
+        peer_update() {
+            return null;
+        }
         line_color(id) {
             return "";
         }
@@ -8049,6 +8085,15 @@ var $;
             return [];
         }
         line_y(id) {
+            return [];
+        }
+        peer_color(id) {
+            return "";
+        }
+        peer_x(id) {
+            return [];
+        }
+        peer_y(id) {
             return [];
         }
     }
@@ -8067,6 +8112,9 @@ var $;
     __decorate([
         $.$mol_mem_key
     ], $hyoo_draw_pane.prototype, "Line", null);
+    __decorate([
+        $.$mol_mem_key
+    ], $hyoo_draw_pane.prototype, "Peer", null);
     __decorate([
         $.$mol_mem
     ], $hyoo_draw_pane.prototype, "Ruler_vert", null);
@@ -8095,15 +8143,28 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    $.$mol_style_attach("hyoo/draw/pane/pane.css", "[hyoo_draw_pane_peer] {\n\tstroke-dasharray: 2;\n\tstroke-opacity: .5;\n}\n");
+})($ || ($ = {}));
+//pane.css.js.map
+;
+"use strict";
+var $;
+(function ($) {
     var $$;
     (function ($$) {
         class $hyoo_draw_pane extends $.$hyoo_draw_pane {
             figures(next) {
                 return this.state().doc('figures').list(next);
             }
+            peers() {
+                this.figures();
+                const self = this.state().peer();
+                return [...this.state().doc('figures').store().clock.keys()].filter(id => id != self);
+            }
             graphs() {
                 return [
                     ...this.figures().map(id => this.Line(id)),
+                    ...this.peers().map(id => this.Peer(id)),
                     this.Ruler_hor(),
                     this.Ruler_vert(),
                 ];
@@ -8119,6 +8180,21 @@ var $;
             }
             line_color(id) {
                 return `var(--hyoo_draw_palette_${this.figure(id).sub('color').value()})`;
+            }
+            peer(id) {
+                return this.state().doc('peers').sub(id.toString(36));
+            }
+            peer_x(id) {
+                const data = this.peer(id).value();
+                return data ? [data.left, data.left, data.right, data.right, data.left] : [];
+            }
+            peer_y(id) {
+                const data = this.peer(id).value();
+                return data ? [data.top, data.bottom, data.bottom, data.top, data.top] : [];
+            }
+            peer_color(id) {
+                const color = this.peer(id).value()?.color ?? 'negative';
+                return `var(--hyoo_draw_palette_${color})`;
             }
             figure_current(next = null) {
                 return next;
@@ -8208,13 +8284,30 @@ var $;
                 }
                 this.figures(figures);
             }
-            pan(next) {
-                return next || this.size_real().map(v => v / 2);
+            _peer_update_task;
+            peer_update() {
+                const dims = this.dimensions_viewport();
+                const color = this.color();
+                if (this._peer_update_task)
+                    this._peer_update_task.destructor();
+                this._peer_update_task = $.$mol_fiber_defer(() => {
+                    this.peer(this.state().peer()).value({
+                        left: dims.x.min,
+                        right: dims.x.max,
+                        top: dims.y.min,
+                        bottom: dims.y.max,
+                        color,
+                    });
+                });
+                return null;
             }
         }
         __decorate([
             $.$mol_mem
         ], $hyoo_draw_pane.prototype, "figures", null);
+        __decorate([
+            $.$mol_mem
+        ], $hyoo_draw_pane.prototype, "peers", null);
         __decorate([
             $.$mol_mem
         ], $hyoo_draw_pane.prototype, "graphs", null);
@@ -8231,11 +8324,23 @@ var $;
             $.$mol_mem_key
         ], $hyoo_draw_pane.prototype, "line_color", null);
         __decorate([
+            $.$mol_mem_key
+        ], $hyoo_draw_pane.prototype, "peer", null);
+        __decorate([
+            $.$mol_mem_key
+        ], $hyoo_draw_pane.prototype, "peer_x", null);
+        __decorate([
+            $.$mol_mem_key
+        ], $hyoo_draw_pane.prototype, "peer_y", null);
+        __decorate([
+            $.$mol_mem_key
+        ], $hyoo_draw_pane.prototype, "peer_color", null);
+        __decorate([
             $.$mol_mem
         ], $hyoo_draw_pane.prototype, "figure_current", null);
         __decorate([
             $.$mol_mem
-        ], $hyoo_draw_pane.prototype, "pan", null);
+        ], $hyoo_draw_pane.prototype, "peer_update", null);
         $$.$hyoo_draw_pane = $hyoo_draw_pane;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
