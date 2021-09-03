@@ -6042,7 +6042,7 @@ var $;
         }
         h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
         h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
-        return 4294967296 * ((1 << 16) & h2) + (h1 >>> 0);
+        return 4294967296 * (((1 << 16) - 1) & h2) + (h1 >>> 0);
     }
     $.$mol_hash_string = $mol_hash_string;
 })($ || ($ = {}));
@@ -6807,8 +6807,19 @@ var $;
             return `wss://sync-hyoo-ru.herokuapp.com/`;
         }
         server_clock = new $.$hyoo_crowd_clock;
+        peer() {
+            const key = this + '.peer()';
+            const peer = this.$.$mol_state_local.value(key);
+            if (peer)
+                return Number(peer);
+            const peer2 = 1 + Math.floor(Math.random() * (2 ** (6 * 8) - 2));
+            $.$mol_fiber_defer(() => {
+                this.$.$mol_state_local.value(key, peer2);
+            });
+            return peer2;
+        }
         store() {
-            return new this.$.$hyoo_crowd_doc;
+            return new this.$.$hyoo_crowd_doc(this.peer());
         }
         path() {
             return '';
@@ -6824,6 +6835,7 @@ var $;
             state.path = $.$mol_const(this.path() ? this.path() + '/' + key : key);
             state.doc = k => this.doc(key + '/' + k);
             state.socket = () => this.socket();
+            state.peer = () => this.peer();
             return state;
         }
         sub(key) {
@@ -6945,6 +6957,9 @@ var $;
             socket.send(JSON.stringify(message));
         }
     }
+    __decorate([
+        $.$mol_mem
+    ], $mol_state_shared.prototype, "peer", null);
     __decorate([
         $.$mol_mem
     ], $mol_state_shared.prototype, "store", null);
@@ -9193,21 +9208,19 @@ var $;
                 const offset = new $.$mol_vector_2d(rect.width / 2, rect.height / 2);
                 const arg = next ? (next[0] - offset.x) + 'x' + (next[1] - offset.y) : undefined;
                 const str = this.$.$mol_state_arg.value('center', arg);
-                const val = this.$.$mol_state_local.value('center', next);
                 if (str) {
                     const coords = str.split('x').map(Number);
                     return new $.$mol_vector_2d(coords[0] + offset.x, coords[1] + offset.y);
                 }
-                if (val) {
-                    return new $.$mol_vector_2d(...val);
-                }
-                return new $.$mol_vector_2d(Math.trunc((Math.random() - .5) * 2 ** 32), Math.trunc((Math.random() - .5) * 2 ** 32));
+                const peer = this.Pane().state().peer();
+                const x = ~($.$mol_hash_string('x', peer) - 2 ** (6 * 8 - 1));
+                const y = ~($.$mol_hash_string('y', peer) - 2 ** (6 * 8 - 1));
+                return new $.$mol_vector_2d(x, y);
             }
             zoom(next) {
                 const arg = next ? String(next) : undefined;
                 const str = this.$.$mol_state_arg.value('zoom', arg);
-                const val = this.$.$mol_state_local.value('zoom', next);
-                return Number(str) || val || 1;
+                return Number(str) || 1;
             }
         }
         __decorate([

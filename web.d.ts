@@ -1942,6 +1942,7 @@ declare namespace $ {
     class $mol_state_shared extends $mol_object2 {
         server(): string;
         server_clock: $hyoo_crowd_clock;
+        peer(): number;
         store(): $hyoo_crowd_doc;
         path(): string;
         node(): $hyoo_crowd_node;
