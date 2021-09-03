@@ -87,11 +87,30 @@ namespace $.$$ {
 						}
 						
 					}
+
+					const next = { x: point!.x, y: point!.y }
 					
-					figure.sub( 'points' ).list([
-						... points,
-						{ x: point!.x, y: point!.y },
-					])
+					if( points.length > 1 ) {
+						
+						const end = points[ points.length - 2 ] as typeof next
+						const last = {
+							x: ( end.x + next.x ) / 2,
+							y: ( end.y + next.y ) / 2,
+						}
+						
+						points = [
+							... points.slice( 0 , -1 ),
+							last,
+							next,
+						]
+					
+					} else {
+						
+						points = [ ... points, next ]
+						
+					}
+					
+					figure.sub( 'points' ).list( points )
 					
 					return
 				}
