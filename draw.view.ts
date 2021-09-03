@@ -22,30 +22,23 @@ namespace $.$$ {
 			const arg = next ? ( next[0] - offset.x ) + 'x' + ( next[1] - offset.y ) : undefined
 			
 			const str = this.$.$mol_state_arg.value( 'center', arg )
-			const val = this.$.$mol_state_local.value( 'center', next ) as null | readonly[ number, number ]
-			
 			if( str ) {
 				const coords = str.split( 'x' ).map( Number )
 				return new $mol_vector_2d( coords[0] + offset.x, coords[1] + offset.y )
 			}
 			
-			if( val ) {
-				return new $mol_vector_2d( ... val )
-			}
+			const peer = this.Pane().state().peer()
+			const x = ~( $mol_hash_string( 'x', peer ) - 2 ** ( 6 * 8 - 1 ) )
+			const y = ~( $mol_hash_string( 'y', peer ) - 2 ** ( 6 * 8 - 1 ) )
 			
-			return new $mol_vector_2d(
-				Math.trunc( ( Math.random() - .5 ) * 2**32 ),
-				Math.trunc( ( Math.random() - .5 ) * 2**32 ),
-			)
-			
+			return new $mol_vector_2d( x, y )
 		}
 		
 		@ $mol_mem
 		zoom( next?: number ) {
 			const arg = next ? String( next ) : undefined
 			const str = this.$.$mol_state_arg.value( 'zoom', arg )
-			const val = this.$.$mol_state_local.value( 'zoom', next ) as null | number
-			return Number( str ) || val || 1
+			return Number( str ) || 1
 		}
 		
 	}
