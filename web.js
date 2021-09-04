@@ -8004,7 +8004,6 @@ var $;
                             case 'fill': return this.Fill(id);
                         }
                     }).filter($.$mol_guard_defined),
-                    ...this.peers().map(id => this.Peer(id)),
                     this.Ruler_hor(),
                     this.Ruler_vert(),
                 ];
