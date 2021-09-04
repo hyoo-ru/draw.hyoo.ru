@@ -17,7 +17,12 @@ namespace $.$$ {
 		@ $mol_mem
 		graphs() {
 			return [
-				... this.figures().map( id => this.Line( id ) ),
+				... this.figures().map( id => {
+					switch( this.figure( id ).sub( 'type' ).value() ) {
+						case 'line': return this.Line( id )
+						case 'fill': return this.Fill( id )
+					}
+				} ).filter( $mol_guard_defined ),
 				... this.peers().map( id => this.Peer( id ) ),
 				this.Ruler_hor(),
 				this.Ruler_vert(),
@@ -82,12 +87,13 @@ namespace $.$$ {
 		
 		draw( event: Event ) {
 			switch( this.tool() ) {
-				case 'pencil': return this.draw_pencil( event )
+				case 'pencil': return this.draw_pencil( 'line', event )
+				case 'filler': return this.draw_pencil( 'fill', event )
 				case 'eraser': return this.draw_eraser( event )
 			}
 		}
 		
-		draw_pencil( event: Event ) {
+		draw_pencil( type: string, event: Event ) {
 			
 			event.preventDefault()
 			
@@ -119,7 +125,7 @@ namespace $.$$ {
 							this.figures( figures )
 							
 							figure.sub( 'color' ).value( this.color() )
-							figure.sub( 'type' ).value( 'line' )
+							figure.sub( 'type' ).value( type )
 							
 						}
 						
@@ -177,10 +183,12 @@ namespace $.$$ {
 			let figures = this.figures()
 			for( const id of figures ) {
 				
-				const graph = this.Line( id )
+				const figure = this.figure( id )
+				const type = figure.sub( 'type' ).value()
+				
+				const graph = type === 'fill' ? this.Fill( id ) : this.Line( id )
 				if( !visible.has( graph ) ) continue
 				
-				const figure = this.figure( id )
 				if( color && color !== figure.sub( 'color' ).value() ) continue
 				
 				const points = figure.sub( 'points' )

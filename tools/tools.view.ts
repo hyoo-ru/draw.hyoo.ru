@@ -8,6 +8,7 @@ namespace $.$$ {
 			switch( id ) {
 				case 'move': return [ this.Icon_move() ]
 				case 'pencil': return [ this.Icon_pencil() ]
+				case 'filler': return [ this.Icon_filler() ]
 				case 'eraser': return [ this.Icon_eraser() ]
 				default: return []
 			}

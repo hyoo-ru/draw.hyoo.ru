@@ -15,6 +15,10 @@ $hyoo_draw_pane $mol_plot_pane
 		color <= line_color!id \
 		series_x <= line_x!id /number
 		series_y <= line_y!id /number
+	Fill!id $mol_plot_line
+		color <= line_color!id \
+		series_x <= line_x!id /number
+		series_y <= line_y!id /number
 	Peer!id $mol_plot_line
 		color <= peer_color!id \
 		series_x <= peer_x!id /number
