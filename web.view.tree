@@ -346,21 +346,16 @@ $mol_plot_pane $mol_svg_root
 		^
 		dblclick?event <=> reset?event null
 
-$mol_svg_path $mol_svg
-	dom_name \path
-	attr *
-		^
-		d <= geometry \
-
-
 $mol_plot_line $mol_plot_graph
 	threshold 1
 	spacing 2
 	color_fill \none
+	dom_name \path
+	attr *
+		^
+		d <= curve \
 	sub /
 		<= Hint
-		<= Curve $mol_svg_path
-			geometry <= curve \
 	-
 	Sample $mol_plot_graph_sample
 		color <= color
@@ -386,6 +381,13 @@ $mol_svg_rect $mol_svg
 		height <= height \0
 		x <= pos_x \
 		y <= pos_y \
+
+$mol_svg_path $mol_svg
+	dom_name \path
+	attr *
+		^
+		d <= geometry \
+
 
 $mol_svg_text_box $mol_svg_group
 	font_size 16
@@ -470,6 +472,10 @@ $hyoo_draw_pane $mol_plot_pane
 		<= zoom
 		<= zoom
 	Line!id $mol_plot_line
+		color <= line_color!id \
+		series_x <= line_x!id /number
+		series_y <= line_y!id /number
+	Fill!id $mol_plot_line
 		color <= line_color!id \
 		series_x <= line_x!id /number
 		series_y <= line_y!id /number
@@ -593,15 +599,19 @@ $mol_icon_lead_pencil $mol_icon path \M16.84,2.73C16.45,2.73 16.07,2.88 15.77,3.
 
 $mol_icon_eraser $mol_icon path \M16.24,3.56L21.19,8.5C21.97,9.29 21.97,10.55 21.19,11.34L12,20.53C10.44,22.09 7.91,22.09 6.34,20.53L2.81,17C2.03,16.21 2.03,14.95 2.81,14.16L13.41,3.56C14.2,2.78 15.46,2.78 16.24,3.56M4.22,15.58L7.76,19.11C8.54,19.9 9.8,19.9 10.59,19.11L14.12,15.58L9.17,10.63L4.22,15.58Z
 
+$mol_icon_format_color_fill $mol_icon path \M19,11.5C19,11.5 17,13.67 17,15C17,16.1 17.9,17 19,17C20.1,17 21,16.1 21,15C21,13.67 19,11.5 19,11.5M5.21,10L10,5.21L14.79,10M16.56,8.94L7.62,0L6.21,1.41L8.59,3.79L3.44,8.94C2.85,9.5 2.85,10.47 3.44,11.06L8.94,16.56C9.23,16.85 9.62,17 10,17C10.38,17 10.77,16.85 11.06,16.56L16.56,11.06C17.15,10.47 17.15,9.5 16.56,8.94Z
+
 $hyoo_draw_tools $mol_switch
 	value?val \pencil
 	keys /
 		- \move
 		\pencil
+		\filler
 		\eraser
 	Icon_move $mol_icon_cursor_move
 	Icon_pencil $mol_icon_lead_pencil
 	Icon_eraser $mol_icon_eraser
+	Icon_filler $mol_icon_format_color_fill
 
 $hyoo_draw $mol_book2
 	title @ \Fast vector sketch

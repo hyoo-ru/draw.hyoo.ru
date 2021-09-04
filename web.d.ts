@@ -1974,24 +1974,18 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_svg_path extends $mol_svg {
-        dom_name(): string;
-        attr(): {
-            d: string;
-        };
-        geometry(): string;
-    }
-}
-
-declare namespace $ {
     class $mol_plot_line extends $mol_plot_graph {
         threshold(): number;
         spacing(): number;
         color_fill(): string;
+        dom_name(): string;
+        attr(): {
+            d: string;
+            mol_plot_graph_type: string;
+        };
         sub(): readonly any[];
         Sample(): $mol_plot_graph_sample;
         curve(): string;
-        Curve(): $mol_svg_path;
     }
 }
 
@@ -2000,6 +1994,7 @@ declare namespace $ {
 
 declare namespace $.$$ {
     class $mol_plot_line extends $.$mol_plot_line {
+        sub(): readonly any[];
         indexes(): number[];
         curve(): string;
     }
@@ -2053,6 +2048,16 @@ declare namespace $.$$ {
     class $mol_svg_rect extends $.$mol_svg_rect {
         pos_x(): any;
         pos_y(): any;
+    }
+}
+
+declare namespace $ {
+    class $mol_svg_path extends $mol_svg {
+        dom_name(): string;
+        attr(): {
+            d: string;
+        };
+        geometry(): string;
     }
 }
 
@@ -2214,6 +2219,7 @@ declare namespace $ {
         shift(val?: any): $mol_vector_2d<number>;
         scale(val?: any): $mol_vector_2d<number>;
         Line(id: any): $$.$mol_plot_line;
+        Fill(id: any): $$.$mol_plot_line;
         Peer(id: any): $$.$mol_plot_line;
         Ruler_vert(): $$.$mol_plot_ruler_vert;
         Ruler_hor(): $$.$mol_plot_ruler_hor;
@@ -2227,6 +2233,10 @@ declare namespace $ {
         peer_x(id: any): readonly number[];
         peer_y(id: any): readonly number[];
     }
+}
+
+declare namespace $ {
+    function $mol_guard_defined<T>(value: T): value is NonNullable<T>;
 }
 
 declare namespace $ {
@@ -2252,7 +2262,7 @@ declare namespace $.$$ {
         figure_current(next?: string | null): string | null;
         _point_last: $mol_vector_2d<number> | null;
         draw(event: Event): void;
-        draw_pencil(event: Event): void;
+        draw_pencil(type: string, event: Event): void;
         draw_eraser(event: Event): void;
         _peer_update_task: $mol_fiber | undefined;
         peer_update(): null;
@@ -2498,12 +2508,19 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $mol_icon_format_color_fill extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
     class $hyoo_draw_tools extends $mol_switch {
         value(val?: any): string;
         keys(): readonly any[];
         Icon_move(): $mol_icon_cursor_move;
         Icon_pencil(): $mol_icon_lead_pencil;
         Icon_eraser(): $mol_icon_eraser;
+        Icon_filler(): $mol_icon_format_color_fill;
     }
 }
 

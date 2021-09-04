@@ -7219,27 +7219,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $mol_svg_path extends $.$mol_svg {
-        dom_name() {
-            return "path";
-        }
-        attr() {
-            return {
-                ...super.attr(),
-                d: this.geometry()
-            };
-        }
-        geometry() {
-            return "";
-        }
-    }
-    $.$mol_svg_path = $mol_svg_path;
-})($ || ($ = {}));
-//path.view.tree.js.map
-;
-"use strict";
-var $;
-(function ($) {
     class $mol_plot_line extends $.$mol_plot_graph {
         threshold() {
             return 1;
@@ -7250,10 +7229,18 @@ var $;
         color_fill() {
             return "none";
         }
+        dom_name() {
+            return "path";
+        }
+        attr() {
+            return {
+                ...super.attr(),
+                d: this.curve()
+            };
+        }
         sub() {
             return [
-                this.Hint(),
-                this.Curve()
+                this.Hint()
             ];
         }
         Sample() {
@@ -7265,18 +7252,10 @@ var $;
         curve() {
             return "";
         }
-        Curve() {
-            const obj = new this.$.$mol_svg_path();
-            obj.geometry = () => this.curve();
-            return obj;
-        }
     }
     __decorate([
         $.$mol_mem
     ], $mol_plot_line.prototype, "Sample", null);
-    __decorate([
-        $.$mol_mem
-    ], $mol_plot_line.prototype, "Curve", null);
     $.$mol_plot_line = $mol_plot_line;
 })($ || ($ = {}));
 //line.view.tree.js.map
@@ -7294,6 +7273,9 @@ var $;
     var $$;
     (function ($$) {
         class $mol_plot_line extends $.$mol_plot_line {
+            sub() {
+                return this.hint() ? super.sub() : [];
+            }
             indexes() {
                 const threshold = this.threshold();
                 const { x: { min: viewport_left, max: viewport_right }, y: { min: viewport_bottom, max: viewport_top }, } = this.viewport();
@@ -7309,7 +7291,7 @@ var $;
                         : 0, point.y < viewport_bottom ? -1
                     : point.y > viewport_top ? 1
                         : 0);
-                for (let i = 0; i < series_x.length; i++) {
+                for (let i = 0; i < series_x.length - 1; i++) {
                     const scaled = new $.$mol_vector_2d(Math.round(shift_x + series_x[i] * scale_x), Math.round(shift_y + series_y[i] * scale_y));
                     if (Math.abs(scaled.x - last.x) < threshold
                         && Math.abs(scaled.y - last.y) < threshold)
@@ -7325,6 +7307,7 @@ var $;
                     last_zone = zone;
                     indexes.push(i);
                 }
+                indexes.push(series_x.length - 1);
                 return indexes;
             }
             curve() {
@@ -7461,6 +7444,27 @@ var $;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
 //rect.view.js.map
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_svg_path extends $.$mol_svg {
+        dom_name() {
+            return "path";
+        }
+        attr() {
+            return {
+                ...super.attr(),
+                d: this.geometry()
+            };
+        }
+        geometry() {
+            return "";
+        }
+    }
+    $.$mol_svg_path = $mol_svg_path;
+})($ || ($ = {}));
+//path.view.tree.js.map
 ;
 "use strict";
 var $;
@@ -8050,6 +8054,13 @@ var $;
             obj.series_y = () => this.line_y(id);
             return obj;
         }
+        Fill(id) {
+            const obj = new this.$.$mol_plot_line();
+            obj.color = () => this.line_color(id);
+            obj.series_x = () => this.line_x(id);
+            obj.series_y = () => this.line_y(id);
+            return obj;
+        }
         Peer(id) {
             const obj = new this.$.$mol_plot_line();
             obj.color = () => this.peer_color(id);
@@ -8114,6 +8125,9 @@ var $;
     ], $hyoo_draw_pane.prototype, "Line", null);
     __decorate([
         $.$mol_mem_key
+    ], $hyoo_draw_pane.prototype, "Fill", null);
+    __decorate([
+        $.$mol_mem_key
     ], $hyoo_draw_pane.prototype, "Peer", null);
     __decorate([
         $.$mol_mem
@@ -8124,6 +8138,16 @@ var $;
     $.$hyoo_draw_pane = $hyoo_draw_pane;
 })($ || ($ = {}));
 //pane.view.tree.js.map
+;
+"use strict";
+var $;
+(function ($) {
+    function $mol_guard_defined(value) {
+        return value !== null && value !== undefined;
+    }
+    $.$mol_guard_defined = $mol_guard_defined;
+})($ || ($ = {}));
+//defined.js.map
 ;
 "use strict";
 var $;
@@ -8143,7 +8167,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $.$mol_style_attach("hyoo/draw/pane/pane.css", "[hyoo_draw_pane_peer] {\n\tstroke-dasharray: 2;\n\tstroke-opacity: .5;\n}\n");
+    $.$mol_style_attach("hyoo/draw/pane/pane.css", "[hyoo_draw_pane_peer] {\n\tstroke-dasharray: 2;\n\tstroke-opacity: .5;\n}\n\n[hyoo_draw_pane_fill] {\n\tfill: currentColor;\n\tfill-opacity: .5;\n}\n");
 })($ || ($ = {}));
 //pane.css.js.map
 ;
@@ -8163,7 +8187,12 @@ var $;
             }
             graphs() {
                 return [
-                    ...this.figures().map(id => this.Line(id)),
+                    ...this.figures().map(id => {
+                        switch (this.figure(id).sub('type').value()) {
+                            case 'line': return this.Line(id);
+                            case 'fill': return this.Fill(id);
+                        }
+                    }).filter($.$mol_guard_defined),
                     ...this.peers().map(id => this.Peer(id)),
                     this.Ruler_hor(),
                     this.Ruler_vert(),
@@ -8202,11 +8231,12 @@ var $;
             _point_last = null;
             draw(event) {
                 switch (this.tool()) {
-                    case 'pencil': return this.draw_pencil(event);
+                    case 'pencil': return this.draw_pencil('line', event);
+                    case 'filler': return this.draw_pencil('fill', event);
                     case 'eraser': return this.draw_eraser(event);
                 }
             }
-            draw_pencil(event) {
+            draw_pencil(type, event) {
                 event.preventDefault();
                 const action = this.action_type();
                 const point = this.action_point();
@@ -8227,7 +8257,7 @@ var $;
                                 figures.push(id);
                                 this.figures(figures);
                                 figure.sub('color').value(this.color());
-                                figure.sub('type').value('line');
+                                figure.sub('type').value(type);
                             }
                         }
                         const next = { x: point.x, y: point.y };
@@ -8266,10 +8296,11 @@ var $;
                 const visible = new Set(this.graphs_visible());
                 let figures = this.figures();
                 for (const id of figures) {
-                    const graph = this.Line(id);
+                    const figure = this.figure(id);
+                    const type = figure.sub('type').value();
+                    const graph = type === 'fill' ? this.Fill(id) : this.Line(id);
                     if (!visible.has(graph))
                         continue;
-                    const figure = this.figure(id);
                     if (color && color !== figure.sub('color').value())
                         continue;
                     const points = figure.sub('points');
@@ -9254,6 +9285,18 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_icon_format_color_fill extends $.$mol_icon {
+        path() {
+            return "M19,11.5C19,11.5 17,13.67 17,15C17,16.1 17.9,17 19,17C20.1,17 21,16.1 21,15C21,13.67 19,11.5 19,11.5M5.21,10L10,5.21L14.79,10M16.56,8.94L7.62,0L6.21,1.41L8.59,3.79L3.44,8.94C2.85,9.5 2.85,10.47 3.44,11.06L8.94,16.56C9.23,16.85 9.62,17 10,17C10.38,17 10.77,16.85 11.06,16.56L16.56,11.06C17.15,10.47 17.15,9.5 16.56,8.94Z";
+        }
+    }
+    $.$mol_icon_format_color_fill = $mol_icon_format_color_fill;
+})($ || ($ = {}));
+//fill.view.tree.js.map
+;
+"use strict";
+var $;
+(function ($) {
     class $hyoo_draw_tools extends $.$mol_switch {
         value(val) {
             if (val !== undefined)
@@ -9263,6 +9306,7 @@ var $;
         keys() {
             return [
                 "pencil",
+                "filler",
                 "eraser"
             ];
         }
@@ -9278,6 +9322,10 @@ var $;
             const obj = new this.$.$mol_icon_eraser();
             return obj;
         }
+        Icon_filler() {
+            const obj = new this.$.$mol_icon_format_color_fill();
+            return obj;
+        }
     }
     __decorate([
         $.$mol_mem
@@ -9291,6 +9339,9 @@ var $;
     __decorate([
         $.$mol_mem
     ], $hyoo_draw_tools.prototype, "Icon_eraser", null);
+    __decorate([
+        $.$mol_mem
+    ], $hyoo_draw_tools.prototype, "Icon_filler", null);
     $.$hyoo_draw_tools = $hyoo_draw_tools;
 })($ || ($ = {}));
 //tools.view.tree.js.map
@@ -9312,6 +9363,7 @@ var $;
                 switch (id) {
                     case 'move': return [this.Icon_move()];
                     case 'pencil': return [this.Icon_pencil()];
+                    case 'filler': return [this.Icon_filler()];
                     case 'eraser': return [this.Icon_eraser()];
                     default: return [];
                 }
