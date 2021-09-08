@@ -1710,6 +1710,10 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    function $mol_hash_string(str: string, seed?: number): number;
+}
+
+declare namespace $ {
     function $mol_crypto_auditor_pair(this: $): Promise<{
         public: $mol_crypto_auditor_public;
         private: $mol_crypto_auditor_private;
@@ -1792,10 +1796,6 @@ declare namespace $ {
         interface ElementChildrenAttribute {
         }
     }
-}
-
-declare namespace $ {
-    function $mol_hash_string(str: string, seed?: number): number;
 }
 
 declare namespace $ {
@@ -2001,7 +2001,6 @@ declare namespace $ {
             public: $mol_crypto_auditor_public;
             private: $mol_crypto_auditor_private;
         };
-        store_raw(): $hyoo_crowd_doc;
         store(): $hyoo_crowd_doc;
         path(): string;
         node(): $hyoo_crowd_node;
