@@ -2255,6 +2255,7 @@ declare namespace $ {
     class $hyoo_draw_pane extends $mol_plot_pane {
         color(): string;
         tool(): string;
+        grid(): boolean;
         state(): $mol_state_shared;
         reset(event?: any): any;
         auto(): readonly any[];
@@ -2532,6 +2533,18 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
+    class $mol_icon_grid extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_grid_large extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
     class $mol_icon_lead_pencil extends $mol_icon {
         path(): string;
     }
@@ -2590,6 +2603,9 @@ declare namespace $ {
         Chat(): $$.$mol_chat;
         Source_link(): $mol_link_source;
         Lights(): $$.$mol_lights_toggle;
+        Grid_icon(): $mol_icon_grid_large;
+        grid(): boolean;
+        Grid(): $mol_check_icon;
         tool(): string;
         Tools(): $$.$hyoo_draw_tools;
         tools_right(): readonly any[];

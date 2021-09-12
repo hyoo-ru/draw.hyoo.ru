@@ -461,6 +461,7 @@ $mol_plot_ruler_hor $mol_plot_ruler
 $hyoo_draw_pane $mol_plot_pane
 	color \blue
 	tool \pencil
+	grid false
 	state $mol_state_shared
 	reset?event null
 	auto /
@@ -593,6 +594,10 @@ $mol_lights_toggle $mol_check_icon
 	hint @ \Toggle lights
 	checked?val <=> lights?val false
 
+$mol_icon_grid $mol_icon path \M10,4V8H14V4H10M16,4V8H20V4H16M16,10V14H20V10H16M16,16V20H20V16H16M14,20V16H10V20H14M8,20V16H4V20H8M8,14V10H4V14H8M8,8V4H4V8H8M10,14H14V10H10V14M4,2H20C21.1,2 22,2.9 22,4V20C22,21.1 21.1,22 20,22H4C2.92,22 2,21.1 2,20V4C2,2.9 2.9,2 4,2Z
+
+$mol_icon_grid_large $mol_icon path \M4,2H20C21.1,2 22,2.9 22,4V20C22,21.1 21.1,22 20,22H4C2.92,22 2,21.1 2,20V4C2,2.9 2.9,2 4,2M4,4V11H11V4H4M4,20H11V13H4V20M20,20V13H13V20H20M20,4H13V11H20V4Z
+
 $mol_icon_lead_pencil $mol_icon path \M16.84,2.73C16.45,2.73 16.07,2.88 15.77,3.17L13.65,5.29L18.95,10.6L21.07,8.5C21.67,7.89 21.67,6.94 21.07,6.36L17.9,3.17C17.6,2.88 17.22,2.73 16.84,2.73M12.94,6L4.84,14.11L7.4,14.39L7.58,16.68L9.86,16.85L10.15,19.41L18.25,11.3M4.25,15.04L2.5,21.73L9.2,19.94L8.96,17.78L6.65,17.61L6.47,15.29
 
 $mol_icon_eraser $mol_icon path \M16.24,3.56L21.19,8.5C21.97,9.29 21.97,10.55 21.19,11.34L12,20.53C10.44,22.09 7.91,22.09 6.34,20.53L2.81,17C2.03,16.21 2.03,14.95 2.81,14.16L13.41,3.56C14.2,2.78 15.46,2.78 16.24,3.56M4.22,15.58L7.76,19.11C8.54,19.9 9.8,19.9 10.59,19.11L14.12,15.58L9.17,10.63L4.22,15.58Z
@@ -628,6 +633,7 @@ $hyoo_draw $mol_book2
 				<= Pane $hyoo_draw_pane
 					color <= color
 					tool <= tool
+					grid <= grid
 					shift?val <=> center?val $mol_vector_2d /
 						0
 						0
@@ -641,5 +647,9 @@ $hyoo_draw $mol_book2
 								<= Source_link $mol_link_source
 									uri \https://github.com/hyoo-ru/draw.hyoo.ru
 								<= Lights $mol_lights_toggle
+								<= Grid $mol_check_icon
+									hint @ \Grid
+									checked => grid
+									Icon <= Grid_icon $mol_icon_grid_large
 								<= Tools $hyoo_draw_tools
 									value => tool

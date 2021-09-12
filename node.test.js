@@ -8144,6 +8144,9 @@ var $;
         tool() {
             return "pencil";
         }
+        grid() {
+            return false;
+        }
         state() {
             const obj = new this.$.$mol_state_shared();
             return obj;
@@ -8316,8 +8319,10 @@ var $;
                             case 'fill': return this.Fill(id);
                         }
                     }).filter($.$mol_guard_defined),
-                    this.Ruler_hor(),
-                    this.Ruler_vert(),
+                    ...this.grid() ? [
+                        this.Ruler_hor(),
+                        this.Ruler_vert(),
+                    ] : []
                 ];
             }
             figure(id) {
@@ -9371,6 +9376,30 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_icon_grid extends $.$mol_icon {
+        path() {
+            return "M10,4V8H14V4H10M16,4V8H20V4H16M16,10V14H20V10H16M16,16V20H20V16H16M14,20V16H10V20H14M8,20V16H4V20H8M8,14V10H4V14H8M8,8V4H4V8H8M10,14H14V10H10V14M4,2H20C21.1,2 22,2.9 22,4V20C22,21.1 21.1,22 20,22H4C2.92,22 2,21.1 2,20V4C2,2.9 2.9,2 4,2Z";
+        }
+    }
+    $.$mol_icon_grid = $mol_icon_grid;
+})($ || ($ = {}));
+//grid.view.tree.js.map
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_icon_grid_large extends $.$mol_icon {
+        path() {
+            return "M4,2H20C21.1,2 22,2.9 22,4V20C22,21.1 21.1,22 20,22H4C2.92,22 2,21.1 2,20V4C2,2.9 2.9,2 4,2M4,4V11H11V4H4M4,20H11V13H4V20M20,20V13H13V20H20M20,4H13V11H20V4Z";
+        }
+    }
+    $.$mol_icon_grid_large = $mol_icon_grid_large;
+})($ || ($ = {}));
+//large.view.tree.js.map
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_icon_lead_pencil extends $.$mol_icon {
         path() {
             return "M16.84,2.73C16.45,2.73 16.07,2.88 15.77,3.17L13.65,5.29L18.95,10.6L21.07,8.5C21.67,7.89 21.67,6.94 21.07,6.36L17.9,3.17C17.6,2.88 17.22,2.73 16.84,2.73M12.94,6L4.84,14.11L7.4,14.39L7.58,16.68L9.86,16.85L10.15,19.41L18.25,11.3M4.25,15.04L2.5,21.73L9.2,19.94L8.96,17.78L6.65,17.61L6.47,15.29";
@@ -9559,6 +9588,7 @@ var $;
             const obj = new this.$.$hyoo_draw_pane();
             obj.color = () => this.color();
             obj.tool = () => this.tool();
+            obj.grid = () => this.grid();
             obj.shift = (val) => this.center(val);
             obj.zoom = (val) => this.zoom(val);
             return obj;
@@ -9579,6 +9609,19 @@ var $;
             const obj = new this.$.$mol_lights_toggle();
             return obj;
         }
+        Grid_icon() {
+            const obj = new this.$.$mol_icon_grid_large();
+            return obj;
+        }
+        grid() {
+            return this.Grid().checked();
+        }
+        Grid() {
+            const obj = new this.$.$mol_check_icon();
+            obj.hint = () => this.$.$mol_locale.text('$hyoo_draw_Grid_hint');
+            obj.Icon = () => this.Grid_icon();
+            return obj;
+        }
         tool() {
             return this.Tools().value();
         }
@@ -9591,6 +9634,7 @@ var $;
                 this.Chat(),
                 this.Source_link(),
                 this.Lights(),
+                this.Grid(),
                 this.Tools()
             ];
         }
@@ -9646,6 +9690,12 @@ var $;
     __decorate([
         $.$mol_mem
     ], $hyoo_draw.prototype, "Lights", null);
+    __decorate([
+        $.$mol_mem
+    ], $hyoo_draw.prototype, "Grid_icon", null);
+    __decorate([
+        $.$mol_mem
+    ], $hyoo_draw.prototype, "Grid", null);
     __decorate([
         $.$mol_mem
     ], $hyoo_draw.prototype, "Tools", null);
