@@ -1,5 +1,8 @@
 {
 	"$hyoo_draw_title": "Fast vector sketch",
+	"$hyoo_draw_tools_hint_eraser": "Erase color point",
+	"$hyoo_draw_tools_hint_filler": "Draw color filled curve",
+	"$hyoo_draw_tools_hint_pencil": "Draw colored curve",
 	"$mol_chat_title": "Discussion",
 	"$mol_lights_toggle_hint": "Toggle lights",
 	"$mol_link_source_hint": "Source code"

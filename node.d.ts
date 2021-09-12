@@ -2532,12 +2532,6 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
-    class $mol_icon_cursor_move extends $mol_icon {
-        path(): string;
-    }
-}
-
-declare namespace $ {
     class $mol_icon_lead_pencil extends $mol_icon {
         path(): string;
     }
@@ -2559,10 +2553,12 @@ declare namespace $ {
     class $hyoo_draw_tools extends $mol_switch {
         value(val?: any): string;
         keys(): readonly any[];
-        Icon_move(): $mol_icon_cursor_move;
         Icon_pencil(): $mol_icon_lead_pencil;
         Icon_eraser(): $mol_icon_eraser;
         Icon_filler(): $mol_icon_format_color_fill;
+        hint_pencil(): string;
+        hint_filler(): string;
+        hint_eraser(): string;
     }
 }
 
@@ -2571,7 +2567,8 @@ declare namespace $ {
 
 declare namespace $.$$ {
     class $hyoo_draw_tools extends $.$hyoo_draw_tools {
-        option_label(id: string): $mol_icon_cursor_move[];
+        option_label(id: string): $mol_icon_lead_pencil[];
+        option_hint(id: string): string;
     }
 }
 

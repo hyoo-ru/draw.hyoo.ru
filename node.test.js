@@ -9371,18 +9371,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $mol_icon_cursor_move extends $.$mol_icon {
-        path() {
-            return "M13,6V11H18V7.75L22.25,12L18,16.25V13H13V18H16.25L12,22.25L7.75,18H11V13H6V16.25L1.75,12L6,7.75V11H11V6H7.75L12,1.75L16.25,6H13Z";
-        }
-    }
-    $.$mol_icon_cursor_move = $mol_icon_cursor_move;
-})($ || ($ = {}));
-//move.view.tree.js.map
-;
-"use strict";
-var $;
-(function ($) {
     class $mol_icon_lead_pencil extends $.$mol_icon {
         path() {
             return "M16.84,2.73C16.45,2.73 16.07,2.88 15.77,3.17L13.65,5.29L18.95,10.6L21.07,8.5C21.67,7.89 21.67,6.94 21.07,6.36L17.9,3.17C17.6,2.88 17.22,2.73 16.84,2.73M12.94,6L4.84,14.11L7.4,14.39L7.58,16.68L9.86,16.85L10.15,19.41L18.25,11.3M4.25,15.04L2.5,21.73L9.2,19.94L8.96,17.78L6.65,17.61L6.47,15.29";
@@ -9432,10 +9420,6 @@ var $;
                 "eraser"
             ];
         }
-        Icon_move() {
-            const obj = new this.$.$mol_icon_cursor_move();
-            return obj;
-        }
         Icon_pencil() {
             const obj = new this.$.$mol_icon_lead_pencil();
             return obj;
@@ -9448,13 +9432,19 @@ var $;
             const obj = new this.$.$mol_icon_format_color_fill();
             return obj;
         }
+        hint_pencil() {
+            return this.$.$mol_locale.text('$hyoo_draw_tools_hint_pencil');
+        }
+        hint_filler() {
+            return this.$.$mol_locale.text('$hyoo_draw_tools_hint_filler');
+        }
+        hint_eraser() {
+            return this.$.$mol_locale.text('$hyoo_draw_tools_hint_eraser');
+        }
     }
     __decorate([
         $.$mol_mem
     ], $hyoo_draw_tools.prototype, "value", null);
-    __decorate([
-        $.$mol_mem
-    ], $hyoo_draw_tools.prototype, "Icon_move", null);
     __decorate([
         $.$mol_mem
     ], $hyoo_draw_tools.prototype, "Icon_pencil", null);
@@ -9483,17 +9473,27 @@ var $;
         class $hyoo_draw_tools extends $.$hyoo_draw_tools {
             option_label(id) {
                 switch (id) {
-                    case 'move': return [this.Icon_move()];
                     case 'pencil': return [this.Icon_pencil()];
                     case 'filler': return [this.Icon_filler()];
                     case 'eraser': return [this.Icon_eraser()];
                     default: return [];
                 }
             }
+            option_hint(id) {
+                switch (id) {
+                    case 'pencil': return this.hint_pencil();
+                    case 'filler': return this.hint_filler();
+                    case 'eraser': return this.hint_eraser();
+                    default: return '';
+                }
+            }
         }
         __decorate([
             $.$mol_mem_key
         ], $hyoo_draw_tools.prototype, "option_label", null);
+        __decorate([
+            $.$mol_mem_key
+        ], $hyoo_draw_tools.prototype, "option_hint", null);
         $$.$hyoo_draw_tools = $hyoo_draw_tools;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
