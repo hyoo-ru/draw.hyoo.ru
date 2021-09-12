@@ -2596,6 +2596,7 @@ declare namespace $ {
         Theme(): $$.$mol_theme_auto;
         color(): any;
         Colors(): $$.$hyoo_draw_colors;
+        tools_left(): readonly any[];
         Tools_left(): $$.$mol_list;
         Side_left(): $$.$mol_scroll;
         center(val?: any): $mol_vector_2d<number>;
@@ -2607,6 +2608,7 @@ declare namespace $ {
         Lights(): $$.$mol_lights_toggle;
         tool(): string;
         Tools(): $$.$hyoo_draw_tools;
+        tools_right(): readonly any[];
         Tools_right(): $$.$mol_list;
         Side_right(): $$.$mol_scroll;
         Main(): $mol_view;
@@ -2621,6 +2623,7 @@ declare namespace $.$$ {
         sub(): ($mol_view | $mol_page)[];
         center(next?: $mol_vector_2d<number>): $mol_vector_2d<number>;
         zoom(next?: number): number;
+        tools_left(): $hyoo_draw_colors[];
     }
 }
 

@@ -9248,7 +9248,7 @@ var $;
         value(val) {
             if (val !== undefined)
                 return val;
-            return "pencil";
+            return "";
         }
         keys() {
             return [
@@ -9352,11 +9352,14 @@ var $;
             const obj = new this.$.$hyoo_draw_colors();
             return obj;
         }
-        Tools_left() {
-            const obj = new this.$.$mol_list();
-            obj.rows = () => [
+        tools_left() {
+            return [
                 this.Colors()
             ];
+        }
+        Tools_left() {
+            const obj = new this.$.$mol_list();
+            obj.rows = () => this.tools_left();
             return obj;
         }
         Side_left() {
@@ -9408,14 +9411,17 @@ var $;
             const obj = new this.$.$hyoo_draw_tools();
             return obj;
         }
-        Tools_right() {
-            const obj = new this.$.$mol_list();
-            obj.rows = () => [
+        tools_right() {
+            return [
                 this.Chat(),
                 this.Source_link(),
                 this.Lights(),
                 this.Tools()
             ];
+        }
+        Tools_right() {
+            const obj = new this.$.$mol_list();
+            obj.rows = () => this.tools_right();
             return obj;
         }
         Side_right() {
@@ -9521,6 +9527,11 @@ var $;
                     this.Tools().value('');
                 return Number(str) || 1;
             }
+            tools_left() {
+                return [
+                    ...this.tool() ? [this.Colors()] : []
+                ];
+            }
         }
         __decorate([
             $.$mol_mem
@@ -9531,6 +9542,9 @@ var $;
         __decorate([
             $.$mol_mem
         ], $hyoo_draw.prototype, "zoom", null);
+        __decorate([
+            $.$mol_mem
+        ], $hyoo_draw.prototype, "tools_left", null);
         $$.$hyoo_draw = $hyoo_draw;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
