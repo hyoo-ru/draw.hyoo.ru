@@ -14,6 +14,7 @@ $hyoo_draw $mol_book2
 				<= Pane $hyoo_draw_pane
 					color <= color
 					tool <= tool
+					grid <= grid
 					shift?val <=> center?val $mol_vector_2d /
 						0
 						0
@@ -27,5 +28,9 @@ $hyoo_draw $mol_book2
 								<= Source_link $mol_link_source
 									uri \https://github.com/hyoo-ru/draw.hyoo.ru
 								<= Lights $mol_lights_toggle
+								<= Grid $mol_check_icon
+									hint @ \Grid
+									checked => grid
+									Icon <= Grid_icon $mol_icon_grid_large
 								<= Tools $hyoo_draw_tools
 									value => tool

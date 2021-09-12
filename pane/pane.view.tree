@@ -1,6 +1,7 @@
 $hyoo_draw_pane $mol_plot_pane
 	color \blue
 	tool \pencil
+	grid false
 	state $mol_state_shared
 	reset?event null
 	auto /
