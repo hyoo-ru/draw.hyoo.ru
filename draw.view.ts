@@ -42,6 +42,13 @@ namespace $.$$ {
 			return Number( str ) || 1
 		}
 		
+		@ $mol_mem
+		tools_left() {
+			return [
+				... this.tool() ? [ this.Colors() ] : []
+			]
+		}
+		
 	}
 
 }

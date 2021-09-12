@@ -1,5 +1,5 @@
 $hyoo_draw_tools $mol_switch
-	value?val \pencil
+	value?val \
 	keys /
 		- \move
 		\pencil

@@ -8,7 +8,7 @@ $hyoo_draw $mol_book2
 				<= Side_left $mol_scroll
 					sub /
 						<= Tools_left $mol_list
-							rows /
+							rows <= tools_left /
 								<= Colors $hyoo_draw_colors
 									value => color
 				<= Pane $hyoo_draw_pane
@@ -21,7 +21,7 @@ $hyoo_draw $mol_book2
 				<= Side_right $mol_scroll
 					sub /
 						<= Tools_right $mol_list
-							rows /
+							rows <= tools_right /
 								<= Chat $mol_chat
 									pages => chat_pages
 								<= Source_link $mol_link_source
