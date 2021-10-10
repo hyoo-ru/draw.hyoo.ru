@@ -6122,6 +6122,103 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    function $mol_db_response(request) {
+        return new Promise((done, fail) => {
+            request.onerror = () => fail(new Error(request.error.message));
+            request.onsuccess = () => done(request.result);
+        });
+    }
+    $.$mol_db_response = $mol_db_response;
+})($ || ($ = {}));
+//response.js.map
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_db_store {
+        native;
+        constructor(native) {
+            this.native = native;
+        }
+        get name() {
+            return this.native.name;
+        }
+        get path() {
+            return this.native.keyPath;
+        }
+        get incremental() {
+            return this.native.autoIncrement;
+        }
+        get indexes() {
+            return new Proxy({}, {
+                ownKeys: () => [...this.native.indexNames],
+                has: (_, name) => this.native.indexNames.contains(name),
+                get: (_, name) => new $.$mol_db_index(this.native.index(name))
+            });
+        }
+        index_make(name, path = [], unique = false, multiEntry = false) {
+            return this.native.createIndex(name, path, { multiEntry, unique });
+        }
+        index_drop(name) {
+            this.native.deleteIndex(name);
+            return this;
+        }
+        get transaction() {
+            return new $.$mol_db_transaction(this.native.transaction);
+        }
+        get db() {
+            return this.transaction.db;
+        }
+        clear() {
+            return $.$mol_db_response(this.native.clear());
+        }
+        count(keys) {
+            return $.$mol_db_response(this.native.count(keys));
+        }
+        put(doc, key) {
+            return $.$mol_db_response(this.native.put(doc, key));
+        }
+        get(key) {
+            return $.$mol_db_response(this.native.get(key));
+        }
+        select(key, count) {
+            return $.$mol_db_response(this.native.getAll(key, count));
+        }
+        drop(keys) {
+            return $.$mol_db_response(this.native.delete(keys));
+        }
+    }
+    $.$mol_db_store = $mol_db_store;
+})($ || ($ = {}));
+//store.js.map
+;
+"use strict";
+//store_schema.js.map
+;
+"use strict";
+var $;
+(function ($) {
+    async function $mol_db(name, ...migrations) {
+        const request = this.indexedDB.open(name, migrations.length ? migrations.length + 1 : undefined);
+        request.onupgradeneeded = event => {
+            migrations.splice(0, event.oldVersion - 1);
+            const transaction = new $.$mol_db_transaction(request.transaction);
+            for (const migrate of migrations)
+                migrate(transaction);
+        };
+        const db = await $.$mol_db_response(request);
+        return new $.$mol_db_database(db);
+    }
+    $.$mol_db = $mol_db;
+})($ || ($ = {}));
+//db.js.map
+;
+"use strict";
+//db_schema.js.map
+;
+"use strict";
+var $;
+(function ($) {
     class $hyoo_crowd_clock extends Map {
         now = 0;
         constructor(entries) {
@@ -7138,10 +7235,15 @@ var $;
 var $;
 (function ($) {
     class $mol_state_shared extends $.$mol_object2 {
+        db() {
+            const init = $.$mol_fiber_sync(() => $.$$.$mol_db('$mol_state_shared_db', mig => mig.store_make('Chunks'), mig => mig.stores.Chunks.index_make('Path', ['path'])));
+            return init();
+        }
         server() {
             return `wss://sync-hyoo-ru.herokuapp.com/`;
         }
         server_clock = new $.$hyoo_crowd_clock;
+        db_clock = new $.$hyoo_crowd_clock;
         peer() {
             return $.$mol_hash_string(this.keys_serial().public);
         }
@@ -7187,6 +7289,7 @@ var $;
             state.peer = () => this.peer();
             state.keys_serial = () => this.keys_serial();
             state.keys = () => this.keys();
+            state.db = () => this.db();
             return state;
         }
         sub(key) {
@@ -7196,6 +7299,7 @@ var $;
             state.request = n => this.request(n);
             state.path = () => this.path();
             state.version_last = n => this.version_last(n);
+            state.db = () => this.db();
             return state;
         }
         version_last(next) {
@@ -7204,10 +7308,26 @@ var $;
         request_done(next) {
             return (res) => { };
         }
+        db_load() {
+            return $.$mol_fiber_defer(() => {
+                const db = this.db();
+                const Chunks = db.read('Chunks').Chunks;
+                const path = this.path();
+                const delta = $.$mol_fiber_sync(() => Chunks.indexes.Path.select([path]))();
+                const store = this.store();
+                store.apply(delta);
+                this.version_last(-1);
+            });
+        }
         request(next) {
+            const db = this.db();
             this.socket();
             const store = this.store();
-            if (next !== undefined) {
+            const path = this.path();
+            this.db_load();
+            if (next === undefined) {
+            }
+            else {
                 const pub = this.keys_serial().public;
                 store.root.sub(pub).value(pub);
             }
@@ -7216,21 +7336,27 @@ var $;
                     const delta = store.delta(this.server_clock);
                     if (next !== undefined && !delta.length)
                         return;
-                    this.send(this.path(), next === undefined && !delta.length ? [] : delta);
+                    if (next !== undefined) {
+                        const trans = db.change('Chunks');
+                        const Chunks = trans.stores.Chunks;
+                        for (const chunk of delta) {
+                            console.log({ ...chunk, path });
+                            Chunks.put({ ...chunk, path }, [path, chunk.head, chunk.self]);
+                        }
+                        trans.commit().then(console.log);
+                    }
+                    if (delta.length) {
+                        this.send(path, next === undefined && !delta.length ? [] : delta);
+                    }
                     for (const chunk of delta) {
                         this.server_clock.see(chunk.peer, chunk.time);
                     }
                 });
             });
-            if ($.$mol_dom_context.navigator.onLine && next === undefined) {
-                const prev = $.$mol_mem_cached(() => this.request());
-                if (prev === undefined) {
-                    const wait = $.$mol_fiber_sync(() => new Promise(done => {
-                        $.$mol_mem_cached(() => this.request_done(), done);
-                        new $.$mol_after_timeout(5000, () => done(null));
-                    }));
-                    wait();
-                }
+            if (next === undefined) {
+                $.$mol_fiber.run(() => {
+                    $.$mol_fiber_defer(() => { this.send(path, []); });
+                });
             }
             return null;
         }
@@ -7267,6 +7393,7 @@ var $;
             return next ?? [{ chunk: 0, offset: 0 }, { chunk: 0, offset: 0 }];
         }
         socket() {
+            const db = this.db();
             this.heartbeat();
             const atom = $.$mol_atom2.current;
             const socket = new $.$mol_dom_context.WebSocket(this.server());
@@ -7291,6 +7418,12 @@ var $;
                     this.send(path, delta);
                     return;
                 }
+                const trans = db.change('Chunks');
+                const Chunks = trans.stores.Chunks;
+                for (const chunk of delta) {
+                    Chunks.put({ ...chunk, path }, [path, chunk.head, chunk.self]);
+                }
+                trans.commit();
                 store.apply(delta);
                 for (const chunk of delta) {
                     doc.server_clock.see(chunk.peer, chunk.time);
@@ -7331,6 +7464,9 @@ var $;
     }
     __decorate([
         $.$mol_mem
+    ], $mol_state_shared.prototype, "db", null);
+    __decorate([
+        $.$mol_mem
     ], $mol_state_shared.prototype, "peer", null);
     __decorate([
         $.$mol_mem
@@ -7353,6 +7489,9 @@ var $;
     __decorate([
         $.$mol_mem
     ], $mol_state_shared.prototype, "request_done", null);
+    __decorate([
+        $.$mol_mem
+    ], $mol_state_shared.prototype, "db_load", null);
     __decorate([
         $.$mol_mem
     ], $mol_state_shared.prototype, "request", null);
@@ -9871,6 +10010,129 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_db_database {
+        native;
+        constructor(native) {
+            this.native = native;
+        }
+        get name() {
+            return this.native.name;
+        }
+        get version() {
+            return this.native.version;
+        }
+        get stores() {
+            return [...this.native.objectStoreNames];
+        }
+        read(...names) {
+            return new $.$mol_db_transaction(this.native.transaction(names, 'readonly')).stores;
+        }
+        change(...names) {
+            return new $.$mol_db_transaction(this.native.transaction(names, 'readwrite'));
+        }
+        kill() {
+            this.native.close();
+            const request = indexedDB.deleteDatabase(this.name);
+            request.onblocked = console.error;
+            return $.$mol_db_response(request).then(() => { });
+        }
+        destructor() {
+            this.native.close();
+        }
+    }
+    $.$mol_db_database = $mol_db_database;
+})($ || ($ = {}));
+//database.js.map
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_db_transaction {
+        native;
+        constructor(native) {
+            this.native = native;
+        }
+        get stores() {
+            return new Proxy({}, {
+                ownKeys: () => [...this.native.objectStoreNames],
+                has: (_, name) => this.native.objectStoreNames.contains(name),
+                get: (_, name) => new $.$mol_db_store(this.native.objectStore(name)),
+            });
+        }
+        store_make(name) {
+            return this.native.db.createObjectStore(name, { autoIncrement: true });
+        }
+        store_drop(name) {
+            this.native.db.deleteObjectStore(name);
+            return this;
+        }
+        abort() {
+            this.native.abort();
+        }
+        commit() {
+            this.native.commit();
+            return new Promise((done, fail) => {
+                this.native.onerror = () => fail(new Error(this.native.error.message));
+                this.native.oncomplete = () => done();
+            });
+        }
+        get db() {
+            return new $.$mol_db_database(this.native.db);
+        }
+    }
+    $.$mol_db_transaction = $mol_db_transaction;
+})($ || ($ = {}));
+//transaction.js.map
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_db_index {
+        native;
+        constructor(native) {
+            this.native = native;
+        }
+        get name() {
+            return this.native.name;
+        }
+        get paths() {
+            return this.native.keyPath;
+        }
+        get unique() {
+            return this.native.unique;
+        }
+        get multiple() {
+            return this.native.multiEntry;
+        }
+        get store() {
+            return new $.$mol_db_store(this.native.objectStore);
+        }
+        get transaction() {
+            return this.store.transaction;
+        }
+        get db() {
+            return this.store.db;
+        }
+        count(keys) {
+            return $.$mol_db_response(this.native.count(keys));
+        }
+        get(key) {
+            return $.$mol_db_response(this.native.get(key));
+        }
+        select(key, count) {
+            return $.$mol_db_response(this.native.getAll(key, count));
+        }
+    }
+    $.$mol_db_index = $mol_db_index;
+})($ || ($ = {}));
+//index.js.map
+;
+"use strict";
+//index_schema.js.map
+;
+"use strict";
+var $;
+(function ($) {
     function $mol_test_complete() {
         process.exit(0);
     }
@@ -11763,6 +12025,85 @@ var $;
 var $;
 (function ($) {
     $.$mol_test({
+        async 'put, get, drop, count records and clear store'() {
+            const db = await $.$$.$mol_db('$mol_db_test', mig => mig.store_make('letters'));
+            const trans = db.change('letters');
+            try {
+                const { letters } = trans.stores;
+                $.$mol_assert_like(await letters.get(1), undefined);
+                $.$mol_assert_like(await letters.get(2), undefined);
+                $.$mol_assert_like(await letters.count(), 0);
+                await letters.put('a');
+                await letters.put('b', 1);
+                await letters.put('c', 2);
+                $.$mol_assert_like(await letters.get(1), 'b');
+                $.$mol_assert_like(await letters.get(2), 'c');
+                $.$mol_assert_like(await letters.count(), 2);
+                await letters.drop(1);
+                $.$mol_assert_like(await letters.get(1), undefined);
+                $.$mol_assert_like(await letters.count(), 1);
+                await letters.clear();
+                $.$mol_assert_like(await letters.count(), 0);
+            }
+            finally {
+                trans.abort();
+                db.kill();
+            }
+        },
+        async 'select by query'() {
+            const db = await $.$$.$mol_db('$mol_db_test', mig => mig.store_make('letters'));
+            const trans = db.change('letters');
+            try {
+                const { letters } = trans.stores;
+                await letters.put('a');
+                await letters.put('b');
+                await letters.put('c');
+                await letters.put('d');
+                $.$mol_assert_like(await letters.select(), ['a', 'b', 'c', 'd']);
+                $.$mol_assert_like(await letters.select(null, 2), ['a', 'b']);
+                $.$mol_assert_like(await letters.select(IDBKeyRange.bound(2, 3)), ['b', 'c']);
+            }
+            finally {
+                trans.abort();
+                db.kill();
+            }
+        },
+    });
+})($ || ($ = {}));
+//store.test.js.map
+;
+"use strict";
+var $;
+(function ($) {
+    $.$mol_test({
+        async 'take and drop db'() {
+            const db = await $.$$.$mol_db('$mol_db_test');
+            await db.kill();
+        },
+        async 'make and drop store in separate migrations'() {
+            try {
+                const db1 = await $.$$.$mol_db('$mol_db_test', mig => mig.store_make('temp'));
+                db1.destructor();
+                $.$mol_assert_like(db1.stores, ['temp']);
+                $.$mol_assert_like(db1.version, 2);
+                const db2 = await $.$$.$mol_db('$mol_db_test', mig => mig.store_make('temp'), mig => mig.store_drop('temp'));
+                db2.destructor();
+                $.$mol_assert_like(db2.stores, []);
+                $.$mol_assert_like(db2.version, 3);
+            }
+            finally {
+                const db0 = await $.$$.$mol_db('$mol_db_test');
+                await db0.kill();
+            }
+        },
+    });
+})($ || ($ = {}));
+//db.test.js.map
+;
+"use strict";
+var $;
+(function ($) {
+    $.$mol_test({
         'fresh'() {
             const clock = new $.$hyoo_crowd_clock;
             clock.see(111, 1);
@@ -13301,5 +13642,77 @@ var $;
     $.$mol_view_tree_compile = $mol_view_tree_compile;
 })($ || ($ = {}));
 //tree.js.map
+;
+"use strict";
+var $;
+(function ($) {
+    $.$mol_test({
+        async 'unique index'() {
+            const db = await $.$$.$mol_db('$mol_db_test', mig => mig.store_make('users'), mig => mig.stores.users.index_make('names', ['name'], !!'unique'));
+            const trans = db.change('users');
+            try {
+                const { users } = trans.stores;
+                await users.put({ name: 'Jin' }, 'jin');
+                await users.put({ name: 'John' }, 'john');
+                await users.put({ name: 'Bin' }, 'bin');
+                const { names } = users.indexes;
+                $.$mol_assert_like(await names.get(['Jin']), { name: 'Jin' });
+                $.$mol_assert_like(await names.get(['John']), { name: 'John' });
+                $.$mol_assert_like(await names.count(), 3);
+                $.$mol_assert_like(await names.select(IDBKeyRange.bound(['J'], ['J\uFFFF'])), [{ name: 'Jin' }, { name: 'John' }]);
+                try {
+                    await users.put({ name: 'Jin' }, 'jin2');
+                    $.$mol_fail(new Error('Exception expected'));
+                }
+                catch (error) {
+                    $.$mol_assert_equal(error.message, `Unable to add key to index 'names': at least one key does not satisfy the uniqueness requirements.`);
+                }
+            }
+            finally {
+                trans.abort();
+                db.kill();
+            }
+        },
+        async 'multi path index'() {
+            const db = await $.$$.$mol_db('$mol_db_test', mig => mig.store_make('users'), mig => mig.stores.users.index_make('names', ['first', 'last']));
+            const trans = db.change('users');
+            try {
+                const { users } = trans.stores;
+                await users.put({ first: 'Jin', last: 'Johnson' }, 'jin');
+                await users.put({ first: 'John', last: 'Jinson' }, 'john');
+                await users.put({ first: 'Bond', last: 'James' }, '007');
+                const { names } = users.indexes;
+                $.$mol_assert_like(await names.get(['Jin', 'Johnson']), { first: 'Jin', last: 'Johnson' });
+                $.$mol_assert_like(await names.get(['John', 'Jinson']), { first: 'John', last: 'Jinson' });
+                $.$mol_assert_like(await names.count(), 3);
+                $.$mol_assert_like(await names.select(IDBKeyRange.bound(['Jin', 'Johnson'], ['John', 'Jinson'])), [{ first: 'Jin', last: 'Johnson' }, { first: 'John', last: 'Jinson' }]);
+            }
+            finally {
+                trans.abort();
+                db.kill();
+            }
+        },
+        async 'multiple indexes'() {
+            const db = await $.$$.$mol_db('$mol_db_test', mig => mig.store_make('users'), mig => mig.stores.users.index_make('names', ['name'], !!'unique'), mig => mig.stores.users.index_make('ages', ['age']));
+            const trans = db.change('users');
+            try {
+                const { users } = trans.stores;
+                await users.put({ name: 'Jin', age: 18 }, 'jin');
+                await users.put({ name: 'John', age: 18 }, 'john');
+                const { names, ages } = users.indexes;
+                $.$mol_assert_like(await names.select(['Jin']), [{ name: 'Jin', age: 18 }]);
+                $.$mol_assert_like(await names.select(['John']), [{ name: 'John', age: 18 }]);
+                $.$mol_assert_like(await names.count(), 2);
+                $.$mol_assert_like(await ages.select([18]), [{ name: 'Jin', age: 18 }, { name: 'John', age: 18 }]);
+                $.$mol_assert_like(await ages.count(), 2);
+            }
+            finally {
+                trans.abort();
+                db.kill();
+            }
+        },
+    });
+})($ || ($ = {}));
+//index.test.js.map
 
 //# sourceMappingURL=node.test.js.map
