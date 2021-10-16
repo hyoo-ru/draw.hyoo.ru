@@ -7321,7 +7321,9 @@ var $;
                 const db = this.db();
                 const Chunks = db.read('Chunks').Chunks;
                 const path = this.path();
-                const delta = $.$mol_fiber_sync(() => Chunks.indexes.Path.select([path]))();
+                const delta = $.$mol_fiber_sync(() => Chunks.indexes.Path.select([path]))()
+                    .map(doc => doc.chunk)
+                    .filter(Boolean);
                 const store = this.store();
                 store.apply(delta);
                 this.version_last(-1);
@@ -7348,7 +7350,7 @@ var $;
                         const trans = db.change('Chunks');
                         const Chunks = trans.stores.Chunks;
                         for (const chunk of delta) {
-                            Chunks.put({ ...chunk, path }, [path, chunk.head, chunk.self]);
+                            Chunks.put({ path, chunk }, [path, chunk.head, chunk.self]);
                         }
                         trans.commit();
                     }
@@ -7428,7 +7430,7 @@ var $;
                 const trans = db.change('Chunks');
                 const Chunks = trans.stores.Chunks;
                 for (const chunk of delta) {
-                    Chunks.put({ ...chunk, path }, [path, chunk.head, chunk.self]);
+                    Chunks.put({ path, chunk }, [path, chunk.head, chunk.self]);
                 }
                 trans.commit();
                 store.apply(delta);

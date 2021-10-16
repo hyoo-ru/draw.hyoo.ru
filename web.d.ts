@@ -2042,8 +2042,9 @@ declare namespace $ {
         db(): $mol_db_database<{
             Chunks: {
                 Key: [string, number, number];
-                Doc: $hyoo_crowd_chunk & {
+                Doc: {
                     path: string;
+                    chunk: $hyoo_crowd_chunk;
                 };
                 Indexes: {
                     Path: [string];
