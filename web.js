@@ -2471,7 +2471,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $.$mol_style_attach("mol/gap/gap.css", ":root {\n\t--mol_gap_block: .75rem;\n\t--mol_gap_text: .5rem .75rem;\n\t--mol_gap_round: .25rem;\n}\n");
+    $.$mol_style_attach("mol/gap/gap.css", ":root {\n\t--mol_gap_block: .75rem;\n\t--mol_gap_text: .5rem .75rem;\n\t--mol_gap_round: .25rem;\n\t--mol_gap_space: .35rem;\n\t--mol_gap_blur: .5rem;\n}\n");
 })($ || ($ = {}));
 //gap.css.js.map
 ;
@@ -2483,6 +2483,8 @@ var $;
         block: vary('--mol_gap_block'),
         text: vary('--mol_gap_text'),
         round: vary('--mol_gap_round'),
+        space: vary('--mol_gap_space'),
+        blur: vary('--mol_gap_blur'),
     };
 })($ || ($ = {}));
 //gap.js.map
@@ -3419,12 +3421,22 @@ var $;
                 next = $.$mol_dom_context.location.href;
             }
             else if (!/^about:srcdoc/.test(next)) {
-                history.replaceState(history.state, $.$mol_dom_context.document.title, next);
+                new $.$mol_after_frame(() => {
+                    const next = this.href();
+                    const prev = $.$mol_dom_context.location.href;
+                    if (next === prev)
+                        return;
+                    const history = $.$mol_dom_context.history;
+                    history.replaceState(history.state, $.$mol_dom_context.document.title, next);
+                });
             }
             if ($.$mol_dom_context.parent !== $.$mol_dom_context.self) {
                 $.$mol_dom_context.parent.postMessage(['hashchange', next], '*');
             }
             return next;
+        }
+        static href_normal() {
+            return this.link({});
         }
         static dict(next) {
             var href = this.href(next && this.make_link(next)).split(/#!?/)[1] || '';
@@ -3496,6 +3508,9 @@ var $;
     __decorate([
         $.$mol_mem
     ], $mol_state_arg, "href", null);
+    __decorate([
+        $.$mol_mem
+    ], $mol_state_arg, "href_normal", null);
     __decorate([
         $.$mol_mem
     ], $mol_state_arg, "dict", null);
@@ -3813,7 +3828,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $.$mol_style_attach("mol/button/button.view.css", "[mol_button] {\n\tborder: none;\n\tfont: inherit;\n\tdisplay: inline-flex;\n\tflex-shrink: 0;\n\ttext-decoration: inherit;\n\tcursor: inherit;\n\tposition: relative;\n\tbox-sizing: border-box;\n\tword-break: normal;\n\tcursor: default;\n\tuser-select: none;\n\tborder-radius: var(--mol_gap_round);\n}\n[mol_button]:focus {\n\toutline: none;\n}\n");
+    $.$mol_style_attach("mol/button/button.view.css", "[mol_button] {\n\tborder: none;\n\tfont: inherit;\n\tdisplay: inline-flex;\n\tgap: var(--mol_gap_space);\n\tflex-shrink: 0;\n\ttext-decoration: inherit;\n\tcursor: inherit;\n\tposition: relative;\n\tbox-sizing: border-box;\n\tword-break: normal;\n\tcursor: default;\n\tuser-select: none;\n\tborder-radius: var(--mol_gap_round);\n}\n[mol_button]:focus {\n\toutline: none;\n}\n");
 })($ || ($ = {}));
 //button.view.css.js.map
 ;
@@ -3889,7 +3904,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $.$mol_style_attach("mol/button/typed/typed.view.css", "[mol_button_typed] {\n\tdisplay: inline-block;\n\talign-content: center;\n\talign-items: center;\n\tvertical-align: middle;\n\ttext-align: center;\n\tpadding: var(--mol_gap_text);\n\tborder-radius: var(--mol_gap_round);\n}\n\n[mol_button_typed][disabled] {\n\tcolor: var(--mol_theme_text);\n\tpointer-events: none;\n}\n\n[mol_button_typed]:hover ,\n[mol_button_typed]:focus {\n\tcursor: pointer;\n\tbackground-color: var(--mol_theme_hover);\n}\n");
+    $.$mol_style_attach("mol/button/typed/typed.view.css", "[mol_button_typed] {\n\talign-content: center;\n\talign-items: center;\n\tpadding: var(--mol_gap_text);\n\tborder-radius: var(--mol_gap_round);\n}\n\n[mol_button_typed][disabled] {\n\tcolor: var(--mol_theme_text);\n\tpointer-events: none;\n}\n\n[mol_button_typed]:hover ,\n[mol_button_typed]:focus {\n\tcursor: pointer;\n\tbackground-color: var(--mol_theme_hover);\n}\n");
 })($ || ($ = {}));
 //typed.view.css.js.map
 ;
@@ -4469,6 +4484,9 @@ var $;
             }
             return distance;
         }
+        transponed() {
+            return this[0].map((_, i) => this.map(row => row[i]));
+        }
         get x() { return this[0]; }
         get y() { return this[1]; }
         get z() { return this[2]; }
@@ -4731,6 +4749,12 @@ var $;
             const obj = new this.$.$mol_vector_2d(this.gap_x(), this.gap_y());
             return obj;
         }
+        repos_x(val) {
+            return 0;
+        }
+        repos_y(val) {
+            return 0;
+        }
         indexes() {
             return [];
         }
@@ -4889,14 +4913,20 @@ var $;
             indexes() {
                 return this.series_x().map((_, i) => i);
             }
+            repos_x(val) {
+                return val;
+            }
+            repos_y(val) {
+                return val;
+            }
             points() {
                 const [shift_x, shift_y] = this.shift();
                 const [scale_x, scale_y] = this.scale();
                 const series_x = this.series_x();
                 const series_y = this.series_y();
                 return this.indexes().map(index => {
-                    let point_x = Math.round(shift_x + series_x[index] * scale_x);
-                    let point_y = Math.round(shift_y + series_y[index] * scale_y);
+                    let point_x = Math.round(shift_x + this.repos_x(series_x[index]) * scale_x);
+                    let point_y = Math.round(shift_y + this.repos_y(series_y[index]) * scale_y);
                     point_x = Math.max(Number.MIN_SAFE_INTEGER, Math.min(point_x, Number.MAX_SAFE_INTEGER));
                     point_y = Math.max(Number.MIN_SAFE_INTEGER, Math.min(point_y, Number.MAX_SAFE_INTEGER));
                     return [point_x, point_y];
@@ -4910,7 +4940,7 @@ var $;
                 const series_x = this.series_x();
                 const series_y = this.series_y();
                 for (let i = 0; i < series_x.length; i++) {
-                    next = next.expanded1([series_x[i], series_y[i]]);
+                    next = next.expanded1([this.repos_x(series_x[i]), this.repos_y(series_y[i])]);
                 }
                 return next;
             }
@@ -5234,7 +5264,7 @@ var $;
                     if (events.length > 0) {
                         if (event.ctrlKey)
                             return this.action_type('zoom');
-                        if (event.buttons === 2)
+                        if (event.buttons === 4)
                             return this.action_type('pan');
                         if (event.buttons === 1)
                             return this.action_type('draw');
@@ -5381,7 +5411,7 @@ var $;
                 const action_type = this.event_eat(event);
                 if (action_type === 'zoom') {
                     const zoom_prev = this.zoom() || 0.001;
-                    const zoom_next = zoom_prev * (1 - .1 * Math.sign(event.deltaY));
+                    const zoom_next = zoom_prev * (1 - .001 * event.deltaY);
                     const mult = zoom_next / zoom_prev;
                     this.zoom(zoom_next);
                     const pan_prev = this.pan();
@@ -5518,12 +5548,6 @@ var $;
                 this.Touch()
             ];
         }
-        event() {
-            return {
-                ...super.event(),
-                dblclick: (event) => this.reset(event)
-            };
-        }
         gap_x() {
             const obj = new this.$.$mol_vector_range(this.gap_left(), this.gap_right());
             return obj;
@@ -5601,11 +5625,6 @@ var $;
             obj.pan = (val) => this.shift(val);
             obj.draw = (event) => this.draw(event);
             return obj;
-        }
-        reset(event) {
-            if (event !== undefined)
-                return event;
-            return null;
         }
     }
     __decorate([
@@ -5692,9 +5711,6 @@ var $;
     __decorate([
         $.$mol_mem
     ], $mol_plot_pane.prototype, "Touch", null);
-    __decorate([
-        $.$mol_mem
-    ], $mol_plot_pane.prototype, "reset", null);
     $.$mol_plot_pane = $mol_plot_pane;
 })($ || ($ = {}));
 //pane.view.tree.js.map
@@ -7368,7 +7384,7 @@ var $;
                     : point.y > viewport_top ? 1
                         : 0);
                 for (let i = 0; i < series_x.length - 1; i++) {
-                    const scaled = new $.$mol_vector_2d(Math.round(shift_x + series_x[i] * scale_x), Math.round(shift_y + series_y[i] * scale_y));
+                    const scaled = new $.$mol_vector_2d(Math.round(shift_x + this.repos_x(series_x[i]) * scale_x), Math.round(shift_y + this.repos_y(series_y[i]) * scale_y));
                     if (Math.abs(scaled.x - last.x) < threshold
                         && Math.abs(scaled.y - last.y) < threshold)
                         continue;
@@ -8535,6 +8551,7 @@ var $;
         boxSizing: 'border-box',
         position: 'relative',
         minWidth: rem(2.5),
+        gap: $.$mol_gap.space,
         border: {
             radius: $.$mol_gap.round,
         },
@@ -8588,7 +8605,7 @@ var $;
                 return new URL(this.uri(), base);
             }
             current() {
-                const base = this.$.$mol_state_arg.href();
+                const base = this.$.$mol_state_arg.href_normal();
                 const target = this.uri_native().toString();
                 if (base === target)
                     return true;

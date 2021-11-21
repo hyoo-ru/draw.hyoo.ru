@@ -655,6 +655,7 @@ declare namespace $ {
     interface Overrides {
         alignContent?: 'baseline' | 'start' | 'end' | 'flex-start' | 'flex-end' | 'center' | 'normal' | 'space-between' | 'space-around' | 'space-evenly' | 'stretch' | readonly ['first' | 'last', 'baseline'] | readonly ['safe' | 'unsafe', 'start' | 'end' | 'flex-start' | 'flex-end'] | Common;
         justifyContent?: 'start' | 'end' | 'flex-start' | 'flex-end' | 'left' | 'right' | 'space-between' | 'space-around' | 'space-evenly' | 'normal' | 'stretch' | 'center' | Common;
+        gap?: Length;
         background?: 'none' | {
             color?: Color | Common;
             image?: readonly (readonly [$mol_style_func<'url'>])[] | 'none' | Common;
@@ -776,6 +777,8 @@ declare namespace $ {
         readonly block: $mol_style_func<"var", "--mol_gap_block">;
         readonly text: $mol_style_func<"var", "--mol_gap_text">;
         readonly round: $mol_style_func<"var", "--mol_gap_round">;
+        readonly space: $mol_style_func<"var", "--mol_gap_space">;
+        readonly blur: $mol_style_func<"var", "--mol_gap_blur">;
     };
 }
 
@@ -993,6 +996,7 @@ declare namespace $ {
     class $mol_state_arg extends $mol_object {
         prefix: string;
         static href(next?: string): string;
+        static href_normal(): string;
         static dict(next?: {
             [key: string]: string | null;
         }): {
@@ -1365,6 +1369,7 @@ declare namespace $ {
         }): this;
         center<Item extends $mol_vector<number, number>>(this: $mol_vector<Item, Length>): Item;
         distance(this: $mol_vector<$mol_vector<number, number>, Length>): number;
+        transponed(this: $mol_vector<$mol_vector<number, number>, Length>): $mol_vector<$mol_vector<number, Length>, typeof this[0]['length']>;
         get x(): Value;
         get y(): Value;
         get z(): Value;
@@ -1474,6 +1479,8 @@ declare namespace $ {
         dimensions(): $mol_vector_2d<$mol_vector_range<number>>;
         size_real(): $mol_vector_2d<number>;
         gap(): $mol_vector_2d<$mol_vector_range<number>>;
+        repos_x(val: any): number;
+        repos_y(val: any): number;
         indexes(): readonly number[];
         points(): readonly (readonly number[])[];
         front(): readonly $mol_svg[];
@@ -1513,6 +1520,8 @@ declare namespace $.$$ {
     class $mol_plot_graph extends $.$mol_plot_graph {
         viewport(): $mol_vector_2d<$mol_vector_range<number>>;
         indexes(): readonly number[];
+        repos_x(val: number): number;
+        repos_y(val: number): number;
         points(): readonly (readonly number[])[];
         series_x(): readonly number[];
         dimensions(): $mol_vector_2d<$mol_vector_range<number>>;
@@ -1615,9 +1624,6 @@ declare namespace $ {
         sub(): readonly $mol_svg[];
         graphs_colored(): readonly $mol_plot_graph[];
         plugins(): readonly any[];
-        event(): {
-            dblclick: (event?: any) => any;
-        };
         gap_x(): $mol_vector_range<number>;
         gap_y(): $mol_vector_range<number>;
         shift_limit_x(): $mol_vector_range<number>;
@@ -1638,7 +1644,6 @@ declare namespace $ {
         action_type(): string;
         action_point(): $mol_vector_2d<number>;
         Touch(): $$.$mol_touch;
-        reset(event?: any): any;
     }
 }
 
