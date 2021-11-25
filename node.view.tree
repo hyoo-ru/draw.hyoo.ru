@@ -359,6 +359,41 @@ $mol_plot_pane $mol_svg_root
 		^
 		dblclick?event <=> reset?event null
 
+$mol_svg_image $mol_svg
+	dom_name \image
+	pos /
+		0
+		0
+	size /
+		0
+		0
+	attr *
+		^
+		x <= pos_x \
+		y <= pos_y \
+		width <= size_x \
+		height <= size_y \
+		href <= uri \
+		preserveAspectRatio <= aspect \none
+
+$mol_plot_map_tiles $mol_plot_graph
+	tile_size_real 256
+	level 0
+	level_pyramid 0
+	tiles_limit 8
+	uri_template \
+	sub <= tiles /
+	Tile!id $mol_svg_image
+		style *
+			transform <= tile_transform!id \
+		uri <= tile_uri!id \
+		pos /
+			0
+			0
+		size /
+			<= tile_size_real
+			<= tile_size_real
+
 $mol_plot_line $mol_plot_graph
 	threshold 1
 	spacing 2
@@ -475,6 +510,7 @@ $hyoo_draw_pane $mol_plot_pane
 	color \blue
 	tool \pencil
 	grid false
+	map false
 	state $mol_state_shared
 	reset?event null
 	auto /
@@ -485,6 +521,10 @@ $hyoo_draw_pane $mol_plot_pane
 	scale?val $mol_vector_2d /
 		<= zoom
 		<= zoom
+	Map $mol_plot_map_tiles
+		level_pyramid -3
+		tile_size_real <= tile_size 256
+		uri_template <= tiles_uri \https://basemaps.cartocdn.com/rastertiles/voyager/{level}/{x}/{y}.png
 	Line!id $mol_plot_line
 		color <= line_color!id \
 		series_x <= line_x!id /number
@@ -611,6 +651,8 @@ $mol_icon_grid $mol_icon path \M10,4V8H14V4H10M16,4V8H20V4H16M16,10V14H20V10H16M
 
 $mol_icon_grid_large $mol_icon path \M4,2H20C21.1,2 22,2.9 22,4V20C22,21.1 21.1,22 20,22H4C2.92,22 2,21.1 2,20V4C2,2.9 2.9,2 4,2M4,4V11H11V4H4M4,20H11V13H4V20M20,20V13H13V20H20M20,4H13V11H20V4Z
 
+$mol_icon_map $mol_icon path \M15,19L9,16.89V5L15,7.11M20.5,3C20.44,3 20.39,3 20.34,3L15,5.1L9,3L3.36,4.9C3.15,4.97 3,5.15 3,5.38V20.5C3,20.78 3.22,21 3.5,21C3.55,21 3.61,21 3.66,20.97L9,18.9L15,21L20.64,19.1C20.85,19 21,18.85 21,18.62V3.5C21,3.22 20.78,3 20.5,3Z
+
 $mol_icon_lead_pencil $mol_icon path \M16.84,2.73C16.45,2.73 16.07,2.88 15.77,3.17L13.65,5.29L18.95,10.6L21.07,8.5C21.67,7.89 21.67,6.94 21.07,6.36L17.9,3.17C17.6,2.88 17.22,2.73 16.84,2.73M12.94,6L4.84,14.11L7.4,14.39L7.58,16.68L9.86,16.85L10.15,19.41L18.25,11.3M4.25,15.04L2.5,21.73L9.2,19.94L8.96,17.78L6.65,17.61L6.47,15.29
 
 $mol_icon_eraser $mol_icon path \M16.24,3.56L21.19,8.5C21.97,9.29 21.97,10.55 21.19,11.34L12,20.53C10.44,22.09 7.91,22.09 6.34,20.53L2.81,17C2.03,16.21 2.03,14.95 2.81,14.16L13.41,3.56C14.2,2.78 15.46,2.78 16.24,3.56M4.22,15.58L7.76,19.11C8.54,19.9 9.8,19.9 10.59,19.11L14.12,15.58L9.17,10.63L4.22,15.58Z
@@ -626,9 +668,26 @@ $hyoo_draw_tools $mol_switch
 	Icon_pencil $mol_icon_lead_pencil
 	Icon_eraser $mol_icon_eraser
 	Icon_filler $mol_icon_format_color_fill
-	hint_pencil @ \Draw colored curve
-	hint_filler @ \Draw color filled curve
-	hint_eraser @ \Erase color point
+	hint_pencil @ \Draw curve
+	hint_filler @ \Fill region
+	hint_eraser @ \Erase color
+
+$mol_image $mol_view
+	dom_name \img
+	field *
+		^
+		src <= uri \
+		alt <= title
+		loading <= loading \lazy
+
+$mol_link_iconed $mol_link
+	sub /
+		<= Icon $mol_image
+			uri <= icon \
+			title \
+	content /
+		<= title <= uri
+	host \
 
 $hyoo_draw $mol_book2
 	title @ \Fast vector sketch
@@ -647,6 +706,7 @@ $hyoo_draw $mol_book2
 					color <= color
 					tool <= tool
 					grid <= grid
+					map <= map
 					shift?val <=> center?val $mol_vector_2d /
 						0
 						0
@@ -662,7 +722,15 @@ $hyoo_draw $mol_book2
 								<= Lights $mol_lights_toggle
 								<= Grid $mol_check_icon
 									hint @ \Grid
-									checked => grid
+									checked?val <=> grid?val false
 									Icon <= Grid_icon $mol_icon_grid_large
+								<= Map $mol_check_icon
+									hint @ \Map
+									checked?val <=> map?val false
+									Icon <= Map_icon $mol_icon_map
 								<= Tools $hyoo_draw_tools
 									value => tool
+				<= Attribution $mol_view sub <= attribution /
+					<= CARTO $mol_link_iconed
+						title \CARTO
+						uri \https://carto.com/attributions

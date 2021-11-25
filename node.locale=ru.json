@@ -1,4 +1,10 @@
 {
+	"$hyoo_draw_Grid_hint": "Сетка",
+	"$hyoo_draw_Map_hint": "Карта",
+	"$hyoo_draw_title": "Быстрые векторные наброски",
+	"$hyoo_draw_tools_hint_eraser": "Стирать цвет",
+	"$hyoo_draw_tools_hint_filler": "Заливать область",
+	"$hyoo_draw_tools_hint_pencil": "Рисовать линию",
 	"$mol_chat_title": "Дискуссия",
 	"$mol_lights_toggle_hint": "Переключить освещение",
 	"$mol_link_source_hint": "Исходные коды"

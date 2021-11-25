@@ -2099,6 +2099,69 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $mol_svg_image extends $mol_svg {
+        dom_name(): string;
+        pos(): readonly any[];
+        size(): readonly any[];
+        attr(): {
+            x: string;
+            y: string;
+            width: string;
+            height: string;
+            href: string;
+            preserveAspectRatio: string;
+        };
+        pos_x(): string;
+        pos_y(): string;
+        size_x(): string;
+        size_y(): string;
+        uri(): string;
+        aspect(): string;
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_svg_image extends $.$mol_svg_image {
+        pos_x(): any;
+        pos_y(): any;
+        size_x(): any;
+        size_y(): any;
+    }
+}
+
+declare namespace $ {
+    class $mol_plot_map_tiles extends $mol_plot_graph {
+        tile_size_real(): number;
+        level(): number;
+        level_pyramid(): number;
+        tiles_limit(): number;
+        uri_template(): string;
+        sub(): readonly any[];
+        Tile(id: any): $$.$mol_svg_image;
+        tiles(): readonly any[];
+        tile_transform(id: any): string;
+        tile_uri(id: any): string;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $.$$ {
+    type Id = [number, number, number];
+    export class $mol_plot_map_tiles extends $.$mol_plot_map_tiles {
+        level(): number;
+        tiles(): $mol_svg_image[];
+        tile_uri(id: Id): string;
+        tile_transform(id: Id): string;
+        tile_at(pos: [number, number, number]): number[];
+        back(): readonly $.$mol_svg[];
+        front(): never[];
+    }
+    export {};
+}
+
+declare namespace $ {
     class $mol_plot_line extends $mol_plot_graph {
         threshold(): number;
         spacing(): number;
@@ -2339,11 +2402,13 @@ declare namespace $ {
         color(): string;
         tool(): string;
         grid(): boolean;
+        map(): boolean;
         state(): $mol_state_shared;
         reset(event?: any): any;
         auto(): readonly any[];
         shift(val?: any): $mol_vector_2d<number>;
         scale(val?: any): $mol_vector_2d<number>;
+        Map(): $$.$mol_plot_map_tiles;
         Line(id: any): $$.$mol_plot_line;
         Fill(id: any): $$.$mol_plot_line;
         Peer(id: any): $$.$mol_plot_line;
@@ -2352,6 +2417,8 @@ declare namespace $ {
         snapshot(): string;
         snapshot_current(): string;
         peer_update(): any;
+        tile_size(): number;
+        tiles_uri(): string;
         line_color(id: any): string;
         line_x(id: any): readonly number[];
         line_y(id: any): readonly number[];
@@ -2376,7 +2443,7 @@ declare namespace $.$$ {
     class $hyoo_draw_pane extends $.$hyoo_draw_pane {
         figures(next?: readonly string[]): readonly string[];
         peers(): number[];
-        graphs(): ($mol_plot_line | $mol_plot_ruler_vert | $mol_plot_ruler_hor)[];
+        graphs(): ($mol_plot_map_tiles | $mol_plot_line | $mol_plot_ruler_vert | $mol_plot_ruler_hor)[];
         figure(id: string): $mol_state_shared;
         line_x(id: string): number[];
         line_y(id: string): number[];
@@ -2629,6 +2696,12 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $mol_icon_map extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
     class $mol_icon_lead_pencil extends $mol_icon {
         path(): string;
     }
@@ -2670,6 +2743,45 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
+    class $mol_image extends $mol_view {
+        dom_name(): string;
+        field(): {
+            src: string;
+            alt: string;
+            loading: string;
+        };
+        uri(): string;
+        loading(): string;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_link_iconed extends $mol_link {
+        sub(): readonly any[];
+        content(): readonly any[];
+        host(): string;
+        icon(): string;
+        Icon(): $mol_image;
+        title(): string;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $.$$ {
+    class $mol_link_iconed extends $.$mol_link_iconed {
+        icon(): string;
+        host(): string;
+        title(): string;
+        sub(): any[];
+    }
+}
+
+declare namespace $ {
     class $hyoo_draw extends $mol_book2 {
         title(): string;
         plugins(): readonly any[];
@@ -2687,14 +2799,20 @@ declare namespace $ {
         Chat(): $$.$mol_chat;
         Source_link(): $mol_link_source;
         Lights(): $$.$mol_lights_toggle;
+        grid(val?: any): boolean;
         Grid_icon(): $mol_icon_grid_large;
-        grid(): boolean;
         Grid(): $mol_check_icon;
+        map(val?: any): boolean;
+        Map_icon(): $mol_icon_map;
+        Map(): $mol_check_icon;
         tool(): string;
         Tools(): $$.$hyoo_draw_tools;
         tools_right(): readonly any[];
         Tools_right(): $$.$mol_list;
         Side_right(): $$.$mol_scroll;
+        CARTO(): $$.$mol_link_iconed;
+        attribution(): readonly any[];
+        Attribution(): $mol_view;
         Main(): $mol_view;
     }
 }
@@ -2707,6 +2825,9 @@ declare namespace $.$$ {
         sub(): ($mol_view | $mol_page)[];
         center(next?: $mol_vector_2d<number>): $mol_vector_2d<number>;
         zoom(next?: number): number;
+        grid(next?: boolean): boolean;
+        map(next?: boolean): boolean;
+        attribution(): $mol_link_iconed[];
         tools_left(): $hyoo_draw_colors[];
     }
 }

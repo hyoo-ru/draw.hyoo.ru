@@ -2765,7 +2765,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $.$mol_style_attach("mol/gap/gap.css", ":root {\n\t--mol_gap_block: .75rem;\n\t--mol_gap_text: .5rem .75rem;\n\t--mol_gap_round: .25rem;\n\t--mol_gap_space: .35rem;\n\t--mol_gap_blur: .5rem;\n}\n");
+    $.$mol_style_attach("mol/gap/gap.css", ":root {\n\t--mol_gap_block: .75rem;\n\t--mol_gap_text: .5rem .75rem;\n\t--mol_gap_round: .25rem;\n\t--mol_gap_space: .25rem;\n\t--mol_gap_blur: .5rem;\n}\n");
 })($ || ($ = {}));
 //gap.css.js.map
 ;
@@ -4032,7 +4032,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $.$mol_style_attach("mol/button/button.view.css", "[mol_button] {\n\tborder: none;\n\tfont: inherit;\n\tdisplay: inline-flex;\n\tgap: var(--mol_gap_space);\n\tflex-shrink: 0;\n\ttext-decoration: inherit;\n\tcursor: inherit;\n\tposition: relative;\n\tbox-sizing: border-box;\n\tword-break: normal;\n\tcursor: default;\n\tuser-select: none;\n\tborder-radius: var(--mol_gap_round);\n}\n[mol_button]:focus {\n\toutline: none;\n}\n");
+    $.$mol_style_attach("mol/button/button.view.css", "[mol_button] {\n\tborder: none;\n\tfont: inherit;\n\tdisplay: inline-flex;\n\tflex-shrink: 0;\n\ttext-decoration: inherit;\n\tcursor: inherit;\n\tposition: relative;\n\tbox-sizing: border-box;\n\tword-break: normal;\n\tcursor: default;\n\tuser-select: none;\n\tborder-radius: var(--mol_gap_round);\n}\n[mol_button]:focus {\n\toutline: none;\n}\n");
 })($ || ($ = {}));
 //button.view.css.js.map
 ;
@@ -4108,7 +4108,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $.$mol_style_attach("mol/button/typed/typed.view.css", "[mol_button_typed] {\n\talign-content: center;\n\talign-items: center;\n\tpadding: var(--mol_gap_text);\n\tborder-radius: var(--mol_gap_round);\n}\n\n[mol_button_typed][disabled] {\n\tcolor: var(--mol_theme_text);\n\tpointer-events: none;\n}\n\n[mol_button_typed]:hover ,\n[mol_button_typed]:focus {\n\tcursor: pointer;\n\tbackground-color: var(--mol_theme_hover);\n}\n");
+    $.$mol_style_attach("mol/button/typed/typed.view.css", "[mol_button_typed] {\n\talign-content: center;\n\talign-items: center;\n\tpadding: var(--mol_gap_text);\n\tborder-radius: var(--mol_gap_round);\n\tgap: var(--mol_gap_space);\n}\n\n[mol_button_typed][disabled] {\n\tcolor: var(--mol_theme_text);\n\tpointer-events: none;\n}\n\n[mol_button_typed]:hover ,\n[mol_button_typed]:focus {\n\tcursor: pointer;\n\tbackground-color: var(--mol_theme_hover);\n}\n");
 })($ || ($ = {}));
 //typed.view.css.js.map
 ;
@@ -7566,6 +7566,231 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_svg_image extends $.$mol_svg {
+        dom_name() {
+            return "image";
+        }
+        pos() {
+            return [
+                0,
+                0
+            ];
+        }
+        size() {
+            return [
+                0,
+                0
+            ];
+        }
+        attr() {
+            return {
+                ...super.attr(),
+                x: this.pos_x(),
+                y: this.pos_y(),
+                width: this.size_x(),
+                height: this.size_y(),
+                href: this.uri(),
+                preserveAspectRatio: this.aspect()
+            };
+        }
+        pos_x() {
+            return "";
+        }
+        pos_y() {
+            return "";
+        }
+        size_x() {
+            return "";
+        }
+        size_y() {
+            return "";
+        }
+        uri() {
+            return "";
+        }
+        aspect() {
+            return "none";
+        }
+    }
+    $.$mol_svg_image = $mol_svg_image;
+})($ || ($ = {}));
+//image.view.tree.js.map
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_svg_image extends $.$mol_svg_image {
+            pos_x() {
+                return this.pos()[0];
+            }
+            pos_y() {
+                return this.pos()[1];
+            }
+            size_x() {
+                return this.size()[0];
+            }
+            size_y() {
+                return this.size()[1];
+            }
+        }
+        $$.$mol_svg_image = $mol_svg_image;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//image.view.js.map
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_plot_map_tiles extends $.$mol_plot_graph {
+        tile_size_real() {
+            return 256;
+        }
+        level() {
+            return 0;
+        }
+        level_pyramid() {
+            return 0;
+        }
+        tiles_limit() {
+            return 8;
+        }
+        uri_template() {
+            return "";
+        }
+        sub() {
+            return this.tiles();
+        }
+        Tile(id) {
+            const obj = new this.$.$mol_svg_image();
+            obj.style = () => ({
+                transform: this.tile_transform(id)
+            });
+            obj.uri = () => this.tile_uri(id);
+            obj.pos = () => [
+                0,
+                0
+            ];
+            obj.size = () => [
+                this.tile_size_real(),
+                this.tile_size_real()
+            ];
+            return obj;
+        }
+        tiles() {
+            return [];
+        }
+        tile_transform(id) {
+            return "";
+        }
+        tile_uri(id) {
+            return "";
+        }
+    }
+    __decorate([
+        $.$mol_mem_key
+    ], $mol_plot_map_tiles.prototype, "Tile", null);
+    $.$mol_plot_map_tiles = $mol_plot_map_tiles;
+})($ || ($ = {}));
+//tiles.view.tree.js.map
+;
+"use strict";
+var $;
+(function ($) {
+    $.$mol_style_attach("mol/plot/map/tiles/tile.view.css", "[mol_plot_map_tiles_tile] {\n\ttransition: none;\n\tanimation: mol_plot_map_tiles_tile_show .2s linear forwards;\n}\n\n@keyframes mol_plot_map_tiles_tile_show {\n\tfrom {\n\t\topacity: 0;\n\t}\n\tto {\n\t\topacity: 1;\n\t}\n}\n");
+})($ || ($ = {}));
+//tile.view.css.js.map
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_plot_map_tiles extends $.$mol_plot_map_tiles {
+            level() {
+                return Math.max(0, Math.round(Math.log2(this.scale()[0])));
+            }
+            tiles() {
+                const level = this.level();
+                const limit = this.tiles_limit();
+                const dims = this.dimensions_pane();
+                const tiles = [];
+                const range = [level, Math.max(0, level + this.level_pyramid())].sort((a, b) => a - b);
+                for (let l = range[0]; l <= range[1]; ++l) {
+                    let [xs, ys] = this.tile_at([l, dims.x.min, dims.y.min]);
+                    let [xe, ye] = this.tile_at([l, dims.x.max, dims.y.max]);
+                    if (xe - xs >= limit) {
+                        xs = Math.ceil((xs + xe - limit) / 2);
+                        xe = xs + limit - 1;
+                    }
+                    if (ye - ys >= limit) {
+                        ys = Math.ceil((ys + ye - limit) / 2);
+                        ye = ys + limit - 1;
+                    }
+                    for (let y = ys; y <= ye; ++y) {
+                        for (let x = xs; x <= xe; ++x) {
+                            tiles.push(this.Tile([l, x, y]));
+                        }
+                    }
+                }
+                return tiles;
+            }
+            tile_uri(id) {
+                const [level, x, y] = id;
+                const count = 1 << level;
+                return this.uri_template()
+                    .replace('{level}', String(level))
+                    .replace('{x}', String((x % count + count) % count))
+                    .replace('{y}', String((y % count + count) % count));
+            }
+            tile_transform(id) {
+                const [level, x, y] = id;
+                const [shift_x, shift_y] = this.shift();
+                const [scale_x, scale_y] = this.scale();
+                const count = 1 << level;
+                const tile_size = this.tile_size_real();
+                const pos_x = ((x / count - .5) * tile_size * scale_x + shift_x);
+                const pos_y = ((y / count - .5) * tile_size * scale_y + shift_y);
+                const scale = scale_x / 2 ** level + .5 / tile_size;
+                return `translate3d(${pos_x}px,${pos_y}px,0px) scale(${scale})`;
+            }
+            tile_at(pos) {
+                const [level, x, y] = pos;
+                const count = 1 << level;
+                const tile_size = this.tile_size_real();
+                return [
+                    Math.floor((x / tile_size + .5) * count),
+                    Math.floor((y / tile_size + .5) * count),
+                ];
+            }
+            back() {
+                return [this];
+            }
+            front() {
+                return [];
+            }
+        }
+        __decorate([
+            $.$mol_mem
+        ], $mol_plot_map_tiles.prototype, "level", null);
+        __decorate([
+            $.$mol_mem
+        ], $mol_plot_map_tiles.prototype, "tiles", null);
+        __decorate([
+            $.$mol_mem_key
+        ], $mol_plot_map_tiles.prototype, "tile_uri", null);
+        __decorate([
+            $.$mol_mem_key
+        ], $mol_plot_map_tiles.prototype, "tile_transform", null);
+        $$.$mol_plot_map_tiles = $mol_plot_map_tiles;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//tiles.view.js.map
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_plot_line extends $.$mol_plot_graph {
         threshold() {
             return 1;
@@ -8371,6 +8596,9 @@ var $;
         grid() {
             return false;
         }
+        map() {
+            return false;
+        }
         state() {
             const obj = new this.$.$mol_state_shared();
             return obj;
@@ -8395,6 +8623,13 @@ var $;
             if (val !== undefined)
                 return val;
             const obj = new this.$.$mol_vector_2d(this.zoom(), this.zoom());
+            return obj;
+        }
+        Map() {
+            const obj = new this.$.$mol_plot_map_tiles();
+            obj.level_pyramid = () => -3;
+            obj.tile_size_real = () => this.tile_size();
+            obj.uri_template = () => this.tiles_uri();
             return obj;
         }
         Line(id) {
@@ -8439,6 +8674,12 @@ var $;
         peer_update() {
             return null;
         }
+        tile_size() {
+            return 256;
+        }
+        tiles_uri() {
+            return "https://basemaps.cartocdn.com/rastertiles/voyager/{level}/{x}/{y}.png";
+        }
         line_color(id) {
             return "";
         }
@@ -8470,6 +8711,9 @@ var $;
     __decorate([
         $.$mol_mem
     ], $hyoo_draw_pane.prototype, "scale", null);
+    __decorate([
+        $.$mol_mem
+    ], $hyoo_draw_pane.prototype, "Map", null);
     __decorate([
         $.$mol_mem_key
     ], $hyoo_draw_pane.prototype, "Line", null);
@@ -8517,7 +8761,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $.$mol_style_attach("hyoo/draw/pane/pane.css", "[hyoo_draw_pane_peer] {\n\tstroke-dasharray: 2;\n\tstroke-opacity: .5;\n}\n\n[hyoo_draw_pane_fill] {\n\tfill: currentColor;\n\tfill-opacity: .5;\n}\n");
+    $.$mol_style_attach("hyoo/draw/pane/pane.css", "[hyoo_draw_pane_peer] {\n\tstroke-dasharray: 2;\n\tstroke-opacity: .5;\n}\n\n[hyoo_draw_pane_fill] {\n\tfill: currentColor;\n\tfill-opacity: .5;\n}\n\n[hyoo_draw_pane_map_tile] {\n\tfilter: var(--mol_theme_image);\n}\n");
 })($ || ($ = {}));
 //pane.css.js.map
 ;
@@ -8537,6 +8781,7 @@ var $;
             }
             graphs() {
                 return [
+                    ...this.map() ? [this.Map()] : [],
                     ...this.figures().map(id => {
                         switch (this.figure(id).sub('type').value()) {
                             case 'line': return this.Line(id);
@@ -9615,6 +9860,18 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_icon_map extends $.$mol_icon {
+        path() {
+            return "M15,19L9,16.89V5L15,7.11M20.5,3C20.44,3 20.39,3 20.34,3L15,5.1L9,3L3.36,4.9C3.15,4.97 3,5.15 3,5.38V20.5C3,20.78 3.22,21 3.5,21C3.55,21 3.61,21 3.66,20.97L9,18.9L15,21L20.64,19.1C20.85,19 21,18.85 21,18.62V3.5C21,3.22 20.78,3 20.5,3Z";
+        }
+    }
+    $.$mol_icon_map = $mol_icon_map;
+})($ || ($ = {}));
+//map.view.tree.js.map
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_icon_lead_pencil extends $.$mol_icon {
         path() {
             return "M16.84,2.73C16.45,2.73 16.07,2.88 15.77,3.17L13.65,5.29L18.95,10.6L21.07,8.5C21.67,7.89 21.67,6.94 21.07,6.36L17.9,3.17C17.6,2.88 17.22,2.73 16.84,2.73M12.94,6L4.84,14.11L7.4,14.39L7.58,16.68L9.86,16.85L10.15,19.41L18.25,11.3M4.25,15.04L2.5,21.73L9.2,19.94L8.96,17.78L6.65,17.61L6.47,15.29";
@@ -9746,6 +10003,118 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_image extends $.$mol_view {
+        dom_name() {
+            return "img";
+        }
+        field() {
+            return {
+                ...super.field(),
+                src: this.uri(),
+                alt: this.title(),
+                loading: this.loading()
+            };
+        }
+        uri() {
+            return "";
+        }
+        loading() {
+            return "lazy";
+        }
+    }
+    $.$mol_image = $mol_image;
+})($ || ($ = {}));
+//image.view.tree.js.map
+;
+"use strict";
+var $;
+(function ($) {
+    $.$mol_style_attach("mol/image/image.view.css", "[mol_image] {\n\tborder-radius: var(--mol_gap_round);\n\toverflow: hidden;\n\tflex: 0 1 auto;\n\tmax-width: 100%;\n\tobject-fit: cover;\n}\n");
+})($ || ($ = {}));
+//image.view.css.js.map
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_link_iconed extends $.$mol_link {
+        sub() {
+            return [
+                this.Icon()
+            ];
+        }
+        content() {
+            return [
+                this.title()
+            ];
+        }
+        host() {
+            return "";
+        }
+        icon() {
+            return "";
+        }
+        Icon() {
+            const obj = new this.$.$mol_image();
+            obj.uri = () => this.icon();
+            obj.title = () => "";
+            return obj;
+        }
+        title() {
+            return this.uri();
+        }
+    }
+    __decorate([
+        $.$mol_mem
+    ], $mol_link_iconed.prototype, "Icon", null);
+    $.$mol_link_iconed = $mol_link_iconed;
+})($ || ($ = {}));
+//iconed.view.tree.js.map
+;
+"use strict";
+var $;
+(function ($) {
+    $.$mol_style_attach("mol/link/iconed/iconed.view.css", "[mol_link_iconed] {\n\talign-items: center;\n\tcolor: var(--mol_theme_control);\n\tdisplay: inline;\n\tpadding: var(--mol_gap_text);\n}\n\n[mol_link_iconed_icon] {\n\tbox-shadow: none;\n\theight: 1em;\n\twidth: 1em;\n\tdisplay: inline-block;\n\tmargin: .125rem 0;\n\tvertical-align: text-bottom;\n\tborder-radius: 0;\n\tobject-fit: scale-down;\n}\n\n[mol_theme=\"$mol_theme_dark\"] [mol_link_iconed_icon] {\n\tfilter: invert(1) hue-rotate(180deg);\n}\n");
+})($ || ($ = {}));
+//iconed.view.css.js.map
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_link_iconed extends $.$mol_link_iconed {
+            icon() {
+                return `https://favicon.yandex.net/favicon/${this.host()}?color=0,0,0,0&size=32&stub=1`;
+            }
+            host() {
+                const base = this.$.$mol_state_arg.href();
+                const url = new URL(this.uri(), base);
+                return url.hostname;
+            }
+            title() {
+                return decodeURIComponent(this.uri().split(this.host(), 2)[1]).replace(/^\//, ' ');
+            }
+            sub() {
+                return [
+                    ...this.host() ? [this.Icon()] : [],
+                    ...this.content(),
+                ];
+            }
+        }
+        __decorate([
+            $.$mol_mem
+        ], $mol_link_iconed.prototype, "host", null);
+        __decorate([
+            $.$mol_mem
+        ], $mol_link_iconed.prototype, "title", null);
+        $$.$mol_link_iconed = $mol_link_iconed;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//iconed.view.js.map
+;
+"use strict";
+var $;
+(function ($) {
     class $hyoo_draw extends $.$mol_book2 {
         title() {
             return this.$.$mol_locale.text('$hyoo_draw_title');
@@ -9804,6 +10173,7 @@ var $;
             obj.color = () => this.color();
             obj.tool = () => this.tool();
             obj.grid = () => this.grid();
+            obj.map = () => this.map();
             obj.shift = (val) => this.center(val);
             obj.zoom = (val) => this.zoom(val);
             return obj;
@@ -9824,17 +10194,36 @@ var $;
             const obj = new this.$.$mol_lights_toggle();
             return obj;
         }
+        grid(val) {
+            if (val !== undefined)
+                return val;
+            return false;
+        }
         Grid_icon() {
             const obj = new this.$.$mol_icon_grid_large();
             return obj;
         }
-        grid() {
-            return this.Grid().checked();
-        }
         Grid() {
             const obj = new this.$.$mol_check_icon();
             obj.hint = () => this.$.$mol_locale.text('$hyoo_draw_Grid_hint');
+            obj.checked = (val) => this.grid(val);
             obj.Icon = () => this.Grid_icon();
+            return obj;
+        }
+        map(val) {
+            if (val !== undefined)
+                return val;
+            return false;
+        }
+        Map_icon() {
+            const obj = new this.$.$mol_icon_map();
+            return obj;
+        }
+        Map() {
+            const obj = new this.$.$mol_check_icon();
+            obj.hint = () => this.$.$mol_locale.text('$hyoo_draw_Map_hint');
+            obj.checked = (val) => this.map(val);
+            obj.Icon = () => this.Map_icon();
             return obj;
         }
         tool() {
@@ -9850,6 +10239,7 @@ var $;
                 this.Source_link(),
                 this.Lights(),
                 this.Grid(),
+                this.Map(),
                 this.Tools()
             ];
         }
@@ -9865,12 +10255,29 @@ var $;
             ];
             return obj;
         }
+        CARTO() {
+            const obj = new this.$.$mol_link_iconed();
+            obj.title = () => "CARTO";
+            obj.uri = () => "https://carto.com/attributions";
+            return obj;
+        }
+        attribution() {
+            return [
+                this.CARTO()
+            ];
+        }
+        Attribution() {
+            const obj = new this.$.$mol_view();
+            obj.sub = () => this.attribution();
+            return obj;
+        }
         Main() {
             const obj = new this.$.$mol_view();
             obj.sub = () => [
                 this.Side_left(),
                 this.Pane(),
-                this.Side_right()
+                this.Side_right(),
+                this.Attribution()
             ];
             return obj;
         }
@@ -9907,10 +10314,22 @@ var $;
     ], $hyoo_draw.prototype, "Lights", null);
     __decorate([
         $.$mol_mem
+    ], $hyoo_draw.prototype, "grid", null);
+    __decorate([
+        $.$mol_mem
     ], $hyoo_draw.prototype, "Grid_icon", null);
     __decorate([
         $.$mol_mem
     ], $hyoo_draw.prototype, "Grid", null);
+    __decorate([
+        $.$mol_mem
+    ], $hyoo_draw.prototype, "map", null);
+    __decorate([
+        $.$mol_mem
+    ], $hyoo_draw.prototype, "Map_icon", null);
+    __decorate([
+        $.$mol_mem
+    ], $hyoo_draw.prototype, "Map", null);
     __decorate([
         $.$mol_mem
     ], $hyoo_draw.prototype, "Tools", null);
@@ -9922,6 +10341,12 @@ var $;
     ], $hyoo_draw.prototype, "Side_right", null);
     __decorate([
         $.$mol_mem
+    ], $hyoo_draw.prototype, "CARTO", null);
+    __decorate([
+        $.$mol_mem
+    ], $hyoo_draw.prototype, "Attribution", null);
+    __decorate([
+        $.$mol_mem
     ], $hyoo_draw.prototype, "Main", null);
     $.$hyoo_draw = $hyoo_draw;
 })($ || ($ = {}));
@@ -9930,7 +10355,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $.$mol_style_attach("hyoo/draw/draw.view.css", "[hyoo_draw] {\n\tposition: relative;\n\t--hyoo_draw_palette_red: #F44336;\n\t--hyoo_draw_palette_pink: #E91E63;\n\t--hyoo_draw_palette_purple: #9C27B0;\n\t--hyoo_draw_palette_indigo: #3F51B5;\n\t--hyoo_draw_palette_blue: #2196F3;\n\t--hyoo_draw_palette_cyan: #00BCD4;\n\t--hyoo_draw_palette_teal: #009688;\n\t--hyoo_draw_palette_green: #4CAF50;\n\t--hyoo_draw_palette_lime: #CDDC39;\n\t--hyoo_draw_palette_yellow: #FFEB3B;\n\t--hyoo_draw_palette_amber: #FFC107;\n\t--hyoo_draw_palette_orange: #FF9800;\n\t--hyoo_draw_palette_brown: #795548;\n\t--hyoo_draw_palette_coral: #456;\n\t--hyoo_draw_palette_blue_grey: #607D8B;\n\t--hyoo_draw_palette_grey: #9E9E9E;\n\t--hyoo_draw_palette_negative: var(--mol_theme_text);\n}\n\n[hyoo_draw_main] {\n\tposition: relative;\n\tflex: 10000 0 30rem;\n\tmin-width: 0;\n}\n\n[hyoo_draw_side_left] {\n\tposition: absolute;\n\ttop: 0;\n\tleft: 0;\n}\n\n[hyoo_draw_side_right] {\n\tposition: absolute;\n\ttop: 0;\n\tright: 0;\n}\n\n[hyoo_draw_chat_page] {\n\tbox-shadow: 0 0 0 1px var(--mol_theme_line);\n}\n\n");
+    $.$mol_style_attach("hyoo/draw/draw.view.css", "[hyoo_draw] {\n\tposition: relative;\n\t--hyoo_draw_palette_red: #F44336;\n\t--hyoo_draw_palette_pink: #E91E63;\n\t--hyoo_draw_palette_purple: #9C27B0;\n\t--hyoo_draw_palette_indigo: #3F51B5;\n\t--hyoo_draw_palette_blue: #2196F3;\n\t--hyoo_draw_palette_cyan: #00BCD4;\n\t--hyoo_draw_palette_teal: #009688;\n\t--hyoo_draw_palette_green: #4CAF50;\n\t--hyoo_draw_palette_lime: #CDDC39;\n\t--hyoo_draw_palette_yellow: #FFEB3B;\n\t--hyoo_draw_palette_amber: #FFC107;\n\t--hyoo_draw_palette_orange: #FF9800;\n\t--hyoo_draw_palette_brown: #795548;\n\t--hyoo_draw_palette_coral: #456;\n\t--hyoo_draw_palette_blue_grey: #607D8B;\n\t--hyoo_draw_palette_grey: #9E9E9E;\n\t--hyoo_draw_palette_negative: var(--mol_theme_text);\n}\n\n[hyoo_draw_main] {\n\tposition: relative;\n\tflex: 10000 0 30rem;\n\tmin-width: 0;\n}\n\n[hyoo_draw_side_left] {\n\tposition: absolute;\n\ttop: 0;\n\tleft: 0;\n}\n\n[hyoo_draw_side_right] {\n\tposition: absolute;\n\ttop: 0;\n\tright: 0;\n}\n\n[hyoo_draw_chat_page] {\n\tbox-shadow: 0 0 0 1px var(--mol_theme_line);\n}\n\n[hyoo_draw_attribution] {\n\tposition: absolute;\n\tbottom: 0;\n\tright: 0;\n}\n\n");
 })($ || ($ = {}));
 //draw.view.css.js.map
 ;
@@ -9963,7 +10388,20 @@ var $;
             zoom(next) {
                 const arg = next ? String(next) : undefined;
                 const str = this.$.$mol_state_arg.value('zoom', arg);
-                return Number(str) || 1;
+                return Number(str) || 8;
+            }
+            grid(next) {
+                const arg = next === undefined ? undefined : String(next);
+                return this.$.$mol_state_arg.value('grid', arg) === 'true' ?? super.grid();
+            }
+            map(next) {
+                const arg = next === undefined ? undefined : String(next);
+                return this.$.$mol_state_arg.value('map', arg) === 'true' ?? super.grid();
+            }
+            attribution() {
+                return [
+                    ...this.map() ? [this.CARTO()] : [],
+                ];
             }
             tools_left() {
                 return [
@@ -9980,6 +10418,12 @@ var $;
         __decorate([
             $.$mol_mem
         ], $hyoo_draw.prototype, "zoom", null);
+        __decorate([
+            $.$mol_mem
+        ], $hyoo_draw.prototype, "grid", null);
+        __decorate([
+            $.$mol_mem
+        ], $hyoo_draw.prototype, "map", null);
         __decorate([
             $.$mol_mem
         ], $hyoo_draw.prototype, "tools_left", null);
