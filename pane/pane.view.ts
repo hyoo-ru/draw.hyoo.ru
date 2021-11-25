@@ -95,6 +95,10 @@ namespace $.$$ {
 			}
 		}
 		
+		draw_end() {
+			this.figure_current( null )
+		}
+		
 		draw_pencil( type: string, event: Event ) {
 			
 			event.preventDefault()
@@ -102,79 +106,62 @@ namespace $.$$ {
 			const action = this.action_type()
 			const point = this.action_point()
 			
-			switch( action ) {
+			let id = this.figure_current()
+			if( !id ) {
+				this.figure_current( $mol_guid() )
+				this._point_last = point
+				return
+			}
+			
+			const figure = this.figure( id )
+			let points = figure.sub( 'points' ).list()
+			
+			if( points.length === 0 ) {
 				
-				case 'draw': {
-					
-					let id = this.figure_current()
-					if( !id ) {
-						this.figure_current( $mol_guid() )
-						this._point_last = point
-						return
-					}
-					
-					const figure = this.figure( id )
-					let points = figure.sub( 'points' ).list()
-					
-					if( points.length === 0 ) {
-						
-						points = [ { x: this._point_last!.x, y: this._point_last!.y } ]
-						
-						let figures = [ ... this.figures() ]
-						if( figures.indexOf( id ) === -1 ) {
-							
-							figures.push( id )
-							this.figures( figures )
-							
-							figure.sub( 'color' ).value( this.color() )
-							figure.sub( 'type' ).value( type )
-							
-						}
-						
-					}
-
-					const next = { x: point!.x, y: point!.y }
-					
-					if( points.length > 1 ) {
-						
-						const end = points[ points.length - 2 ] as typeof next
-						const last = {
-							x: ( end.x + next.x ) / 2,
-							y: ( end.y + next.y ) / 2,
-						}
-						
-						points = [
-							... points.slice( 0 , -1 ),
-							last,
-							next,
-						]
-					
-					} else {
-						
-						points = [ ... points, next ]
-						
-					}
-					
-					figure.sub( 'points' ).list( points )
-					
-					return
-				}
+				points = [ { x: this._point_last!.x, y: this._point_last!.y } ]
 				
-				default: {
-					this.figure_current( null )
-					return
+				let figures = [ ... this.figures() ]
+				if( figures.indexOf( id ) === -1 ) {
+					
+					figures.push( id )
+					this.figures( figures )
+					
+					figure.sub( 'color' ).value( this.color() )
+					figure.sub( 'type' ).value( type )
+					
 				}
 				
 			}
+
+			const next = { x: point!.x, y: point!.y }
+			
+			if( points.length > 1 ) {
+				
+				const end = points[ points.length - 2 ] as typeof next
+				const last = {
+					x: ( end.x + next.x ) / 2,
+					y: ( end.y + next.y ) / 2,
+				}
+				
+				points = [
+					... points.slice( 0 , -1 ),
+					last,
+					next,
+				]
+			
+			} else {
+				
+				points = [ ... points, next ]
+				
+			}
+			
+			figure.sub( 'points' ).list( points )
 			
 		}
 		
 		draw_eraser( event: Event ) {
 			
 			event.preventDefault()
-			
-			const action = this.action_type()
-			if( action !== 'draw' ) return
 			
 			const color = this.color()
 			const point = this.action_point()

@@ -29,16 +29,12 @@
 	position: absolute;
 	top: 0;
 	left: 0;
-	box-shadow: 0 0 0.5rem hsla(0,0%,0%,.25);
-	background: var(--mol_theme_back);
 }
 
 [hyoo_draw_side_right] {
 	position: absolute;
 	top: 0;
 	right: 0;
-	box-shadow: 0 0 0.5rem hsla(0,0%,0%,.25);
-	background: var(--mol_theme_back);
 }
 
 [hyoo_draw_chat_page] {
