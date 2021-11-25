@@ -5124,7 +5124,17 @@ var $;
                 return val;
             return null;
         }
+        draw_start(event) {
+            if (event !== undefined)
+                return event;
+            return null;
+        }
         draw(event) {
+            if (event !== undefined)
+                return event;
+            return null;
+        }
+        draw_end(event) {
             if (event !== undefined)
                 return event;
             return null;
@@ -5142,7 +5152,7 @@ var $;
                 pointerdown: (event) => this.event_start(event),
                 pointermove: (event) => this.event_move(event),
                 pointerup: (event) => this.event_end(event),
-                pointerleave: (event) => this.event_end(event),
+                pointerleave: (event) => this.event_leave(event),
                 wheel: (event) => this.event_wheel(event)
             };
         }
@@ -5157,6 +5167,11 @@ var $;
             return null;
         }
         event_end(event) {
+            if (event !== undefined)
+                return event;
+            return null;
+        }
+        event_leave(event) {
             if (event !== undefined)
                 return event;
             return null;
@@ -5232,7 +5247,13 @@ var $;
     ], $mol_touch.prototype, "swipe_to_top", null);
     __decorate([
         $.$mol_mem
+    ], $mol_touch.prototype, "draw_start", null);
+    __decorate([
+        $.$mol_mem
     ], $mol_touch.prototype, "draw", null);
+    __decorate([
+        $.$mol_mem
+    ], $mol_touch.prototype, "draw_end", null);
     __decorate([
         $.$mol_mem
     ], $mol_touch.prototype, "event_start", null);
@@ -5242,6 +5263,9 @@ var $;
     __decorate([
         $.$mol_mem
     ], $mol_touch.prototype, "event_end", null);
+    __decorate([
+        $.$mol_mem
+    ], $mol_touch.prototype, "event_leave", null);
     __decorate([
         $.$mol_mem
     ], $mol_touch.prototype, "event_wheel", null);
@@ -5288,10 +5312,14 @@ var $;
             event_eat(event) {
                 if (event instanceof PointerEvent) {
                     const events = this.pointer_events().filter(e => e.pointerId !== event.pointerId);
-                    if (event.type !== 'pointerleave')
+                    if (event.type !== 'pointerup' && event.type !== 'pointerleave')
                         events.push(event);
                     this.pointer_events(events);
-                    if (this.allow_zoom() && events.filter(e => e.pointerType === 'touch').length === 2) {
+                    const touch_count = events.filter(e => e.pointerType === 'touch').length;
+                    if (this.allow_zoom() && touch_count === 2) {
+                        return this.action_type('zoom');
+                    }
+                    if (this.action_type() === 'zoom' && touch_count === 1) {
                         return this.action_type('zoom');
                     }
                     let button;
@@ -5324,10 +5352,12 @@ var $;
                 const action_type = this.event_eat(event);
                 if (!action_type)
                     return;
-                if (action_type === 'draw')
-                    return;
                 const coords = this.pointer_coords();
                 this.start_pos(coords.center());
+                if (action_type === 'draw') {
+                    this.draw_start(event);
+                    return;
+                }
                 this.start_distance(coords.distance());
                 this.start_zoom(this.zoom());
             }
@@ -5339,14 +5369,17 @@ var $;
                     return;
                 const start_pan = this.start_pan();
                 const action_type = this.event_eat(event);
+                const start_pos = this.start_pos();
                 let pos = this.pointer_center();
                 if (!action_type)
                     return;
                 if (action_type === 'draw') {
-                    this.draw(event);
+                    const distance = new $.$mol_vector(start_pos, pos).distance();
+                    if (distance >= 4) {
+                        this.draw(event);
+                    }
                     return;
                 }
-                const start_pos = this.start_pos();
                 if (!start_pos)
                     return;
                 if (action_type === 'pan') {
@@ -5395,12 +5428,15 @@ var $;
                 }
             }
             event_end(event) {
+                const action = this.action_type();
+                if (action === 'draw') {
+                    this.draw_end(event);
+                }
+                this.event_leave(event);
+            }
+            event_leave(event) {
                 this.event_eat(event);
                 this.dom_node().releasePointerCapture(event.pointerId);
-                if (!this.start_pos()) {
-                    this.draw(event);
-                    return;
-                }
                 this.start_pos(null);
             }
             swipe_left(event) {
@@ -5643,7 +5679,17 @@ var $;
         allow_zoom() {
             return true;
         }
+        draw_start(event) {
+            if (event !== undefined)
+                return event;
+            return null;
+        }
         draw(event) {
+            if (event !== undefined)
+                return event;
+            return null;
+        }
+        draw_end(event) {
             if (event !== undefined)
                 return event;
             return null;
@@ -5664,7 +5710,9 @@ var $;
             obj.allow_draw = () => this.allow_draw();
             obj.allow_pan = () => this.allow_pan();
             obj.allow_zoom = () => this.allow_zoom();
+            obj.draw_start = (event) => this.draw_start(event);
             obj.draw = (event) => this.draw(event);
+            obj.draw_end = (event) => this.draw_end(event);
             return obj;
         }
     }
@@ -5748,7 +5796,13 @@ var $;
     ], $mol_plot_pane.prototype, "zoom", null);
     __decorate([
         $.$mol_mem
+    ], $mol_plot_pane.prototype, "draw_start", null);
+    __decorate([
+        $.$mol_mem
     ], $mol_plot_pane.prototype, "draw", null);
+    __decorate([
+        $.$mol_mem
+    ], $mol_plot_pane.prototype, "draw_end", null);
     __decorate([
         $.$mol_mem
     ], $mol_plot_pane.prototype, "Touch", null);
@@ -8373,60 +8427,51 @@ var $;
                     case 'eraser': return this.draw_eraser(event);
                 }
             }
+            draw_end() {
+                this.figure_current(null);
+            }
             draw_pencil(type, event) {
                 event.preventDefault();
                 const action = this.action_type();
                 const point = this.action_point();
-                switch (action) {
-                    case 'draw': {
-                        let id = this.figure_current();
-                        if (!id) {
-                            this.figure_current($.$mol_guid());
-                            this._point_last = point;
-                            return;
-                        }
-                        const figure = this.figure(id);
-                        let points = figure.sub('points').list();
-                        if (points.length === 0) {
-                            points = [{ x: this._point_last.x, y: this._point_last.y }];
-                            let figures = [...this.figures()];
-                            if (figures.indexOf(id) === -1) {
-                                figures.push(id);
-                                this.figures(figures);
-                                figure.sub('color').value(this.color());
-                                figure.sub('type').value(type);
-                            }
-                        }
-                        const next = { x: point.x, y: point.y };
-                        if (points.length > 1) {
-                            const end = points[points.length - 2];
-                            const last = {
-                                x: (end.x + next.x) / 2,
-                                y: (end.y + next.y) / 2,
-                            };
-                            points = [
-                                ...points.slice(0, -1),
-                                last,
-                                next,
-                            ];
-                        }
-                        else {
-                            points = [...points, next];
-                        }
-                        figure.sub('points').list(points);
-                        return;
-                    }
-                    default: {
-                        this.figure_current(null);
-                        return;
+                let id = this.figure_current();
+                if (!id) {
+                    this.figure_current($.$mol_guid());
+                    this._point_last = point;
+                    return;
+                }
+                const figure = this.figure(id);
+                let points = figure.sub('points').list();
+                if (points.length === 0) {
+                    points = [{ x: this._point_last.x, y: this._point_last.y }];
+                    let figures = [...this.figures()];
+                    if (figures.indexOf(id) === -1) {
+                        figures.push(id);
+                        this.figures(figures);
+                        figure.sub('color').value(this.color());
+                        figure.sub('type').value(type);
                     }
                 }
+                const next = { x: point.x, y: point.y };
+                if (points.length > 1) {
+                    const end = points[points.length - 2];
+                    const last = {
+                        x: (end.x + next.x) / 2,
+                        y: (end.y + next.y) / 2,
+                    };
+                    points = [
+                        ...points.slice(0, -1),
+                        last,
+                        next,
+                    ];
+                }
+                else {
+                    points = [...points, next];
+                }
+                figure.sub('points').list(points);
             }
             draw_eraser(event) {
                 event.preventDefault();
-                const action = this.action_type();
-                if (action !== 'draw')
-                    return;
                 const color = this.color();
                 const point = this.action_point();
                 const radius = 16 / this.zoom();
@@ -9725,7 +9770,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $.$mol_style_attach("hyoo/draw/draw.view.css", "[hyoo_draw] {\n\tposition: relative;\n\t--hyoo_draw_palette_red: #F44336;\n\t--hyoo_draw_palette_pink: #E91E63;\n\t--hyoo_draw_palette_purple: #9C27B0;\n\t--hyoo_draw_palette_indigo: #3F51B5;\n\t--hyoo_draw_palette_blue: #2196F3;\n\t--hyoo_draw_palette_cyan: #00BCD4;\n\t--hyoo_draw_palette_teal: #009688;\n\t--hyoo_draw_palette_green: #4CAF50;\n\t--hyoo_draw_palette_lime: #CDDC39;\n\t--hyoo_draw_palette_yellow: #FFEB3B;\n\t--hyoo_draw_palette_amber: #FFC107;\n\t--hyoo_draw_palette_orange: #FF9800;\n\t--hyoo_draw_palette_brown: #795548;\n\t--hyoo_draw_palette_coral: #456;\n\t--hyoo_draw_palette_blue_grey: #607D8B;\n\t--hyoo_draw_palette_grey: #9E9E9E;\n\t--hyoo_draw_palette_negative: var(--mol_theme_text);\n}\n\n[hyoo_draw_main] {\n\tposition: relative;\n\tflex: 10000 0 30rem;\n\tmin-width: 0;\n}\n\n[hyoo_draw_side_left] {\n\tposition: absolute;\n\ttop: 0;\n\tleft: 0;\n\tbox-shadow: 0 0 0.5rem hsla(0,0%,0%,.25);\n\tbackground: var(--mol_theme_back);\n}\n\n[hyoo_draw_side_right] {\n\tposition: absolute;\n\ttop: 0;\n\tright: 0;\n\tbox-shadow: 0 0 0.5rem hsla(0,0%,0%,.25);\n\tbackground: var(--mol_theme_back);\n}\n\n[hyoo_draw_chat_page] {\n\tbox-shadow: 0 0 0 1px var(--mol_theme_line);\n}\n\n");
+    $.$mol_style_attach("hyoo/draw/draw.view.css", "[hyoo_draw] {\n\tposition: relative;\n\t--hyoo_draw_palette_red: #F44336;\n\t--hyoo_draw_palette_pink: #E91E63;\n\t--hyoo_draw_palette_purple: #9C27B0;\n\t--hyoo_draw_palette_indigo: #3F51B5;\n\t--hyoo_draw_palette_blue: #2196F3;\n\t--hyoo_draw_palette_cyan: #00BCD4;\n\t--hyoo_draw_palette_teal: #009688;\n\t--hyoo_draw_palette_green: #4CAF50;\n\t--hyoo_draw_palette_lime: #CDDC39;\n\t--hyoo_draw_palette_yellow: #FFEB3B;\n\t--hyoo_draw_palette_amber: #FFC107;\n\t--hyoo_draw_palette_orange: #FF9800;\n\t--hyoo_draw_palette_brown: #795548;\n\t--hyoo_draw_palette_coral: #456;\n\t--hyoo_draw_palette_blue_grey: #607D8B;\n\t--hyoo_draw_palette_grey: #9E9E9E;\n\t--hyoo_draw_palette_negative: var(--mol_theme_text);\n}\n\n[hyoo_draw_main] {\n\tposition: relative;\n\tflex: 10000 0 30rem;\n\tmin-width: 0;\n}\n\n[hyoo_draw_side_left] {\n\tposition: absolute;\n\ttop: 0;\n\tleft: 0;\n}\n\n[hyoo_draw_side_right] {\n\tposition: absolute;\n\ttop: 0;\n\tright: 0;\n}\n\n[hyoo_draw_chat_page] {\n\tbox-shadow: 0 0 0 1px var(--mol_theme_line);\n}\n\n");
 })($ || ($ = {}));
 //draw.view.css.js.map
 ;
@@ -9758,8 +9803,6 @@ var $;
             zoom(next) {
                 const arg = next ? String(next) : undefined;
                 const str = this.$.$mol_state_arg.value('zoom', arg);
-                if (next)
-                    this.Tools().value('');
                 return Number(str) || 1;
             }
             tools_left() {
