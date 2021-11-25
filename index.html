@@ -11,10 +11,8 @@
 	</head>
 	<body style="margin: 0; padding: 0; height: 100%; width: 100%">
 		<div mol_view_root="$hyoo_draw"></div>
-		<script>
-			window.onerror = function(a,b,c) { alert( a+' '+b+' '+c ) }
-			window.onload = function(){ window.onerror = null }
-		</script>
+		<script src="//d2wy8f7a9ursnm.cloudfront.net/v7/bugsnag.min.js"></script>
+		<script>Bugsnag.start({ apiKey: '18acf016ed2a2a4cc4445daa9dd2dd3c' })</script>
 		<script src="web.js" charset="utf-8"></script>
 	</body>
 </html>
