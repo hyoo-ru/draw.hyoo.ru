@@ -38,7 +38,25 @@ namespace $.$$ {
 		zoom( next?: number ) {
 			const arg = next ? String( next ) : undefined
 			const str = this.$.$mol_state_arg.value( 'zoom', arg )
-			return Number( str ) || 1
+			return Number( str ) || 8
+		}
+		
+		@ $mol_mem
+		grid( next?: boolean ) {
+			const arg = next === undefined ? undefined : String( next )
+			return this.$.$mol_state_arg.value( 'grid', arg ) === 'true' ?? super.grid()
+		}
+		
+		@ $mol_mem
+		map( next?: boolean ) {
+			const arg = next === undefined ? undefined : String( next )
+			return this.$.$mol_state_arg.value( 'map', arg ) === 'true' ?? super.grid()
+		}
+		
+		attribution() {
+			return [
+				... this.map() ? [ this.CARTO() ] : [],
+			]
 		}
 		
 		@ $mol_mem

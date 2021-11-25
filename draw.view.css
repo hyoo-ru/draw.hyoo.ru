@@ -41,3 +41,9 @@
 	box-shadow: 0 0 0 1px var(--mol_theme_line);
 }
 
+[hyoo_draw_attribution] {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+}
+

@@ -15,6 +15,7 @@ $hyoo_draw $mol_book2
 					color <= color
 					tool <= tool
 					grid <= grid
+					map <= map
 					shift?val <=> center?val $mol_vector_2d /
 						0
 						0
@@ -30,7 +31,15 @@ $hyoo_draw $mol_book2
 								<= Lights $mol_lights_toggle
 								<= Grid $mol_check_icon
 									hint @ \Grid
-									checked => grid
+									checked?val <=> grid?val false
 									Icon <= Grid_icon $mol_icon_grid_large
+								<= Map $mol_check_icon
+									hint @ \Map
+									checked?val <=> map?val false
+									Icon <= Map_icon $mol_icon_map
 								<= Tools $hyoo_draw_tools
 									value => tool
+				<= Attribution $mol_view sub <= attribution /
+					<= CARTO $mol_link_iconed
+						title \CARTO
+						uri \https://carto.com/attributions

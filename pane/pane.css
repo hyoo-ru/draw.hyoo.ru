@@ -7,3 +7,7 @@
 	fill: currentColor;
 	fill-opacity: .5;
 }
+
+[hyoo_draw_pane_map_tile] {
+	filter: var(--mol_theme_image);
+}

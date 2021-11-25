@@ -17,6 +17,7 @@ namespace $.$$ {
 		@ $mol_mem
 		graphs() {
 			return [
+				... this.map() ? [ this.Map() ] : [],
 				... this.figures().map( id => {
 					switch( this.figure( id ).sub( 'type' ).value() ) {
 						case 'line': return this.Line( id )

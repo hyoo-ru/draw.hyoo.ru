@@ -2,6 +2,7 @@ $hyoo_draw_pane $mol_plot_pane
 	color \blue
 	tool \pencil
 	grid false
+	map false
 	state $mol_state_shared
 	reset?event null
 	auto /
@@ -12,6 +13,10 @@ $hyoo_draw_pane $mol_plot_pane
 	scale?val $mol_vector_2d /
 		<= zoom
 		<= zoom
+	Map $mol_plot_map_tiles
+		level_pyramid -3
+		tile_size_real <= tile_size 256
+		uri_template <= tiles_uri \https://basemaps.cartocdn.com/rastertiles/voyager/{level}/{x}/{y}.png
 	Line!id $mol_plot_line
 		color <= line_color!id \
 		series_x <= line_x!id /number
