@@ -11,8 +11,62 @@
 	</head>
 	<body style="margin: 0; padding: 0; height: 100%; width: 100%">
 		<div mol_view_root="$hyoo_draw"></div>
-		<script src="//d2wy8f7a9ursnm.cloudfront.net/v7/bugsnag.min.js"></script>
-		<script>Bugsnag.start({ apiKey: '18acf016ed2a2a4cc4445daa9dd2dd3c' })</script>
+		<script>
+			if( location.hostname !== 'localhost' ) {
+				
+				self.onerror = function( msg, url, line, col, err ) {
+					const el = document.activeElement
+					fetch( 'https://notify.bugsnag.com/', {
+						method: 'post',
+						body: JSON.stringify({
+							apiKey: "18acf016ed2a2a4cc4445daa9dd2dd3c",
+							payloadVersion: 5,
+							notifier: {
+								name: '$hyoo',
+								version: '1',
+								url: 'inline',
+							},
+							events: [{
+								device: {
+									locale: navigator.language,
+									userAgent: navigator.userAgent,
+									time: new Date().toISOString(),
+								},
+								context: el && el.id,
+								exceptions: [{
+									message: err && err.message || err || msg,
+									errorClass: err && err.constructor.name,
+									stacktrace: [{
+										columnNumber: col,
+										file: url,
+										lineNumber: line,
+										method: 'unknown',
+									}],
+								}],
+								metaData: {
+									stack: err && err.stack,
+								},
+								request: {
+									url: document.location.href,
+									referer: document.referrer,
+								},
+							}],
+						})
+					} )
+				}
+				
+				console.onunhandledrejection = function( event ) {
+					self.onerror( 'Unhandled Rejection', '', 0, 0, event.reason )
+				} 
+				
+				const error = console.error
+				console.error = function() {
+					error.apply( console, arguments )
+					self.onerror( 'Logged Error', '', 0, 0, arguments[0] )
+				}
+				
+			}
+		</script>
 		<script src="web.js" charset="utf-8"></script>
 	
 				<script src="/mol/build/client/client.js" charset="utf-8"></script>
