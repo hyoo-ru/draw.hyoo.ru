@@ -76,8 +76,8 @@ var $;
     };
     const error = console.error;
     console.error = function (...args) {
-        error.apply(console, args);
         globalThis.onerror('Logged Error', '', 0, 0, arguments[0]);
+        error.apply(console, args);
     };
 })($ || ($ = {}));
 //bugsnag.js.map
@@ -6465,11 +6465,9 @@ var $;
 var $;
 (function ($) {
     const algorithm = {
-        name: 'RSA-PSS',
-        modulusLength: 256,
-        publicExponent: new Uint8Array([1, 0, 1]),
-        hash: 'SHA-1',
-        saltLength: 8,
+        name: "ECDSA",
+        hash: { name: "SHA-256" },
+        namedCurve: 'P-256',
     };
     async function $mol_crypto_auditor_pair() {
         const pair = await $.crypto.subtle.generateKey(algorithm, true, ['sign', 'verify']);
@@ -6481,7 +6479,7 @@ var $;
     $.$mol_crypto_auditor_pair = $mol_crypto_auditor_pair;
     class $mol_crypto_auditor_public extends Object {
         native;
-        static size = 62;
+        static size = 91;
         constructor(native) {
             super();
             this.native = native;
@@ -6499,6 +6497,7 @@ var $;
     $.$mol_crypto_auditor_public = $mol_crypto_auditor_public;
     class $mol_crypto_auditor_private extends Object {
         native;
+        static size = 138;
         constructor(native) {
             super();
             this.native = native;
@@ -6514,7 +6513,7 @@ var $;
         }
     }
     $.$mol_crypto_auditor_private = $mol_crypto_auditor_private;
-    $.$mol_crypto_auditor_sign_size = 32;
+    $.$mol_crypto_auditor_sign_size = 64;
 })($ || ($ = {}));
 //auditor.js.map
 ;
@@ -12456,8 +12455,7 @@ var $;
         async 'sizes'() {
             const pair = await $.$$.$mol_crypto_auditor_pair();
             const key_private = await pair.private.serial();
-            $.$mol_assert_ok(key_private.byteLength > 190);
-            $.$mol_assert_ok(key_private.byteLength < 200);
+            $.$mol_assert_equal(key_private.byteLength, $.$mol_crypto_auditor_private.size);
             const key_public = await pair.public.serial();
             $.$mol_assert_equal(key_public.byteLength, $.$mol_crypto_auditor_public.size);
             const data = new Uint8Array([1, 2, 3]);
