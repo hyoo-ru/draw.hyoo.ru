@@ -10468,11 +10468,11 @@ var $;
             }
             grid(next) {
                 const arg = next === undefined ? undefined : String(next);
-                return this.$.$mol_state_arg.value('grid', arg) === 'true' ?? super.grid();
+                return (this.$.$mol_state_arg.value('grid', arg) ?? String(super.grid())) === 'true';
             }
             map(next) {
                 const arg = next === undefined ? undefined : String(next);
-                return this.$.$mol_state_arg.value('map', arg) === 'true' ?? super.grid();
+                return (this.$.$mol_state_arg.value('map', arg) ?? String(super.map())) === 'true';
             }
             attribution() {
                 return [
