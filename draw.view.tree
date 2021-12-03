@@ -31,7 +31,7 @@ $hyoo_draw $mol_book2
 								<= Lights $mol_lights_toggle
 								<= Grid $mol_check_icon
 									hint @ \Grid
-									checked?val <=> grid?val false
+									checked?val <=> grid?val true
 									Icon <= Grid_icon $mol_icon_grid_large
 								<= Map $mol_check_icon
 									hint @ \Map
