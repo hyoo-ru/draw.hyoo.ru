@@ -201,26 +201,20 @@ namespace $.$$ {
 			
 		}
 		
-		_peer_update_task: $mol_fiber | undefined
-		
 		@ $mol_mem
 		peer_update() {
 			
 			const dims = this.dimensions_viewport()
 			const color = this.color()
 			
-			if( this._peer_update_task ) this._peer_update_task.destructor()
-			this._peer_update_task = $mol_fiber_defer( ()=> {
-				this.peer( this.state().peer() ).value({
-					left: dims.x.min,
-					right: dims.x.max,
-					top: dims.y.min,
-					bottom: dims.y.max,
-					color,
-				})
-			} )
+			this.peer( this.state().peer() ).value({
+				left: dims.x.min,
+				right: dims.x.max,
+				top: dims.y.min,
+				bottom: dims.y.max,
+				color,
+			})
 
-			return null
 		}
 		
 	}

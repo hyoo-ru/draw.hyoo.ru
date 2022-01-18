@@ -7,6 +7,7 @@ $hyoo_draw_pane $mol_plot_pane
 	reset?event null
 	auto /
 		<= peer_update null
+		<= figure_current null
 	shift?val $mol_vector_2d /
 		0
 		0
