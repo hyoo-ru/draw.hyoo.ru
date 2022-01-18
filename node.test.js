@@ -7210,7 +7210,7 @@ var $;
             return $mol_wire_sync(this).db_init();
         }
         db_init() {
-            return this.$.$mol_db('$mol_state_shared_db', mig => mig.store_make('Docs'));
+            return this.$.$mol_db('$mol_state_shared_db', mig => mig.store_make('Chunks'), mig => null, mig => mig.store_drop('Chunks'), mig => mig.store_make('Docs'));
         }
         server() {
             return `wss://sync-hyoo-ru.herokuapp.com/`;
