@@ -319,8 +319,8 @@
     "$mol_image_-view.tree_image.view.tree.ts"
   ],
   "dependencies": {
-    "jsdom": "*",
     "colorette": "*",
+    "jsdom": "*",
     "chokidar": "*",
     "fake-indexeddb": "*"
   }
