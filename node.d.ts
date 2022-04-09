@@ -2898,6 +2898,45 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
+    class $mol_icon_share extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_share_variant extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_button_share extends $mol_button_minor {
+        uri(): string;
+        capture(): any;
+        hint(): string;
+        sub(): readonly any[];
+        Icon(): $mol_icon_share_variant;
+    }
+}
+
+declare namespace $ {
+    function $mol_dom_serialize(node: Node): string;
+}
+
+declare namespace $ {
+    function $mol_dom_capture_image(el: Element): Promise<HTMLImageElement>;
+    function $mol_dom_capture_canvas(el: Element): Promise<HTMLCanvasElement>;
+}
+
+declare namespace $.$$ {
+    class $mol_button_share extends $.$mol_button_share {
+        capture(): any;
+        uri(): string;
+        click(): Promise<void>;
+    }
+}
+
+declare namespace $ {
     class $mol_image extends $mol_view {
         dom_name(): string;
         field(): {
@@ -2949,6 +2988,7 @@ declare namespace $ {
         Side_left(): $$.$mol_scroll;
         center(val?: any): $mol_vector_2d<number>;
         zoom(val?: any): number;
+        share_capture(): Element;
         Pane(): $$.$hyoo_draw_pane;
         chat_pages(): $mol_page[];
         Chat(): $$.$mol_chat;
@@ -2962,6 +3002,7 @@ declare namespace $ {
         Map(): $mol_check_icon;
         tool(): string;
         Tools(): $$.$hyoo_draw_tools;
+        Share(): $$.$mol_button_share;
         tools_right(): readonly any[];
         Tools_right(): $$.$mol_list;
         Side_right(): $$.$mol_scroll;
