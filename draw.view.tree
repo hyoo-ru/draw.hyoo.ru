@@ -20,6 +20,7 @@ $hyoo_draw $mol_book2
 						0
 						0
 					zoom?val <=> zoom?val 1
+					dom_tree => share_capture
 				<= Side_right $mol_scroll
 					sub /
 						<= Tools_right $mol_list
@@ -39,6 +40,9 @@ $hyoo_draw $mol_book2
 									Icon <= Map_icon $mol_icon_map
 								<= Tools $hyoo_draw_tools
 									value => tool
+								<= Share $mol_button_share
+									title <= title
+									capture <= share_capture
 				<= Attribution $mol_view sub <= attribution /
 					<= CARTO $mol_link_iconed
 						title \CARTO

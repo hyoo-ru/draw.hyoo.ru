@@ -1,3 +1,7 @@
+[hyoo_draw_pane] {
+	background-color: var(--mol_theme_back);
+}
+
 [hyoo_draw_pane_peer] {
 	stroke-dasharray: 2;
 	stroke-opacity: .5;
