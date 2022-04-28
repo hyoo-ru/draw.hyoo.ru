@@ -176,6 +176,7 @@ declare namespace $ {
     const $mol_theme: {
         back: $mol_style_func<"var", "--mol_theme_back">;
         hover: $mol_style_func<"var", "--mol_theme_hover">;
+        card: $mol_style_func<"var", "--mol_theme_card">;
         current: $mol_style_func<"var", "--mol_theme_current">;
         text: $mol_style_func<"var", "--mol_theme_text">;
         control: $mol_style_func<"var", "--mol_theme_control">;
@@ -1325,9 +1326,8 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
-    class $mol_switch extends $mol_view {
+    class $mol_check_list extends $mol_view {
         Option(id: any): $$.$mol_check;
-        value(val?: any): any;
         options(): {};
         keys(): readonly string[];
         sub(): readonly $mol_check[];
@@ -1338,6 +1338,26 @@ declare namespace $ {
         option_enabled(id: any): boolean;
         option_hint(id: any): string;
         items(): readonly $mol_check[];
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $.$$ {
+    class $mol_check_list extends $.$mol_check_list {
+        options(): {
+            [key: string]: string;
+        };
+        keys(): string[];
+        items(): $mol_check[];
+        option_title(key: string): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_switch extends $mol_check_list {
+        value(val?: any): string;
     }
 }
 
@@ -1355,18 +1375,9 @@ declare namespace $ {
     }
 }
 
-declare namespace $ {
-}
-
 declare namespace $.$$ {
     class $mol_switch extends $.$mol_switch {
         value(next?: any): any;
-        options(): {
-            [key: string]: string;
-        };
-        keys(): string[];
-        items(): $mol_check[];
-        option_title(key: string): string;
         option_checked(key: string, next?: boolean): boolean;
     }
 }
