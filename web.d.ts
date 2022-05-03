@@ -1536,8 +1536,8 @@ declare namespace $ {
         dimensions(): $mol_vector_2d<$mol_vector_range<number>>;
         size_real(): $mol_vector_2d<number>;
         gap(): $mol_vector_2d<$mol_vector_range<number>>;
-        repos_x(val: any): number;
-        repos_y(val: any): number;
+        repos_x(id: any): number;
+        repos_y(id: any): number;
         indexes(): readonly number[];
         points(): readonly (readonly number[])[];
         front(): readonly $mol_svg[];
@@ -2421,7 +2421,7 @@ declare namespace $ {
         normalize(val?: any): number;
         precision(): number;
         sub(): readonly any[];
-        Label(index: any): $$.$mol_svg_text;
+        Label(id: any): $$.$mol_svg_text;
         background_x(): string;
         background_y(): string;
         background_width(): string;
@@ -2434,10 +2434,10 @@ declare namespace $ {
         title_pos_y(): string;
         title_align(): string;
         Title(): $$.$mol_svg_text_box;
-        label_pos_x(index: any): string;
-        label_pos_y(index: any): string;
-        label_pos(index: any): readonly any[];
-        label_text(index: any): string;
+        label_pos_x(id: any): string;
+        label_pos_y(id: any): string;
+        label_pos(id: any): readonly any[];
+        label_text(id: any): string;
         label_align(): string;
     }
 }
@@ -2468,7 +2468,7 @@ declare namespace $ {
         title_align(): string;
         label_align(): string;
         title_pos_y(): string;
-        label_pos_x(v: any): string;
+        label_pos_x(id: any): string;
         background_height(): string;
         background_width(): string;
     }
@@ -2496,7 +2496,7 @@ declare namespace $ {
         label_align(): string;
         title_pos_x(): string;
         title_pos_y(): string;
-        label_pos_y(v: any): string;
+        label_pos_y(id: any): string;
         background_width(): string;
     }
 }

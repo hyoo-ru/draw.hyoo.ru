@@ -94,12 +94,12 @@ $mol_check $mol_button_minor
 					<= title \
 
 $mol_check_list $mol_view
-	Option!id $mol_check
-		checked?val <=> option_checked!id?val false
-		label <= option_label!id /
-			<= option_title!id \
-		enabled <= option_enabled!id <= enabled true
-		hint <= option_hint!id \
+	Option* $mol_check
+		checked?val <=> option_checked*?val false
+		label <= option_label* /
+			<= option_title* \
+		enabled <= option_enabled* <= enabled true
+		hint <= option_hint* \
 		minimal_height 24
 	options *
 	keys /string
@@ -211,8 +211,8 @@ $mol_plot_graph $mol_svg_group
 		<= gap_y $mol_vector_range /
 			0
 			0
-	repos_x!val 0
-	repos_y!val 0
+	repos_x* 0
+	repos_y* 0
 	indexes /number
 	points /readonly(number)[]
 	front /$mol_svg
@@ -401,10 +401,10 @@ $mol_plot_map_tiles $mol_plot_graph
 	tiles_limit 8
 	uri_template \
 	sub <= tiles /
-	Tile!id $mol_svg_image
+	Tile* $mol_svg_image
 		style *
-			transform <= tile_transform!id \
-		uri <= tile_uri!id \
+			transform <= tile_transform* \
+		uri <= tile_uri* \
 		pos /
 			0
 			0
@@ -494,18 +494,18 @@ $mol_plot_ruler $mol_plot_graph
 			pos_y <= title_pos_y \100%
 			align <= title_align \start
 			text <= title
-	Label!index $mol_svg_text
-		pos <= label_pos!index /
-			<= label_pos_x!index \
-			<= label_pos_y!index \
-		text <= label_text!index \
+	Label* $mol_svg_text
+		pos <= label_pos* /
+			<= label_pos_x* \
+			<= label_pos_y* \
+		text <= label_text* \
 		align <= label_align \
 
 $mol_plot_ruler_vert $mol_plot_ruler
 	title_align \end
 	label_align \end
 	title_pos_y \14
-	label_pos_x!v <= title_pos_x
+	label_pos_x* <= title_pos_x
 	background_height \100%
 	background_width <= title_pos_x
 
@@ -514,7 +514,7 @@ $mol_plot_ruler_hor $mol_plot_ruler
 	label_align \middle
 	title_pos_x \0
 	title_pos_y \100%
-	label_pos_y!v <= title_pos_y
+	label_pos_y* <= title_pos_y
 	background_width \100%
 
 $hyoo_draw_pane $mol_plot_pane
