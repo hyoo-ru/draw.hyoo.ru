@@ -583,6 +583,14 @@ $mol_icon_open_in_new $mol_icon path \M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.4
 
 $mol_icon_cross $mol_icon path \M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z
 
+$mol_image $mol_view
+	dom_name \img
+	field *
+		^
+		src <= uri \
+		alt <= title
+		loading <= loading \eager
+
 $mol_embed_native $mol_scroll
 	dom_name \object
 	window null
@@ -591,9 +599,12 @@ $mol_embed_native $mol_scroll
 		data <= uri?val \
 		type <= mime \
 	sub /
-		<= Fallback $mol_link
+		<= Fallback_link $mol_link
 			uri <= uri
-			title <= title?val \
+			sub /
+				<= Fallback_image $mol_image
+					uri <= uri
+					title <= title?val \
 
 $mol_frame $mol_embed_native
 	dom_name \iframe
@@ -703,14 +714,6 @@ $mol_button_share $mol_button_minor
 	hint @ \Share
 	sub /
 		<= Icon $mol_icon_share_variant
-
-$mol_image $mol_view
-	dom_name \img
-	field *
-		^
-		src <= uri \
-		alt <= title
-		loading <= loading \eager
 
 $mol_link_iconed $mol_link
 	sub /

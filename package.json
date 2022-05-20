@@ -197,6 +197,7 @@
     "$mol_frame",
     "$mol_embed_native",
     "$mol_embed",
+    "$mol_image",
     "$mol_wait_timeout",
     "$mol_wait",
     "$mol_promise",
@@ -223,8 +224,7 @@
     "$mol_icon_share",
     "$mol_dom_capture",
     "$mol_dom_serialize",
-    "$mol_link_iconed",
-    "$mol_image"
+    "$mol_link_iconed"
   ],
   "dependencies": {
     "colorette": "*",

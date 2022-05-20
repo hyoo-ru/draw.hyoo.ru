@@ -2442,7 +2442,8 @@ var $;
                 if ((error_shower.get(error) ?? this) !== this)
                     return node;
                 try {
-                    node.innerText = '\xA0\xA0' + (error.message || error) + '\xA0\xA0';
+                    const message = error.message || error;
+                    node.innerText = message.replace(/^|$/mg, '\xA0\xA0');
                 }
                 catch { }
                 error_shower.set(error, this);
@@ -9444,6 +9445,39 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_image extends $mol_view {
+        dom_name() {
+            return "img";
+        }
+        field() {
+            return {
+                ...super.field(),
+                src: this.uri(),
+                alt: this.title(),
+                loading: this.loading()
+            };
+        }
+        uri() {
+            return "";
+        }
+        loading() {
+            return "eager";
+        }
+    }
+    $.$mol_image = $mol_image;
+})($ || ($ = {}));
+//mol/image/-view.tree/image.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/image/image.view.css", "[mol_image] {\n\tborder-radius: var(--mol_gap_round);\n\toverflow: hidden;\n\tflex: 0 1 auto;\n\tmax-width: 100%;\n\tobject-fit: cover;\n}\n");
+})($ || ($ = {}));
+//mol/image/-css/image.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_embed_native extends $mol_scroll {
         dom_name() {
             return "object";
@@ -9460,7 +9494,7 @@ var $;
         }
         sub() {
             return [
-                this.Fallback()
+                this.Fallback_link()
             ];
         }
         uri(val) {
@@ -9476,10 +9510,18 @@ var $;
                 return val;
             return "";
         }
-        Fallback() {
-            const obj = new this.$.$mol_link();
+        Fallback_image() {
+            const obj = new this.$.$mol_image();
             obj.uri = () => this.uri();
             obj.title = () => this.title();
+            return obj;
+        }
+        Fallback_link() {
+            const obj = new this.$.$mol_link();
+            obj.uri = () => this.uri();
+            obj.sub = () => [
+                this.Fallback_image()
+            ];
             return obj;
         }
     }
@@ -9491,7 +9533,10 @@ var $;
     ], $mol_embed_native.prototype, "title", null);
     __decorate([
         $mol_mem
-    ], $mol_embed_native.prototype, "Fallback", null);
+    ], $mol_embed_native.prototype, "Fallback_image", null);
+    __decorate([
+        $mol_mem
+    ], $mol_embed_native.prototype, "Fallback_link", null);
     $.$mol_embed_native = $mol_embed_native;
 })($ || ($ = {}));
 //mol/embed/native/-view.tree/native.view.tree.ts
@@ -9834,7 +9879,7 @@ var $;
                     weight: 'normal',
                 },
                 flex: {
-                    grow: 1000,
+                    grow: 1,
                     shrink: 1,
                     basis: 'auto',
                 },
@@ -9842,7 +9887,7 @@ var $;
             Tools: {
                 flex: {
                     basis: 'auto',
-                    grow: 0,
+                    grow: 1000,
                     shrink: 1,
                 },
                 display: 'flex',
@@ -10464,39 +10509,6 @@ var $;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
 //mol/button/share/share.view.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_image extends $mol_view {
-        dom_name() {
-            return "img";
-        }
-        field() {
-            return {
-                ...super.field(),
-                src: this.uri(),
-                alt: this.title(),
-                loading: this.loading()
-            };
-        }
-        uri() {
-            return "";
-        }
-        loading() {
-            return "eager";
-        }
-    }
-    $.$mol_image = $mol_image;
-})($ || ($ = {}));
-//mol/image/-view.tree/image.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_style_attach("mol/image/image.view.css", "[mol_image] {\n\tborder-radius: var(--mol_gap_round);\n\toverflow: hidden;\n\tflex: 0 1 auto;\n\tmax-width: 100%;\n\tobject-fit: cover;\n}\n");
-})($ || ($ = {}));
-//mol/image/-css/image.view.css.ts
 ;
 "use strict";
 var $;
