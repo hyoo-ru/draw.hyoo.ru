@@ -183,6 +183,19 @@ declare namespace $ {
 }
 
 declare namespace $ {
+}
+
+declare namespace $ {
+    let $mol_gap: {
+        readonly block: $mol_style_func<"var", "--mol_gap_block">;
+        readonly text: $mol_style_func<"var", "--mol_gap_text">;
+        readonly round: $mol_style_func<"var", "--mol_gap_round">;
+        readonly space: $mol_style_func<"var", "--mol_gap_space">;
+        readonly blur: $mol_style_func<"var", "--mol_gap_blur">;
+    };
+}
+
+declare namespace $ {
     namespace $$ { }
     const $mol_object_field: unique symbol;
     class $mol_object extends $mol_object2 {
@@ -759,19 +772,6 @@ declare namespace $ {
 
 declare namespace $ {
     function $mol_style_define<Component extends $mol_view, Config extends $mol_style_guard<Component, Config>>(Component: new () => Component, config: Config): HTMLStyleElement | null;
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    let $mol_gap: {
-        readonly block: $mol_style_func<"var", "--mol_gap_block">;
-        readonly text: $mol_style_func<"var", "--mol_gap_text">;
-        readonly round: $mol_style_func<"var", "--mol_gap_round">;
-        readonly space: $mol_style_func<"var", "--mol_gap_space">;
-        readonly blur: $mol_style_func<"var", "--mol_gap_blur">;
-    };
 }
 
 declare namespace $ {
@@ -2601,22 +2601,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_image extends $mol_view {
-        dom_name(): string;
-        field(): {
-            src: string;
-            alt: string;
-            loading: string;
-        };
-        uri(): string;
-        loading(): string;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
     class $mol_embed_native extends $mol_scroll {
         uri(val?: any): string;
         dom_name(): string;
@@ -2626,13 +2610,9 @@ declare namespace $ {
             type: string;
         };
         sub(): readonly any[];
-        uri_object(): string;
         mime(): string;
-        uri_link(): string;
-        uri_image(): string;
-        title(val?: any): string;
-        Fallback_image(): $mol_image;
-        Fallback_link(): $$.$mol_link;
+        title(): string;
+        Fallback(): $$.$mol_link;
     }
 }
 
@@ -2664,7 +2644,6 @@ declare namespace $.$$ {
         uri_listener(): $mol_dom_listener;
         uri_change(event?: MessageEvent<[string, string]>): void;
         auto(): (Window | $mol_dom_listener)[];
-        uri_object(): string;
     }
 }
 
@@ -2895,6 +2874,24 @@ declare namespace $.$$ {
         uri(): string;
         click(): Promise<void>;
     }
+}
+
+declare namespace $ {
+    class $mol_image extends $mol_view {
+        dom_name(): string;
+        field(): {
+            src: string;
+            alt: string;
+            loading: string;
+        };
+        minimal_width(): number;
+        minimal_height(): number;
+        uri(): string;
+        loading(): string;
+    }
+}
+
+declare namespace $ {
 }
 
 declare namespace $ {

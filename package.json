@@ -42,6 +42,7 @@
     "$mol_view",
     "$mol_theme",
     "$mol_style_func",
+    "$mol_gap",
     "$mol_window",
     "$mol_object",
     "$mol_mem",
@@ -91,7 +92,6 @@
     "$mol_type_override",
     "$mol_style_pseudo",
     "$mol_style_sheet",
-    "$mol_gap",
     "$mol_print",
     "$mol_dom_listener",
     "$mol_mem_cached",
@@ -192,7 +192,6 @@
     "$mol_frame",
     "$mol_embed_native",
     "$mol_embed",
-    "$mol_image",
     "$mol_wait_timeout",
     "$mol_wait",
     "$mol_promise",
@@ -219,7 +218,8 @@
     "$mol_icon_share",
     "$mol_dom_capture",
     "$mol_dom_serialize",
-    "$mol_link_iconed"
+    "$mol_link_iconed",
+    "$mol_image"
   ],
   "dependencies": {
     "jsdom": "*",
