@@ -10325,6 +10325,17 @@ var $;
         }
         function clone(el) {
             const re = el.cloneNode();
+            if (el instanceof HTMLImageElement && !/^(data|blob):/.test(el.src)) {
+                const canvas = $mol_jsx("canvas", { width: el.naturalWidth, height: el.naturalHeight });
+                const context = canvas.getContext('2d');
+                context.drawImage(el, 0, 0);
+                try {
+                    re['src'] = canvas.toDataURL();
+                }
+                catch (error) {
+                    $mol_fail_log(error);
+                }
+            }
             const styles = $mol_dom_context.getComputedStyle(el);
             restyle(re, styles);
             const before = $mol_dom_context.getComputedStyle(el, ':before');
