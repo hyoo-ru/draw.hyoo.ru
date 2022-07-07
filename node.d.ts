@@ -2108,15 +2108,14 @@ declare namespace $ {
     let $hyoo_crowd_tokenizer: $mol_regexp<{
         readonly token: string;
         readonly indents: string;
-        readonly spaces: string;
         readonly emoji: string;
         readonly Word: string;
         readonly word: string;
+        readonly space: string;
         readonly others: string;
         readonly 'line-break': string;
         readonly win_end: string;
         readonly mac_end: string;
-        readonly tab: string;
     }>;
 }
 
