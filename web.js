@@ -7214,8 +7214,8 @@ var $;
         kill() {
             this.native.close();
             const request = $mol_dom_context.indexedDB.deleteDatabase(this.name);
-            request.onblocked = console.error;
-            return $mol_db_response(request).then(() => { });
+            request.onblocked = console.warn;
+            return $mol_db_response(request);
         }
         destructor() {
             this.native.close();
@@ -7248,6 +7248,8 @@ var $;
             return this;
         }
         abort() {
+            if (this.native.error)
+                return;
             this.native.abort();
         }
         commit() {

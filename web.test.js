@@ -4226,7 +4226,8 @@ var $;
                 }
             }
             finally {
-                db.kill();
+                trans.abort();
+                await db.kill();
             }
         },
         async 'multi path index'() {
@@ -4245,7 +4246,7 @@ var $;
             }
             finally {
                 trans.abort();
-                db.kill();
+                await db.kill();
             }
         },
         async 'multiple indexes'() {
@@ -4264,7 +4265,7 @@ var $;
             }
             finally {
                 trans.abort();
-                db.kill();
+                await db.kill();
             }
         },
     });
