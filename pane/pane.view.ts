@@ -110,6 +110,7 @@ namespace $.$$ {
 		
 		_point_last = null as null | $mol_vector_2d< number >
 		
+		@ $mol_action
 		draw( event: Event ) {
 			switch( this.tool() ) {
 				case 'pencil': return this.draw_pencil( 'line', event )
