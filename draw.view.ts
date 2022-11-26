@@ -27,10 +27,10 @@ namespace $.$$ {
 				return new $mol_vector_2d( coords[0] + offset.x, coords[1] + offset.y )
 			}
 			
-			const peer = this.Pane().state().peer()
+			const peer = this.Pane().yard().peer().id.split('').reduce( (sum, char) => sum + char.charCodeAt(0), 0 )
 			const x = ~( $mol_hash_string( 'x', peer ) - 2 ** ( 6 * 8 - 1 ) )
 			const y = ~( $mol_hash_string( 'y', peer ) - 2 ** ( 6 * 8 - 1 ) )
-			
+		
 			return new $mol_vector_2d( x, y )
 		}
 		
