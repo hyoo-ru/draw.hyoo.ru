@@ -16,6 +16,7 @@ $hyoo_draw $mol_book2
 					tool <= tool
 					grid <= grid
 					map <= map
+					yard <= yard
 					shift?val <=> center?val $mol_vector_2d /
 						0
 						0
@@ -43,6 +44,8 @@ $hyoo_draw $mol_book2
 								<= Share $mol_button_share
 									title <= title
 									capture <= share_capture
+								<= Online $hyoo_sync_online
+									yard <= yard $hyoo_sync_yard
 				<= Attribution $mol_view sub <= attribution /
 					<= CARTO $mol_link_iconed
 						title \CARTO

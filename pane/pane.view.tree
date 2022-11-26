@@ -3,7 +3,7 @@ $hyoo_draw_pane $mol_plot_pane
 	tool \pencil
 	grid false
 	map false
-	state $mol_state_shared
+	yard $hyoo_sync_yard
 	reset?event null
 	auto /
 		<= peer_update null
