@@ -55,7 +55,7 @@ namespace $.$$ {
 		
 		attribution() {
 			return [
-				... this.map() ? [ this.CARTO() ] : [],
+				... this.map() ? super.attribution() : [],
 			]
 		}
 		
