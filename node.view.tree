@@ -805,7 +805,7 @@ $hyoo_draw $mol_book2
 									title <= title
 									capture <= share_capture
 								<= Online $hyoo_sync_online
-									yard <= yard $hyoo_sync_yard
+									yard <= yard $hyoo_sync_client
 				<= Attribution $mol_view sub <= attribution /
 					<= CARTO $mol_link_iconed
 						title \CARTO

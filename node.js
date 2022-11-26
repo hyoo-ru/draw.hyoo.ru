@@ -9831,6 +9831,9 @@ var $;
             $mol_mem
         ], $hyoo_draw_pane.prototype, "figure_current", null);
         __decorate([
+            $mol_action
+        ], $hyoo_draw_pane.prototype, "draw", null);
+        __decorate([
             $mol_mem
         ], $hyoo_draw_pane.prototype, "peer_update", null);
         $$.$hyoo_draw_pane = $hyoo_draw_pane;
@@ -11279,6 +11282,377 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    function $mol_db_response(request) {
+        return new Promise((done, fail) => {
+            request.onerror = () => fail(new Error(request.error.message));
+            request.onsuccess = () => done(request.result);
+        });
+    }
+    $.$mol_db_response = $mol_db_response;
+})($ || ($ = {}));
+//mol/db/response/response.ts
+;
+"use strict";
+var $;
+(function ($) {
+    async function $mol_db(name, ...migrations) {
+        const request = this.$mol_dom_context.indexedDB.open(name, migrations.length ? migrations.length + 1 : undefined);
+        request.onupgradeneeded = event => {
+            migrations.splice(0, event.oldVersion - 1);
+            const transaction = new $mol_db_transaction(request.transaction);
+            for (const migrate of migrations)
+                migrate(transaction);
+        };
+        const db = await $mol_db_response(request);
+        return new $mol_db_database(db);
+    }
+    $.$mol_db = $mol_db;
+})($ || ($ = {}));
+//mol/db/db.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_db_store {
+        native;
+        constructor(native) {
+            this.native = native;
+        }
+        get name() {
+            return this.native.name;
+        }
+        get path() {
+            return this.native.keyPath;
+        }
+        get incremental() {
+            return this.native.autoIncrement;
+        }
+        get indexes() {
+            return new Proxy({}, {
+                ownKeys: () => [...this.native.indexNames],
+                has: (_, name) => this.native.indexNames.contains(name),
+                get: (_, name) => new $mol_db_index(this.native.index(name))
+            });
+        }
+        index_make(name, path = [], unique = false, multiEntry = false) {
+            return this.native.createIndex(name, path, { multiEntry, unique });
+        }
+        index_drop(name) {
+            this.native.deleteIndex(name);
+            return this;
+        }
+        get transaction() {
+            return new $mol_db_transaction(this.native.transaction);
+        }
+        get db() {
+            return this.transaction.db;
+        }
+        clear() {
+            return $mol_db_response(this.native.clear());
+        }
+        count(keys) {
+            return $mol_db_response(this.native.count(keys));
+        }
+        put(doc, key) {
+            return $mol_db_response(this.native.put(doc, key));
+        }
+        get(key) {
+            return $mol_db_response(this.native.get(key));
+        }
+        select(key, count) {
+            return $mol_db_response(this.native.getAll(key, count));
+        }
+        drop(keys) {
+            return $mol_db_response(this.native.delete(keys));
+        }
+    }
+    $.$mol_db_store = $mol_db_store;
+})($ || ($ = {}));
+//mol/db/store/store.ts
+;
+"use strict";
+//mol/db/store/store_schema.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_db_index {
+        native;
+        constructor(native) {
+            this.native = native;
+        }
+        get name() {
+            return this.native.name;
+        }
+        get paths() {
+            return this.native.keyPath;
+        }
+        get unique() {
+            return this.native.unique;
+        }
+        get multiple() {
+            return this.native.multiEntry;
+        }
+        get store() {
+            return new $mol_db_store(this.native.objectStore);
+        }
+        get transaction() {
+            return this.store.transaction;
+        }
+        get db() {
+            return this.store.db;
+        }
+        count(keys) {
+            return $mol_db_response(this.native.count(keys));
+        }
+        get(key) {
+            return $mol_db_response(this.native.get(key));
+        }
+        select(key, count) {
+            return $mol_db_response(this.native.getAll(key, count));
+        }
+    }
+    $.$mol_db_index = $mol_db_index;
+})($ || ($ = {}));
+//mol/db/index/index.ts
+;
+"use strict";
+//mol/db/index/index_schema.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_dom_context.indexedDB = $node['fake-indexeddb'].indexedDB;
+    $mol_dom_context.IDBCursor = $node['fake-indexeddb'].IDBCursor;
+    $mol_dom_context.IDBCursorWithValue = $node['fake-indexeddb'].IDBCursorWithValue;
+    $mol_dom_context.IDBDatabase = $node['fake-indexeddb'].IDBDatabase;
+    $mol_dom_context.IDBFactory = $node['fake-indexeddb'].IDBFactory;
+    $mol_dom_context.IDBIndex = $node['fake-indexeddb'].IDBIndex;
+    $mol_dom_context.IDBKeyRange = $node['fake-indexeddb'].IDBKeyRange;
+    $mol_dom_context.IDBObjectStore = $node['fake-indexeddb'].IDBObjectStore;
+    $mol_dom_context.IDBOpenDBRequest = $node['fake-indexeddb'].IDBOpenDBRequest;
+    $mol_dom_context.IDBRequest = $node['fake-indexeddb'].IDBRequest;
+    $mol_dom_context.IDBTransaction = $node['fake-indexeddb'].IDBTransaction;
+    $mol_dom_context.IDBVersionChangeEvent = $node['fake-indexeddb'].IDBVersionChangeEvent;
+})($ || ($ = {}));
+//mol/db/db.node.ts
+;
+"use strict";
+//mol/db/db_schema.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_db_database {
+        native;
+        constructor(native) {
+            this.native = native;
+        }
+        get name() {
+            return this.native.name;
+        }
+        get version() {
+            return this.native.version;
+        }
+        get stores() {
+            return [...this.native.objectStoreNames];
+        }
+        read(...names) {
+            return new $mol_db_transaction(this.native.transaction(names, 'readonly')).stores;
+        }
+        change(...names) {
+            return new $mol_db_transaction(this.native.transaction(names, 'readwrite'));
+        }
+        kill() {
+            this.native.close();
+            const request = $mol_dom_context.indexedDB.deleteDatabase(this.name);
+            request.onblocked = console.warn;
+            return $mol_db_response(request);
+        }
+        destructor() {
+            this.native.close();
+        }
+    }
+    $.$mol_db_database = $mol_db_database;
+})($ || ($ = {}));
+//mol/db/database/database.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_db_transaction {
+        native;
+        constructor(native) {
+            this.native = native;
+        }
+        get stores() {
+            return new Proxy({}, {
+                ownKeys: () => [...this.native.objectStoreNames],
+                has: (_, name) => this.native.objectStoreNames.contains(name),
+                get: (_, name) => new $mol_db_store(this.native.objectStore(name)),
+            });
+        }
+        store_make(name) {
+            return this.native.db.createObjectStore(name, { autoIncrement: true });
+        }
+        store_drop(name) {
+            this.native.db.deleteObjectStore(name);
+            return this;
+        }
+        abort() {
+            if (this.native.error)
+                return;
+            this.native.abort();
+        }
+        commit() {
+            this.native.commit();
+            return new Promise((done, fail) => {
+                this.native.onerror = () => fail(new Error(this.native.error.message));
+                this.native.oncomplete = () => done();
+            });
+        }
+        get db() {
+            return new $mol_db_database(this.native.db);
+        }
+    }
+    $.$mol_db_transaction = $mol_db_transaction;
+})($ || ($ = {}));
+//mol/db/transaction/transaction.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $hyoo_sync_client extends $hyoo_sync_yard {
+        async db() {
+            const db1 = await this.$.$mol_db('$hyoo_sync_client_db');
+            await db1.kill();
+            return await this.$.$mol_db('$hyoo_sync_client_db2', mig => mig.store_make('Unit'), mig => mig.stores.Unit.index_make('Land', ['land']), mig => mig.stores.Unit.index_make('Data', ['data']));
+        }
+        async db_land_load(land) {
+            try {
+                var db = await this.db();
+            }
+            catch (error) {
+                $mol_fail_log(error);
+                return [];
+            }
+            const Unit = db.read('Unit').Unit;
+            const recs = await Unit.indexes.Land.select([land.id()]);
+            if (!recs)
+                return [];
+            const units = recs.map(rec => new $hyoo_crowd_unit(rec.land, rec.auth, rec.head, rec.self, rec.next, rec.prev, rec.time, rec.data, new $hyoo_crowd_unit_bin(rec.bin.buffer)));
+            return units;
+        }
+        async db_land_search(from, to = from + '\uFFFF') {
+            try {
+                var db = await this.db();
+            }
+            catch (error) {
+                $mol_fail_log(error);
+                return new Set();
+            }
+            const Unit = db.read('Unit').Unit;
+            const query = IDBKeyRange.bound([from], [to]);
+            const recs = await Unit.indexes.Data.select(query);
+            return new Set(recs.map(rec => rec.land));
+        }
+        async db_land_save(land, units) {
+            try {
+                var db = await this.db();
+            }
+            catch (error) {
+                $mol_fail_log(error);
+                return;
+            }
+            const trans = db.change('Unit');
+            const Unit = trans.stores.Unit;
+            for (const unit of units) {
+                Unit.put(unit, [unit.land, unit.head, unit.self]);
+            }
+            await trans.commit();
+        }
+        reconnects(reset) {
+            return ($mol_wire_probe(() => this.reconnects()) ?? 0) + 1;
+        }
+        master() {
+            this.reconnects();
+            const link = this.master_link();
+            const line = new $mol_dom_context.WebSocket(link);
+            line.binaryType = 'arraybuffer';
+            line.onmessage = async (event) => {
+                if (event.data instanceof ArrayBuffer) {
+                    await this.line_receive(line, new Uint8Array(event.data));
+                }
+                else {
+                    this.$.$mol_log3_fail({
+                        place: this,
+                        message: 'Wrong data',
+                        data: event.data
+                    });
+                }
+            };
+            let interval;
+            line.onclose = () => {
+                clearInterval(interval);
+                setTimeout(() => this.reconnects(null), 5000);
+            };
+            Object.assign(line, {
+                destructor: () => line.close()
+            });
+            return new Promise((done, fail) => {
+                line.onopen = () => {
+                    this.$.$mol_log3_come({
+                        place: this,
+                        message: 'Connected to Master',
+                        line: $mol_key(line),
+                        server: link,
+                    });
+                    interval = setInterval(() => line.send(new Uint8Array), 30000);
+                    done(line);
+                };
+                line.onerror = () => {
+                    this.master_cursor((this.master_cursor() + 1) % this.$.$hyoo_sync_masters.length);
+                    fail(new Error(`Master is unabailable`));
+                };
+            });
+        }
+        line_send_clocks(line, land) {
+            if (line instanceof WebSocket) {
+                const message = new Uint8Array($hyoo_crowd_clock_bin.from(land.id(), land._clocks).buffer);
+                line.send(message);
+            }
+            else {
+                const message = land._clocks;
+                line.postMessage(['hyoo_sync_clocks', land.id(), message]);
+            }
+        }
+        async line_send_units(line, units) {
+            if (line instanceof WebSocket) {
+                await this.world().sign_units(units);
+                const message = new Blob(units.map(unit => unit.bin));
+                line.send(message);
+            }
+            else {
+                line.postMessage(['hyoo_sync_units', units[0].land, units]);
+            }
+        }
+    }
+    __decorate([
+        $mol_memo.method
+    ], $hyoo_sync_client.prototype, "db", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_sync_client.prototype, "reconnects", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_sync_client.prototype, "master", null);
+    $.$hyoo_sync_client = $hyoo_sync_client;
+})($ || ($ = {}));
+//hyoo/sync/client/client.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_avatar extends $mol_icon {
         view_box() {
             return "0 0 24 24";
@@ -11764,7 +12138,7 @@ var $;
             return obj;
         }
         yard() {
-            const obj = new this.$.$hyoo_sync_yard();
+            const obj = new this.$.$hyoo_sync_client();
             return obj;
         }
         Online() {
@@ -11950,7 +12324,7 @@ var $;
             }
             attribution() {
                 return [
-                    ...this.map() ? [this.CARTO()] : [],
+                    ...this.map() ? super.attribution() : [],
                 ];
             }
             tools_left() {

@@ -234,6 +234,13 @@
     "$mol_type_partial_deep",
     "$mol_type_partial",
     "$mol_dom_serialize",
+    "$hyoo_sync_client",
+    "$mol_db",
+    "$mol_db_transaction",
+    "$mol_db_store",
+    "$mol_db_index",
+    "$mol_db_response",
+    "$mol_db_database",
     "$hyoo_sync_online",
     "$mol_avatar",
     "$mol_hash_string",
@@ -246,6 +253,7 @@
   "dependencies": {
     "jsdom": "*",
     "chokidar": "*",
-    "node-fetch": "*"
+    "node-fetch": "*",
+    "fake-indexeddb": "*"
   }
 }
