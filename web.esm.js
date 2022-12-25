@@ -6126,7 +6126,7 @@ var $;
 //mol/plot/pane/pane.view.ts
 ;
 "use strict";
-let $hyoo_sync_revision = "4d87c3b";
+let $hyoo_sync_revision = "de1290f";
 //hyoo/sync/-meta.tree/revision.meta.tree.ts
 ;
 "use strict";
@@ -6452,7 +6452,10 @@ var $;
 (function ($) {
     async function $hyoo_sync_peer(path) {
         let serial = $mol_state_local.value('$hyoo_sync_peer');
-        if (typeof serial !== 'string') {
+        if (typeof serial === 'string') {
+            return await $hyoo_crowd_peer.restore(serial);
+        }
+        else {
             serial = $mol_state_local.value(path);
             if (typeof serial === 'string') {
                 $mol_state_local.value('$hyoo_sync_peer', serial);
