@@ -113,7 +113,6 @@
     "$mol_lights",
     "$mol_state_arg",
     "$mol_action",
-    "$mol_media",
     "$hyoo_draw_colors",
     "$mol_switch",
     "$mol_check_list",
