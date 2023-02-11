@@ -1069,9 +1069,12 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    const named = new WeakSet();
     function $mol_func_name(func) {
         let name = func.name;
         if (name?.length > 1)
+            return name;
+        if (named.has(func))
             return name;
         for (let key in this) {
             try {
@@ -1083,6 +1086,7 @@ var $;
             }
             catch { }
         }
+        named.add(func);
         return name;
     }
     $.$mol_func_name = $mol_func_name;
@@ -9420,7 +9424,7 @@ var $;
 })($ || ($ = {}));
 //hyoo/crowd/json/json.ts
 ;
-var $node = $node || {} ; $node[ "/hyoo/draw/pane/9ap4sd_hgpblf+9ap4sd_hgpblf.bin" ] = "data:application/octet-stream;base64,ffKBIfP68D598oEh8/rwPn3ygSHz+vA+ffKBIfP68D4AAAAAAAAAAAAAAAAAAAAA4PgLxQAAWAAiM29LV3RFVUo5SnNqSUtmb0xNOXNuNkZpOU5kQlNEb3FzLWJ0ZE0wcXNPd0RvYTdEck8taXJHVVhtSGlsR0ZVM0pkYzFIZjJZTVBtelZPNWdySERneUEi9EVYCd0xy/c1SCxjX/qZIRtEjG60cxW2qs9HVXOlSwXVjeC0VAJVYmRMS1lZFHT9ZRMqH0LaF+U5qhdjRF+UcX3ygSHz+vA+ffKBIfP68D598oEh8/rwPsyAP/ZEOHrQAAAAAAAAAAAAAAAAAAAAAOH4C8UAAAEAMwAAAAAAAACzHos7744Lm/kxV9Skjb6rw+rhiPcFNASkbU0Cz/AKsoNz5irqDG/Sx25+EbVhdMH/A1jkRIwfqkPdb8vnQKqzffKBIfP68D598oEh8/rwPn3ygSHz+vA+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA4vgLxQAAAQAxAAAAAAAAALKBskzzsLk7tZiyjHfRH0Xp1+IpBjRmJzbKJ4GLFki9Sbtu310qdERQfSJji4PUQGAD9i81YACnx7zwvOFyJmx98oEh8/rwPsyAP/ZEOHrQffKBIfP68D7jz+IRzwyR4AAAAAAAAAAAAAAAAAAAAAB0FBbFAAABADMAAAAAAAAAl3yUTGmfo8/S/hB4jff5Y8ir/ymTyVMBrbOv4KDYYTts6ReocxfWUUueWw/6DpRfhl/+i2N35BIp7xwJFt3LpA=="
+var $node = $node || {} ; $node[ "/hyoo/draw/pane/50k1hf_b4km16!50k1hf_b4km16.bin" ] = "data:application/octet-stream;base64,g3gTEoo8GiiDeBMSijwaKIN4ExKKPBoog3gTEoo8GigAAAAAAAAAAAAAAAAAAAAAvyfXyQAAWAAiMk1QdXRObjkyVUtGWmJvSGFLa3V5bHQtVzBEdFZVYXozVWVYZ1I1NnNlTXNuUTRVNkZqTlV2V1VIclFWYVprVHBnclMwbG5RRjlGR0ViQkZzOGtSQ0UiicQ6U0/U0eVy6Soh92er0/numo9wrwJBWQXOHOEnSJSzQbti6BfhB1Q9qUaZorOFzfo91tCdE+KThCR05nSVMIN4ExKKPBoog3gTEoo8GiiDeBMSijwaKOPP4hHPDJHgAAAAAAAAAAAAAAAAAAAAAMAn18kAAAEAMwAAAAAAAACJGMTwSyTMdfBKC5qSQyNX4XYoQ4pNCFazs9QSxTw5Ucan2m2d0v+AnHNNYp1uf9xufHf0gslDAvO1uWihIYkKg3gTEoo8GiiDeBMSijwaKIN4ExKKPBooAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwSfXyQAAAQAyAAAAAAAAABUM90Vy92DiSSla2G12fWGFjR7FZIePeVasgY33O88l54f7pk+0ijZ+zqkExf/102TDgAfDUEhcgkz8+pdlwe4="
 
 ;
 "use strict";
@@ -9437,8 +9441,8 @@ var $;
     (function ($$) {
         class $hyoo_draw_pane extends $.$hyoo_draw_pane {
             land_rights() {
-                const land_id = '9ap4sd_hgpblf';
-                const rights = new Uint8Array($mol_fetch.buffer(require(`/hyoo/draw/pane/${land_id}+${land_id}.bin`)));
+                const land_id = '50k1hf_b4km16';
+                const rights = new Uint8Array($mol_fetch.buffer(require(`/hyoo/draw/pane/${land_id}!${land_id}.bin`)));
                 $mol_wire_sync(this.yard().world()).apply(rights);
                 return this.yard().land(land_id);
             }
