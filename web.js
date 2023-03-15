@@ -2668,6 +2668,9 @@ var $;
 var $;
 (function ($) {
     class $mol_book2 extends $mol_scroll {
+        menu_title() {
+            return "";
+        }
         sub() {
             return this.pages();
         }
@@ -2719,6 +2722,9 @@ var $;
                         $mol_fail_log(error);
                     }
                 }).reverse().filter(Boolean).join(' | ');
+            }
+            menu_title() {
+                return this.pages()[0]?.title() || this.title();
             }
             sub() {
                 const next = [...this.pages(), this.Placeholder()];
@@ -6055,7 +6061,7 @@ var $;
 //mol/plot/pane/-css/pane.view.css.ts
 ;
 "use strict";
-let $hyoo_sync_revision = "318df19";
+let $hyoo_sync_revision = "c1ce41a";
 //hyoo/sync/-meta.tree/revision.meta.tree.ts
 ;
 "use strict";
@@ -7762,7 +7768,7 @@ var $;
         land_init(land) {
             this.db_land_init(land);
             if (!land.grabbed())
-                this.$.$mol_wait_timeout(1000);
+                this.$.$mol_wait_timeout(1);
         }
         land(id) {
             return this.world().land_sync(id);
