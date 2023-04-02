@@ -6306,7 +6306,7 @@ var $;
 //mol/plot/pane/-css/pane.view.css.ts
 ;
 "use strict";
-let $hyoo_sync_revision = "fcc9026";
+let $hyoo_sync_revision = "1a9c6e5";
 //hyoo/sync/-meta.tree/revision.meta.tree.ts
 ;
 "use strict";
