@@ -1161,7 +1161,7 @@ declare namespace $ {
     class $mol_fetch_response extends $mol_object2 {
         readonly native: Response;
         constructor(native: Response);
-        status(): "success" | "unknown" | "inform" | "redirect" | "wrong" | "failed";
+        status(): "unknown" | "success" | "inform" | "redirect" | "wrong" | "failed";
         code(): number;
         message(): string;
         headers(): Headers;
@@ -1191,8 +1191,8 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    function $mol_huggingface_run(this: $, space: string, method: string | number, ...data: readonly any[]): readonly string[];
-    function $mol_huggingface_async(space: string, method: number, ...data: readonly any[]): Promise<[string]> & {
+    function $mol_huggingface_run(this: $, space: string, method: string | number, ...data: readonly any[]): any[] | readonly string[];
+    function $mol_huggingface_async(space: string, method: number, ...data: readonly any[]): Promise<any[]> & {
         destructor: () => void;
     };
 }
@@ -1210,7 +1210,7 @@ declare namespace $ {
         static lang(next?: string): string;
         static source(lang: string): any;
         static texts(lang: string, next?: $mol_locale_dict): $mol_locale_dict;
-        static text(key: string): {} | null;
+        static text(key: string): string;
         static warn(key: string): null;
     }
 }
@@ -2905,11 +2905,11 @@ declare namespace $ {
         arg(): {
             mol_chat: string;
         };
-        hint(): {} | null;
+        hint(): string;
         sub(): readonly any[];
         pages(): readonly any[];
         Icon(): $mol_icon_forum_outline;
-        title(): {} | null;
+        title(): string;
         standalone(): string;
         Standalone_icon(): $mol_icon_open_in_new;
         Esternal(): $$.$mol_link;
@@ -2941,7 +2941,7 @@ declare namespace $ {
 
 declare namespace $ {
     class $mol_link_source extends $mol_link {
-        hint(): {} | null;
+        hint(): string;
         sub(): readonly any[];
         Icon(): $mol_icon_github_circle;
     }
@@ -2964,7 +2964,7 @@ declare namespace $ {
 declare namespace $ {
     class $mol_lights_toggle extends $mol_check_icon {
         Icon(): $mol_icon_brightness_6;
-        hint(): {} | null;
+        hint(): string;
         checked(val?: any): boolean;
         Lights_icon(): $mol_icon_brightness_6;
         lights(val?: any): boolean;
@@ -3020,16 +3020,16 @@ declare namespace $ {
         Icon_pencil(): $mol_icon_lead_pencil;
         Icon_eraser(): $mol_icon_eraser;
         Icon_filler(): $mol_icon_format_color_fill;
-        hint_pencil(): {} | null;
-        hint_filler(): {} | null;
-        hint_eraser(): {} | null;
+        hint_pencil(): string;
+        hint_filler(): string;
+        hint_eraser(): string;
     }
 }
 
 declare namespace $.$$ {
     class $hyoo_draw_tools extends $.$hyoo_draw_tools {
         option_label(id: string): $mol_icon_lead_pencil[];
-        option_hint(id: string): {} | null;
+        option_hint(id: string): string;
     }
 }
 
@@ -3052,7 +3052,7 @@ declare namespace $ {
     class $mol_button_share extends $mol_button_minor {
         uri(): string;
         capture(): any;
-        hint(): {} | null;
+        hint(): string;
         sub(): readonly any[];
         Icon(): $mol_icon_share_variant;
     }
@@ -3371,7 +3371,7 @@ declare namespace $ {
 
 declare namespace $ {
     class $hyoo_draw extends $mol_book2 {
-        title(): {} | null;
+        title(): string;
         plugins(): readonly any[];
         sub(): readonly any[];
         Theme(): $$.$mol_theme_auto;
