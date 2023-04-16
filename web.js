@@ -3413,9 +3413,9 @@ var $;
                     const def = this.lang_default();
                     if (lang === def)
                         throw error;
-                    return {};
                 }
             }
+            return {};
         }
         static text(key) {
             const lang = this.lang();
@@ -3606,9 +3606,9 @@ var $;
         $mol_action
     ], $mol_state_arg, "go", null);
     $.$mol_state_arg = $mol_state_arg;
-    const $mol_state_arg_change = (event) => {
+    function $mol_state_arg_change() {
         $mol_state_arg.href($mol_dom_context.location.href);
-    };
+    }
     self.addEventListener('hashchange', $mol_state_arg_change);
 })($ || ($ = {}));
 //mol/state/arg/arg.web.ts
@@ -7050,6 +7050,9 @@ var $;
         [Symbol.toPrimitive]() {
             return `${this.constructor.name}("${this.land.id()}","${this.head}")`;
         }
+        toJSON() {
+            return this.id();
+        }
         [$mol_dev_format_head]() {
             return $mol_dev_format_span({}, $mol_dev_format_native(this), $mol_dev_format_shade(':'), $mol_dev_format_auto(this.land.unit_list(this.head)));
         }
@@ -9364,6 +9367,9 @@ var $;
             return this.land.node(unit.self, Node);
         }
     }
+    __decorate([
+        $mol_mem
+    ], $hyoo_crowd_list.prototype, "set", null);
     $.$hyoo_crowd_list = $hyoo_crowd_list;
 })($ || ($ = {}));
 //hyoo/crowd/list/list.ts
@@ -9850,7 +9856,6 @@ var $;
 var $;
 (function ($) {
     const { rem } = $mol_style_unit;
-    const { scale } = $mol_style_func;
     $mol_style_define($mol_link, {
         textDecoration: 'none',
         color: $mol_theme.control,
@@ -10937,19 +10942,20 @@ var $;
                 const context = canvas.getContext('2d');
                 context.drawImage(el, 0, 0);
                 try {
-                    re['src'] = canvas.toDataURL();
+                    ;
+                    re.src = canvas.toDataURL();
                 }
                 catch (error) {
                     $mol_fail_log(error);
                 }
             }
             if (re instanceof HTMLInputElement) {
-                re.setAttribute('value', el['value']);
-                if (el['checked'])
+                re.setAttribute('value', el.value);
+                if (el.checked)
                     re.setAttribute('checked', '');
             }
             if (re instanceof HTMLTextAreaElement) {
-                re.setAttribute('value', el['value']);
+                re.setAttribute('value', el.value);
             }
             const styles = $mol_dom_context.getComputedStyle(el);
             restyle(re, styles);
@@ -12094,12 +12100,13 @@ var $;
     function $mol_offline() {
         if (typeof window === 'undefined') {
             self.addEventListener('install', (event) => {
-                self['skipWaiting']();
+                ;
+                self.skipWaiting();
             });
             self.addEventListener('activate', (event) => {
                 caches.delete('v1');
                 caches.delete('$mol_offline');
-                self['clients'].claim();
+                self.clients.claim();
                 console.info('$mol_offline activated');
             });
             self.addEventListener('fetch', (event) => {

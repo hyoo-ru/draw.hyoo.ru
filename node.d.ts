@@ -770,12 +770,8 @@ declare namespace $ {
     class $mol_scroll extends $mol_view {
         scroll_top(val?: any): number;
         scroll_left(val?: any): number;
-        field(): {
-            tabIndex: number;
-        };
-        event(): {
-            scroll: (event?: any) => any;
-        };
+        field(): Record<string, any>;
+        event(): Record<string, any>;
         tabindex(): number;
         event_scroll(event?: any): any;
     }
@@ -1151,9 +1147,7 @@ declare namespace $ {
 
 declare namespace $ {
     class $mol_theme_auto extends $mol_plugin {
-        attr(): {
-            mol_theme: string;
-        };
+        attr(): Record<string, any>;
         theme(): string;
     }
 }
@@ -1171,19 +1165,15 @@ declare namespace $ {
             [key: string]: string;
         }>;
         static value(key: string, next?: string | null): string | null;
-        static link(next: any): string;
-        static make_link(next: {
-            [key: string]: any;
-        }): string;
+        static link(next: Record<string, string | null>): string;
+        static make_link(next: Record<string, string | null>): string;
         static go(next: {
             [key: string]: string | null;
         }): void;
         constructor(prefix?: string);
         value(key: string, next?: string): string | null;
         sub(postfix: string): $mol_state_arg;
-        link(next: {
-            [key: string]: string;
-        }): string;
+        link(next: Record<string, string | null>): string;
     }
 }
 
@@ -1199,12 +1189,8 @@ declare namespace $.$$ {
 
 declare namespace $ {
     class $mol_speck extends $mol_view {
-        attr(): {
-            mol_theme: string;
-        };
-        style(): {
-            minHeight: string;
-        };
+        attr(): Record<string, any>;
+        style(): Record<string, any>;
         sub(): readonly any[];
         theme(): string;
         value(): any;
@@ -1232,17 +1218,8 @@ declare namespace $ {
         enabled(): boolean;
         click(event?: any): any;
         event_click(event?: any): any;
-        event(): {
-            click: (event?: any) => any;
-            dblclick: (event?: any) => any;
-            keydown: (event?: any) => any;
-        };
-        attr(): {
-            disabled: boolean;
-            role: string;
-            tabindex: number;
-            title: string;
-        };
+        event(): Record<string, any>;
+        attr(): Record<string, any>;
         sub(): readonly $mol_view_content[];
         Speck(): $mol_speck;
         event_activate(event?: any): any;
@@ -1397,14 +1374,7 @@ declare namespace $ {
 
 declare namespace $ {
     class $mol_check extends $mol_button_minor {
-        attr(): {
-            mol_check_checked: boolean;
-            "aria-checked": string;
-            role: string;
-            disabled: boolean;
-            tabindex: number;
-            title: string;
-        };
+        attr(): Record<string, any>;
         sub(): readonly $mol_view_content[];
         checked(next?: any): boolean;
         aria_checked(): string;
@@ -1435,7 +1405,7 @@ declare namespace $.$$ {
 declare namespace $ {
     class $mol_check_list extends $mol_view {
         Option(id: any): $$.$mol_check;
-        options(): {};
+        options(): Record<string, any>;
         keys(): readonly string[];
         sub(): readonly $mol_check[];
         option_checked(id: any, val?: any): boolean;
@@ -1496,9 +1466,7 @@ declare namespace $ {
         color_raw(id: any): string;
     }
     class $hyoo_draw_colors_option extends $mol_check {
-        style(): {
-            backgroundColor: string;
-        };
+        style(): Record<string, any>;
         color(): string;
     }
 }
@@ -1626,7 +1594,7 @@ declare namespace $ {
         dom_name_space(): string;
         font_size(): number;
         font_family(): string;
-        style_size(): {};
+        style_size(): Record<string, any>;
     }
 }
 
@@ -1639,7 +1607,7 @@ declare namespace $ {
 
 declare namespace $.$$ {
     class $mol_svg extends $.$mol_svg {
-        computed_style(): CSSStyleDeclaration;
+        computed_style(): Record<string, any>;
         font_size(): number;
         font_family(): any;
     }
@@ -1648,10 +1616,7 @@ declare namespace $.$$ {
 declare namespace $ {
     class $mol_svg_root extends $mol_svg {
         dom_name(): string;
-        attr(): {
-            viewBox: string;
-            preserveAspectRatio: string;
-        };
+        attr(): Record<string, any>;
         view_box(): string;
         aspect(): string;
     }
@@ -1677,12 +1642,8 @@ declare namespace $ {
     class $mol_plot_graph extends $mol_svg_group {
         series_x(): readonly number[];
         series_y(): readonly number[];
-        attr(): {
-            mol_plot_graph_type: string;
-        };
-        style(): {
-            color: string;
-        };
+        attr(): Record<string, any>;
+        style(): Record<string, any>;
         viewport(): $mol_vector_2d<$mol_vector_range<number>>;
         shift(): readonly number[];
         scale(): readonly number[];
@@ -1714,12 +1675,8 @@ declare namespace $ {
         hint(): string;
     }
     class $mol_plot_graph_sample extends $mol_view {
-        attr(): {
-            mol_plot_graph_type: string;
-        };
-        style(): {
-            color: string;
-        };
+        attr(): Record<string, any>;
+        style(): Record<string, any>;
         type(): string;
         color(): string;
     }
@@ -1772,17 +1729,8 @@ declare namespace $ {
         draw_start(event?: any): any;
         draw(event?: any): any;
         draw_end(event?: any): any;
-        style(): {
-            "touch-action": string;
-            "overscroll-behavior": string;
-        };
-        event(): {
-            pointerdown: (event?: any) => any;
-            pointermove: (event?: any) => any;
-            pointerup: (event?: any) => any;
-            pointerleave: (event?: any) => any;
-            wheel: (event?: any) => any;
-        };
+        style(): Record<string, any>;
+        event(): Record<string, any>;
         event_start(event?: any): any;
         event_move(event?: any): any;
         event_end(event?: any): any;
@@ -2102,6 +2050,7 @@ declare namespace $ {
         nodes<Node extends typeof $hyoo_crowd_node>(Node: Node): InstanceType<Node>[];
         virgin(): boolean;
         [Symbol.toPrimitive](): string;
+        toJSON(): `${string}_${string}`;
     }
 }
 
@@ -2319,14 +2268,7 @@ declare namespace $ {
         dom_name(): string;
         pos(): readonly any[];
         size(): readonly any[];
-        attr(): {
-            x: string;
-            y: string;
-            width: string;
-            height: string;
-            href: string;
-            preserveAspectRatio: string;
-        };
+        attr(): Record<string, any>;
         pos_x(): string;
         pos_y(): string;
         size_x(): string;
@@ -2383,10 +2325,7 @@ declare namespace $ {
         spacing(): number;
         color_fill(): string;
         dom_name(): string;
-        attr(): {
-            d: string;
-            mol_plot_graph_type: string;
-        };
+        attr(): Record<string, any>;
         sub(): readonly any[];
         Sample(): $mol_plot_graph_sample;
         curve(): string;
@@ -2408,11 +2347,7 @@ declare namespace $ {
     class $mol_svg_text extends $mol_svg {
         dom_name(): string;
         pos(): readonly any[];
-        attr(): {
-            x: string;
-            y: string;
-            "text-anchor": string;
-        };
+        attr(): Record<string, any>;
         sub(): readonly any[];
         pos_x(): string;
         pos_y(): string;
@@ -2435,12 +2370,7 @@ declare namespace $ {
     class $mol_svg_rect extends $mol_svg {
         dom_name(): string;
         pos(): readonly any[];
-        attr(): {
-            width: string;
-            height: string;
-            x: string;
-            y: string;
-        };
+        attr(): Record<string, any>;
         width(): string;
         height(): string;
         pos_x(): string;
@@ -2458,9 +2388,7 @@ declare namespace $.$$ {
 declare namespace $ {
     class $mol_svg_path extends $mol_svg {
         dom_name(): string;
-        attr(): {
-            d: string;
-        };
+        attr(): Record<string, any>;
         geometry(): string;
     }
 }
@@ -2689,18 +2617,10 @@ declare namespace $ {
     class $mol_link extends $mol_view {
         uri(): string;
         dom_name(): string;
-        attr(): {
-            href: string;
-            title: string;
-            target: string;
-            download: string;
-            mol_link_current: boolean;
-        };
+        attr(): Record<string, any>;
         sub(): readonly $mol_view_content[];
-        arg(): {};
-        event(): {
-            click: (event?: any) => any;
-        };
+        arg(): Record<string, any>;
+        event(): Record<string, any>;
         uri_toggle(): string;
         hint(): string;
         hint_safe(): string;
@@ -2773,14 +2693,9 @@ declare namespace $ {
         uri(val?: any): string;
         dom_name(): string;
         window(): any;
-        attr(): {
-            data: string;
-            type: string;
-        };
+        attr(): Record<string, any>;
         sub(): readonly any[];
-        message(): {
-            hashchange: (next?: any) => any;
-        };
+        message(): Record<string, any>;
         mime(): string;
         title(): string;
         Fallback(): $$.$mol_link;
@@ -2806,13 +2721,7 @@ declare namespace $ {
 declare namespace $ {
     class $mol_frame extends $mol_embed_native {
         dom_name(): string;
-        attr(): {
-            data: any;
-            type: any;
-            src: string;
-            srcdoc: any;
-            allow: string;
-        };
+        attr(): Record<string, any>;
         fullscreen(): boolean;
         accelerometer(): boolean;
         autoplay(): boolean;
@@ -2840,9 +2749,7 @@ declare namespace $ {
 declare namespace $ {
     class $mol_page extends $mol_view {
         dom_name(): string;
-        field(): {
-            tabIndex: number;
-        };
+        field(): Record<string, any>;
         sub(): readonly any[];
         tabindex(): number;
         Logo(): any;
@@ -2867,9 +2774,7 @@ declare namespace $ {
     class $mol_chat extends $mol_link {
         seed(): string;
         opened(): boolean;
-        arg(): {
-            mol_chat: string;
-        };
+        arg(): Record<string, any>;
         hint(): string;
         sub(): readonly any[];
         pages(): readonly any[];
@@ -3244,13 +3149,7 @@ declare namespace $ {
         yard(): $hyoo_sync_yard<unknown>;
         uri(): string;
         sub(): readonly any[];
-        attr(): {
-            title: string;
-            href: string;
-            target: string;
-            download: string;
-            mol_link_current: boolean;
-        };
+        attr(): Record<string, any>;
         master_link(): string;
         Well(): $$.$mol_avatar;
         Fail(): $mol_icon_sync_off;
@@ -3274,20 +3173,9 @@ declare namespace $ {
 declare namespace $ {
     class $mol_image extends $mol_view {
         dom_name(): string;
-        field(): {
-            src: string;
-            alt: string;
-            loading: string;
-            decoding: string;
-            crossOrigin: any;
-        };
-        attr(): {
-            width: number;
-            height: number;
-        };
-        event(): {
-            load: (next?: any) => any;
-        };
+        field(): Record<string, any>;
+        attr(): Record<string, any>;
+        event(): Record<string, any>;
         minimal_width(): number;
         minimal_height(): number;
         uri(): string;

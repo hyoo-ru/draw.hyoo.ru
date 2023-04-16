@@ -4085,9 +4085,9 @@ var $;
                     const def = this.lang_default();
                     if (lang === def)
                         throw error;
-                    return {};
                 }
             }
+            return {};
         }
         static text(key) {
             const lang = this.lang();
@@ -4187,7 +4187,7 @@ var $;
             return next;
         }
         static link(next) {
-            var params = {};
+            const params = {};
             var prev = this.dict();
             for (var key in prev) {
                 params[key] = prev[key];
@@ -4198,11 +4198,11 @@ var $;
             return this.make_link(params);
         }
         static make_link(next) {
-            var chunks = [];
-            for (var key in next) {
-                if (null == next[key])
-                    continue;
-                chunks.push([key].concat(next[key]).map(encodeURIComponent).join('='));
+            const chunks = [];
+            for (const key in next) {
+                if (next[key] !== null) {
+                    chunks.push([key, next[key]].map(encodeURIComponent).join('='));
+                }
             }
             return chunks.join(' ');
         }
@@ -4220,8 +4220,8 @@ var $;
             return new this.constructor(this.prefix + postfix + '.');
         }
         link(next) {
-            var prefix = this.prefix;
-            var dict = {};
+            const prefix = this.prefix;
+            const dict = {};
             for (var key in next) {
                 dict[prefix + key] = next[key];
             }
@@ -7517,6 +7517,9 @@ var $;
         [Symbol.toPrimitive]() {
             return `${this.constructor.name}("${this.land.id()}","${this.head}")`;
         }
+        toJSON() {
+            return this.id();
+        }
         [$mol_dev_format_head]() {
             return $mol_dev_format_span({}, $mol_dev_format_native(this), $mol_dev_format_shade(':'), $mol_dev_format_auto(this.land.unit_list(this.head)));
         }
@@ -9778,6 +9781,9 @@ var $;
             return this.land.node(unit.self, Node);
         }
     }
+    __decorate([
+        $mol_mem
+    ], $hyoo_crowd_list.prototype, "set", null);
     $.$hyoo_crowd_list = $hyoo_crowd_list;
 })($ || ($ = {}));
 //hyoo/crowd/list/list.ts
@@ -10264,7 +10270,6 @@ var $;
 var $;
 (function ($) {
     const { rem } = $mol_style_unit;
-    const { scale } = $mol_style_func;
     $mol_style_define($mol_link, {
         textDecoration: 'none',
         color: $mol_theme.control,
@@ -11475,19 +11480,20 @@ var $;
                 const context = canvas.getContext('2d');
                 context.drawImage(el, 0, 0);
                 try {
-                    re['src'] = canvas.toDataURL();
+                    ;
+                    re.src = canvas.toDataURL();
                 }
                 catch (error) {
                     $mol_fail_log(error);
                 }
             }
             if (re instanceof HTMLInputElement) {
-                re.setAttribute('value', el['value']);
-                if (el['checked'])
+                re.setAttribute('value', el.value);
+                if (el.checked)
                     re.setAttribute('checked', '');
             }
             if (re instanceof HTMLTextAreaElement) {
-                re.setAttribute('value', el['value']);
+                re.setAttribute('value', el.value);
             }
             const styles = $mol_dom_context.getComputedStyle(el);
             restyle(re, styles);
