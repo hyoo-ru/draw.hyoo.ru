@@ -9935,7 +9935,7 @@ var $;
     (function ($$) {
         class $hyoo_draw_pane extends $.$hyoo_draw_pane {
             land_rights() {
-                const land_id = '50k1hf_b4km16';
+                const land_id = 'h3cgkd_xfi3wm';
                 const rights = new Uint8Array($mol_fetch.buffer(require(`/hyoo/draw/pane/${land_id}!${land_id}.bin`)));
                 $mol_wire_sync(this.yard().world()).apply(rights);
                 return this.yard().land(land_id);
@@ -10142,7 +10142,7 @@ var $;
 })($ || ($ = {}));
 //hyoo/draw/pane/pane.view.ts
 ;
-var $node = $node || {} ; $node[ "/hyoo/draw/pane/50k1hf_b4km16!50k1hf_b4km16.bin" ] = "data:application/octet-stream;base64,g3gTEoo8GiiDeBMSijwaKIN4ExKKPBoog3gTEoo8GigAAAAAAAAAAAAAAAAAAAAAvyfXyQAAWAAiMk1QdXRObjkyVUtGWmJvSGFLa3V5bHQtVzBEdFZVYXozVWVYZ1I1NnNlTXNuUTRVNkZqTlV2V1VIclFWYVprVHBnclMwbG5RRjlGR0ViQkZzOGtSQ0UiicQ6U0/U0eVy6Soh92er0/numo9wrwJBWQXOHOEnSJSzQbti6BfhB1Q9qUaZorOFzfo91tCdE+KThCR05nSVMIN4ExKKPBoog3gTEoo8GiiDeBMSijwaKOPP4hHPDJHgAAAAAAAAAAAAAAAAAAAAAMAn18kAAAEAMwAAAAAAAACJGMTwSyTMdfBKC5qSQyNX4XYoQ4pNCFazs9QSxTw5Ucan2m2d0v+AnHNNYp1uf9xufHf0gslDAvO1uWihIYkKg3gTEoo8GiiDeBMSijwaKIN4ExKKPBooAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwSfXyQAAAQAyAAAAAAAAABUM90Vy92DiSSla2G12fWGFjR7FZIePeVasgY33O88l54f7pk+0ijZ+zqkExf/102TDgAfDUEhcgkz8+pdlwe4="
+var $node = $node || {} ; $node[ "/hyoo/draw/pane/h3cgkd_xfi3wm!h3cgkd_xfi3wm.bin" ] = "data:application/octet-stream;base64,3aWaPUZ3fPjdpZo9Rnd8+N2lmj1Gd3z43aWaPUZ3fPgAAAAAAAAAAAAAAAAAAAAA9YcQzgAAWAAiMzc3S2g4RGJpSGlyQk5PNGt6RnVqMUF0dTdGUDhoaVBQb0Q3aG0tZVpRc0oxX1ZQdTdMd3pIeVNycUpDeVhmcjNnU255cGJraGtIaUJnRkpCQzYwTlUi30gFy7mJ2xfQRMgyr2ZrCIAdPTsV3MWOS9Jt+rzxBKlzbbDhAx/sEV8tSsiwIK5HKuqYha7CdYE/SL55FgyTa92lmj1Gd3z43aWaPUZ3fPjdpZo9Rnd8+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPaHEM4AAAEAMgAAAAAAAADUAtp8eB2LWe5vvLex9tGgXC36JAPUOjaffKmI3V5/nugI08/nsPqJX0LhSW5WgXH4J15YJMPfwMqhmJTAwyYY"
 
 ;
 "use strict";
