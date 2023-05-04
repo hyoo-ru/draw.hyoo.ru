@@ -4,7 +4,7 @@ namespace $.$$ {
 
 		@ $mol_mem
 		land_rights() {
-			const land_id = '50k1hf_b4km16' as $mol_int62_string
+			const land_id = 'h3cgkd_xfi3wm' as $mol_int62_string
 			const rights = new Uint8Array( $mol_fetch.buffer( require( `/hyoo/draw/pane/${land_id}!${land_id}.bin` ) ) )
 			$mol_wire_sync( this.yard().world() ).apply( rights )	
 			return this.yard().land(land_id)
