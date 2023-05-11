@@ -6827,7 +6827,7 @@ var $;
 //mol/plot/pane/-css/pane.view.css.ts
 ;
 "use strict";
-let $hyoo_sync_revision = "b0b46e6";
+let $hyoo_sync_revision = "d9c542d";
 //hyoo/sync/-meta.tree/revision.meta.tree.ts
 ;
 "use strict";
@@ -8476,9 +8476,12 @@ var $;
         master_cursor(next = 0) {
             return next;
         }
+        master_list() {
+            return this.$.$hyoo_sync_masters;
+        }
         master_link() {
             const scheme = this.$.$mol_dom_context.document.location.protocol.replace(/^http/, 'ws');
-            const host = this.$.$hyoo_sync_masters[this.master_cursor()];
+            const host = this.master_list()[this.master_cursor()];
             return `${scheme}//${host}`;
         }
         master() {
