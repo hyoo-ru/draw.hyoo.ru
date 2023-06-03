@@ -9809,12 +9809,19 @@ var $;
         cut(seat) {
             return this.land.wipe(this.units()[seat]);
         }
-        has(val) {
-            for (const unit of this.units()) {
-                if (unit.data === val)
-                    return true;
+        has(val, next) {
+            if (next === undefined) {
+                for (const unit of this.units()) {
+                    if (unit.data === val)
+                        return true;
+                }
+                return false;
             }
-            return false;
+            if (next)
+                this.add(val);
+            else
+                this.drop(val);
+            return next;
         }
         add(val) {
             if (this.has(val))
@@ -12797,6 +12804,5 @@ var $;
     $mol_style_attach("hyoo/draw/draw.view.css", "[hyoo_draw] {\n\tposition: relative;\n\t--hyoo_draw_palette_red: #F44336;\n\t--hyoo_draw_palette_pink: #E91E63;\n\t--hyoo_draw_palette_purple: #9C27B0;\n\t--hyoo_draw_palette_indigo: #3F51B5;\n\t--hyoo_draw_palette_blue: #2196F3;\n\t--hyoo_draw_palette_cyan: #00BCD4;\n\t--hyoo_draw_palette_teal: #009688;\n\t--hyoo_draw_palette_green: #4CAF50;\n\t--hyoo_draw_palette_lime: #CDDC39;\n\t--hyoo_draw_palette_yellow: #FFEB3B;\n\t--hyoo_draw_palette_amber: #FFC107;\n\t--hyoo_draw_palette_orange: #FF9800;\n\t--hyoo_draw_palette_brown: #795548;\n\t--hyoo_draw_palette_coral: #456;\n\t--hyoo_draw_palette_blue_grey: #607D8B;\n\t--hyoo_draw_palette_grey: #9E9E9E;\n\t--hyoo_draw_palette_negative: var(--mol_theme_text);\n}\n\n[hyoo_draw_main] {\n\tposition: relative;\n\tflex: 10000 0 30rem;\n\tmin-width: 0;\n}\n\n[hyoo_draw_side_left] {\n\tposition: absolute;\n\ttop: 0;\n\tleft: 0;\n}\n\n[hyoo_draw_side_right] {\n\tposition: absolute;\n\ttop: 0;\n\tright: 0;\n}\n\n[hyoo_draw_chat_page] {\n\tbox-shadow: 0 0 0 1px var(--mol_theme_line);\n}\n\n[hyoo_draw_attribution] {\n\tposition: absolute;\n\tbottom: 0;\n\tright: 0;\n}\n\n");
 })($ || ($ = {}));
 //hyoo/draw/-css/draw.view.css.ts
-;
-export default $
-//# sourceMappingURL=node.mjs.map
+
+//# sourceMappingURL=node.js.map
