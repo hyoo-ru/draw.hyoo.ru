@@ -12857,4 +12857,5 @@ var $;
 })($ || ($ = {}));
 //hyoo/draw/-css/draw.view.css.ts
 
+export default $
 //# sourceMappingURL=node.js.map
