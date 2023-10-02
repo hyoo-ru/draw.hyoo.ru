@@ -2,7 +2,8 @@
 	"$mol_button_share_hint": "Поділитися",
 	"$mol_chat_title": "Дискусія",
 	"$mol_lights_toggle_hint": "Переключити освітлення",
-	"$mol_select_Filter_hint": "Фільтр",
+	"$mol_search_Clear_hint": "Очистити",
+	"$mol_search_hint": "Пошук",
 	"$mol_select_hint": "Обрати",
 	"$mol_select_no_options_message": "Немає опцій"
 }

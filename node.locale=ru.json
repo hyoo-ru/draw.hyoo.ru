@@ -9,7 +9,8 @@
 	"$mol_chat_title": "Дискуссия",
 	"$mol_lights_toggle_hint": "Переключить освещение",
 	"$mol_link_source_hint": "Исходные коды",
-	"$mol_select_Filter_hint": "Фильтр..",
+	"$mol_search_Clear_hint": "Очистить",
+	"$mol_search_hint": "Поиск..",
 	"$mol_select_hint": "Выбрать..",
 	"$mol_select_no_options_message": "Нет вариантов"
 }
