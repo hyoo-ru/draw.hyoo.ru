@@ -42,7 +42,6 @@ $hyoo_draw $mol_book2
 								<= Tools $hyoo_draw_tools
 									value => tool
 								<= Share $mol_button_share
-									title <= title
 									capture <= share_capture
 								<= Online $hyoo_sync_online
 									yard <= yard $hyoo_sync_client
