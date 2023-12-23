@@ -14617,6 +14617,7 @@ var $;
         }
         Chat() {
             const obj = new this.$.$mol_chat();
+            obj.seed = () => "8o0ox_5h6l8v";
             return obj;
         }
         Source_link() {
