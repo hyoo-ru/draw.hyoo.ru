@@ -27,6 +27,7 @@ $hyoo_draw $mol_book2
 						<= Tools_right $mol_list
 							rows <= tools_right /
 								<= Chat $mol_chat
+									seed \8o0ox_5h6l8v
 									pages => chat_pages
 								<= Source_link $mol_link_source
 									uri \https://github.com/hyoo-ru/draw.hyoo.ru
