@@ -14125,7 +14125,6 @@ var $;
         }
         Share() {
             const obj = new this.$.$mol_button_share();
-            obj.title = () => this.title();
             obj.capture = () => this.share_capture();
             return obj;
         }
