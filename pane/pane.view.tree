@@ -3,15 +3,15 @@ $hyoo_draw_pane $mol_plot_pane
 	tool \pencil
 	grid false
 	map false
-	yard $hyoo_sync_yard
+	yard $hyoo_sync_yard<any>
 	reset?event null
 	auto /
 		<= peer_update null
 		<= figure_current null
-	shift?val $mol_vector_2d /
+	shift?val $mol_vector_2d<number> /
 		0
 		0
-	scale?val $mol_vector_2d /
+	scale?val $mol_vector_2d<number> /
 		<= zoom
 		<= zoom
 	Map $mol_plot_map_tiles
