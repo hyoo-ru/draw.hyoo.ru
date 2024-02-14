@@ -6570,12 +6570,28 @@ var $;
 var $;
 (function ($) {
     class $mol_error_mix extends AggregateError {
-        name = '$mol_error_mix';
+        name = $$.$mol_func_name(this.constructor);
         constructor(message, ...errors) {
-            super(errors, [message, ...errors.map(e => '  ' + e.message)].join('\n'));
+            super(errors, [message, ...errors.map(e => e.message.replace(/^/gm, '  '))].join('\n'));
+        }
+        get cause() {
+            return [].concat(...this.errors.map(e => e.cause).filter(Boolean));
         }
         toJSON() {
-            return this.message;
+            return this.errors.map(e => e.message);
+        }
+        pick(Class) {
+            if (this instanceof Class)
+                return this;
+            for (const e of this.errors) {
+                if (e instanceof Class)
+                    return e;
+            }
+            for (const e of this.cause) {
+                if (e && e instanceof Class)
+                    return e;
+            }
+            return null;
         }
     }
     $.$mol_error_mix = $mol_error_mix;
@@ -12950,7 +12966,7 @@ var $;
 		}
 		Clear(){
 			const obj = new this.$.$mol_button_minor();
-			(obj.hint) = () => (this.$.$mol_locale.text("$mol_search_Clear_hint"));
+			(obj.hint) = () => ((this.$.$mol_locale.text("$mol_search_Clear_hint")));
 			(obj.click) = (next) => ((this.clear(next)));
 			(obj.sub) = () => ([(this.Clear_icon())]);
 			return obj;
@@ -13853,7 +13869,7 @@ var $;
 		}
 		Grid(){
 			const obj = new this.$.$mol_check_icon();
-			(obj.hint) = () => (this.$.$mol_locale.text("$hyoo_draw_Grid_hint"));
+			(obj.hint) = () => ((this.$.$mol_locale.text("$hyoo_draw_Grid_hint")));
 			(obj.checked) = (next) => ((this.grid(next)));
 			(obj.Icon) = () => ((this.Grid_icon()));
 			return obj;
@@ -13868,7 +13884,7 @@ var $;
 		}
 		Map(){
 			const obj = new this.$.$mol_check_icon();
-			(obj.hint) = () => (this.$.$mol_locale.text("$hyoo_draw_Map_hint"));
+			(obj.hint) = () => ((this.$.$mol_locale.text("$hyoo_draw_Map_hint")));
 			(obj.checked) = (next) => ((this.map(next)));
 			(obj.Icon) = () => ((this.Map_icon()));
 			return obj;
