@@ -416,18 +416,6 @@ $mol_plot_line $mol_plot_graph
 		color <= color
 		type <= type
 
-$mol_svg_text $mol_svg
-	dom_name \text
-	pos /
-	attr *
-		^
-		x <= pos_x \
-		y <= pos_y \
-		text-anchor <= align_hor <= align \middle
-		alignment-baseline <= align_vert \baseline
-	sub /
-		<= text \
-
 $mol_svg_rect $mol_svg
 	dom_name \rect
 	pos /
@@ -444,6 +432,18 @@ $mol_svg_path $mol_svg
 		^
 		d <= geometry \
 
+
+$mol_svg_text $mol_svg
+	dom_name \text
+	pos /
+	attr *
+		^
+		x <= pos_x \
+		y <= pos_y \
+		text-anchor <= align_hor <= align \middle
+		alignment-baseline <= align_vert \baseline
+	sub /
+		<= text \
 
 $mol_plot_ruler $mol_plot_graph
 	step 0
@@ -751,14 +751,23 @@ $mol_pick $mol_pop
 			<= title
 		hint <= hint \
 
-$mol_hotkey $mol_plugin
-	event *
-		^
-		keydown?event <=> keydown?event null
-	key *
-	mod_ctrl false
-	mod_alt false
-	mod_shift false
+$mol_paragraph $mol_view
+	line_height 24
+	letter_width 7
+	width_limit +Infinity
+	row_width 0
+	sub / <= title
+
+$mol_dimmer $mol_paragraph
+	haystack \
+	needle \
+	sub <= parts /$mol_view_content
+	Low* $mol_paragraph
+		sub /
+			<= string* \
+	High* $mol_paragraph
+		sub /
+			<= string* \
 
 $mol_nav $mol_plugin
 	cycle? false
@@ -780,6 +789,15 @@ $mol_nav $mol_plugin
 	event *
 		^
 		keydown?event <=> event_key?event null
+
+$mol_hotkey $mol_plugin
+	event *
+		^
+		keydown?event <=> keydown?event null
+	key *
+	mod_ctrl false
+	mod_alt false
+	mod_shift false
 
 $mol_string $mol_view
 	dom_name \input
@@ -814,24 +832,6 @@ $mol_string $mol_view
 		<= Submit $mol_hotkey
 			mod_ctrl <= submit_with_ctrl false
 			key * enter?event <=> submit?event null
-
-$mol_paragraph $mol_view
-	line_height 24
-	letter_width 7
-	width_limit +Infinity
-	row_width 0
-	sub / <= title
-
-$mol_dimmer $mol_paragraph
-	haystack \
-	needle \
-	sub <= parts /$mol_view_content
-	Low* $mol_paragraph
-		sub /
-			<= string* \
-	High* $mol_paragraph
-		sub /
-			<= string* \
 
 $mol_search $mol_pop
 	query? \
